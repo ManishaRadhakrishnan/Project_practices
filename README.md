@@ -1,9 +1,9 @@
-## Project Management System
+# Project Management System
 
 A web based system developed using Angular 7 framework that can be used by academic institutions to track and manage the yearly projects submitted by students and teachers.
 ***
 
-# PmsApp
+## PmsApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.5.
 
