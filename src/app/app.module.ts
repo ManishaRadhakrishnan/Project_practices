@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { MailComponent } from './mail/mail.component';
-import { ComposeComponent } from './mail/compose/compose.component';
+import { ComposeComponent } from './compose/compose.component';
 
 @NgModule({
   declarations: [
