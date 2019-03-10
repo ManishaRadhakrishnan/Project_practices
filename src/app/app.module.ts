@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { MailComponent } from './mail/mail.component';
 import { ComposeComponent } from './compose/compose.component';
+import { TopicSubComponent } from './topic-sub/topic-sub.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { ComposeComponent } from './compose/compose.component';
     LoginComponent,
     SignUpComponent,
     MailComponent,
-    ComposeComponent
+    ComposeComponent,
+    TopicSubComponent
   ],
   imports: [
     BrowserModule,
