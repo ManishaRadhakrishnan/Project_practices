@@ -5,12 +5,14 @@ import {SignUpComponent} from './sign-up/sign-up.component';
 import{MailComponent} from './mail/mail.component';
 import{ComposeComponent} from './compose/compose.component';
 import{TopicSubComponent} from './topic-sub/topic-sub.component';
+import {TopicViewComponent} from './topic-view/topic-view.component';
 const routes: Routes = [
   {path:'login' , component: LoginComponent},
   {path:'sign-up' , component: SignUpComponent},
   {path:'mail', component: MailComponent},
   {path : 'compose', component: ComposeComponent},
-  {path : 'topic-sub', component: TopicSubComponent}
+  {path : 'topic-sub', component: TopicSubComponent},
+  {path: 'topic-view',component: TopicViewComponent }
 ];
 
 @NgModule({

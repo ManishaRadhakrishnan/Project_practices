@@ -8,6 +8,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { MailComponent } from './mail/mail.component';
 import { ComposeComponent } from './compose/compose.component';
 import { TopicSubComponent } from './topic-sub/topic-sub.component';
+import { TopicViewComponent } from './topic-view/topic-view.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { TopicSubComponent } from './topic-sub/topic-sub.component';
     SignUpComponent,
     MailComponent,
     ComposeComponent,
-    TopicSubComponent
+    TopicSubComponent,
+    TopicViewComponent
   ],
   imports: [
     BrowserModule,
