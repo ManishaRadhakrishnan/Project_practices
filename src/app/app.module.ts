@@ -9,6 +9,9 @@ import { MailComponent } from './mail/mail.component';
 import { ComposeComponent } from './compose/compose.component';
 import { TopicSubComponent } from './topic-sub/topic-sub.component';
 import { TopicViewComponent } from './topic-view/topic-view.component';
+import { StudDashComponent } from './stud-dash/stud-dash.component';
+import { StudProfComponent } from './stud-prof/stud-prof.component';
+import { StudEditComponent } from './stud-edit/stud-edit.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import { TopicViewComponent } from './topic-view/topic-view.component';
     MailComponent,
     ComposeComponent,
     TopicSubComponent,
-    TopicViewComponent
+    TopicViewComponent,
+    StudDashComponent,
+    StudProfComponent,
+    StudEditComponent
   ],
   imports: [
     BrowserModule,
