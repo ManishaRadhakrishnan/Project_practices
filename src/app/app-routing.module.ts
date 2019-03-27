@@ -9,6 +9,8 @@ import {TopicViewComponent} from './topic-view/topic-view.component';
 import {StudDashComponent} from './stud-dash/stud-dash.component';
 import {StudProfComponent} from './stud-prof/stud-prof.component';
 import {StudEditComponent} from './stud-edit/stud-edit.component';
+import {ActivateComponent} from './activate/activate.component';
+import {GuideProjUpdateComponent} from './guide-proj-update/guide-proj-update.component';
 const routes: Routes = [
   {path:'login' , component: LoginComponent},
   {path:'sign-up' , component: SignUpComponent},
@@ -18,7 +20,9 @@ const routes: Routes = [
   {path: 'topic-view',component: TopicViewComponent },
   {path: 'stud-dash', component:StudDashComponent},
   {path: 'stud-prof', component: StudProfComponent},
-  {path: 'stud-edit', component: StudEditComponent}
+  {path: 'stud-edit', component: StudEditComponent},
+  {path: 'activate', component: ActivateComponent},
+  {path: 'guide-proj-update', component: GuideProjUpdateComponent}
 ];
 
 @NgModule({

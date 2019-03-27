@@ -124,7 +124,7 @@ $(function() {
         radioClass: 'iradio_minimal'
     });
 
-    /* For demo purposes */
+    /* For demo purposes 
     var demo = $("<div />").css({
         position: "fixed",
         top: "150px",
@@ -136,7 +136,7 @@ $(function() {
         "z-index": "999999",
         cursor: "pointer",
         color: "#ddd"
-    }).html("<i class='fa fa-gear'></i>").addClass("no-print");
+    }).html("<i class='fa fa-gear'></i>").addClass("no-print");*/  
 
     var demo_settings = $("<div />").css({
         "padding": "10px",

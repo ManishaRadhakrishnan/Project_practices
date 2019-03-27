@@ -12,6 +12,8 @@ import { TopicViewComponent } from './topic-view/topic-view.component';
 import { StudDashComponent } from './stud-dash/stud-dash.component';
 import { StudProfComponent } from './stud-prof/stud-prof.component';
 import { StudEditComponent } from './stud-edit/stud-edit.component';
+import { ActivateComponent } from './activate/activate.component';
+import { GuideProjUpdateComponent } from './guide-proj-update/guide-proj-update.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { StudEditComponent } from './stud-edit/stud-edit.component';
     TopicViewComponent,
     StudDashComponent,
     StudProfComponent,
-    StudEditComponent
+    StudEditComponent,
+    ActivateComponent,
+    GuideProjUpdateComponent
   ],
   imports: [
     BrowserModule,
