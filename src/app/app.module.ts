@@ -14,6 +14,7 @@ import { StudProfComponent } from './stud-prof/stud-prof.component';
 import { StudEditComponent } from './stud-edit/stud-edit.component';
 import { ActivateComponent } from './activate/activate.component';
 import { GuideProjUpdateComponent } from './guide-proj-update/guide-proj-update.component';
+import { SuggestionComponent } from './suggestion/suggestion.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { GuideProjUpdateComponent } from './guide-proj-update/guide-proj-update.
     StudProfComponent,
     StudEditComponent,
     ActivateComponent,
-    GuideProjUpdateComponent
+    GuideProjUpdateComponent,
+    SuggestionComponent
   ],
   imports: [
     BrowserModule,
