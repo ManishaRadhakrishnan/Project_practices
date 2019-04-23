@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Api, ApiService } from '../api.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -6,10 +7,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
-
-  constructor() { }
+  error: string;
+  api: Api;
+  constructor(private api_service: ApiService) { }
 
   ngOnInit() {
+  }
+
+  do_request(full_name: string, email: string, username: string, password: string, confirm_password: string)
+  {
+    if (password == confirm_password)
+    {
+      this.api_service.do_register(full_name, email, username, password)
+      .subscribe( 
+        (data: Api) => this.api = { ...data }, // success path
+        error => this.error = error // error path
+      );
+  }
   }
 
 }
