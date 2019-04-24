@@ -12,9 +12,8 @@ export class StudEditComponent implements OnInit {
   constructor(private api_service: ApiService) { }
   ngOnInit() { }
 
-  do_update_request(first_name, last_name, email, contact, address, course, department)
+  do_update_request(full_name, email, contact, address, course, department)
   {
-    let full_name = first_name + " " + last_name;
     this.api_service.do_update(full_name, email, contact, address, course, department)
     .subscribe(
       (data: Api) => this.api = { ...data }, // success path
