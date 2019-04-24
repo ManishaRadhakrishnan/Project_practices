@@ -38,9 +38,9 @@ export class ApiService {
       );
     }
 
-    insert_mail(email_to: string, email_cc: string, email_bcc: string, email_content: string)
+    insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string)
     {
-      let api_url = encodeURI(this.endpoint_url + "");
+      let api_url = encodeURI(this.endpoint_url + "/insert_mail?user_id=" + user_id + "&email_to=" + email_to + "&subject="+ subject + "&email_cc=" + email_cc + "&email_bcc=" + email_bcc + "&email_content=" + email_content);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error

@@ -14,23 +14,29 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-6">
                                   <div class="box-header">
-                                    <div >
+                                    <div>
                                       <div class="form-group">
                                       <div class="input-group">
                                         <span class="input-group-addon">TO:</span>
-                                        <input name="email_to" type="email" class="form-control" placeholder="Email TO" #email_to>
+                                        <input name="email_to" type="email" class="form-control" #email_to>
                                       </div>
                                       </div>
                                       <div class="form-group">
                                         <div class="input-group">
                                           <span class="input-group-addon">CC:</span>
-                                          <input name="email_to" type="email" class="form-control" placeholder="Email CC" #email_cc>
+                                          <input name="email_to" type="email" class="form-control" #email_cc>
                                         </div>
                                       </div>
                                       <div class="form-group">
                                         <div class="input-group">
                                           <span class="input-group-addon">BCC:</span>
-                                          <input name="email_to" type="email" class="form-control" placeholder="Email BCC" #email_bcc>
+                                          <input name="email_to" type="email" class="form-control" #email_bcc>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                          <span class="input-group-addon">Subject:</span>
+                                          <input name="subject" type="email" class="form-control" #subject>
                                         </div>
                                       </div>
                                       <div class="form-group">
@@ -41,13 +47,13 @@
                                       <i class="fa fa-paperclip"></i> Attachment
                                       <input type="file" name="attachment"/>
                                       </div>
-                                      <p class="help-block">Max. 32MB</p>
+                                      <p class="help-block">Max. 2MB</p>
                                       </div>
                                     </div>
 
                                     <div class="modal-footer clearfix">
-                                      <a href="/mail" class="btn btn-danger text-white" ><b>Discard</b></a>
-                                      <button (click)="do_send_mail(email_to.value, email_cc.value, email_bcc.value, email_content.value)" class="btn btn-primary pull-left"><i class="fa fa-envelope"></i> Send Message</button>
+                                      <a href="/mail" class="btn btn-danger">Discard</a>
+                                      <button (click)="do_send_mail(email_to.value, subject.value, email_cc.value, email_bcc.value, email_content.value)" class="btn btn-primary pull-left"><i class="fa fa-envelope"></i> Send Message</button>
                                     </div>
                                   </div>
                                 </div>

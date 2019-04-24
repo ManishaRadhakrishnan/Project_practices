@@ -14,9 +14,10 @@ export class ComposeComponent implements OnInit {
   ngOnInit() {
   }
 
-  do_send_mail(email_to: string, email_cc: string, email_bcc: string, email_content: string)
+  do_send_mail(email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string)
   {
-    this.api_service.insert_mail(email_to, email_cc, email_bcc, email_content)
+    let user_id = "1";
+    this.api_service.insert_mail(user_id, email_to, subject, email_cc, email_bcc, email_content)
     .subscribe(
       (data: Api) => this.api = { ...data }, // success path
       error => this.error = error // error path
