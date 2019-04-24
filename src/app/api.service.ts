@@ -19,16 +19,24 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-    do_register(full_name: string, email: string, username: string, password: string) {
-        let api_url = encodeURI(this.endpoint_url + "/register?full_name=" + full_name + "&email=" + email + "&password=" + password + "&username=" + username);
-      console.log(api_url);
+    do_register(full_name: string, email: string, username: string, password: string, role: string)
+    {
+      let api_url = encodeURI(this.endpoint_url + "/register?full_name=" + full_name + "&email=" + email + "&password=" + password + "&username=" + username + "&role=" + role);
       return this.http.get<Api>(api_url)
         .pipe(
         // retry(3), // retry a failed request up to 3 times
         catchError(this.handle_error) // then handle the error
       );
-  }
+    }
 
+    do_update(full_name, email, contact, address, course, department)
+    {
+      let api_url = encodeURI(this.endpoint_url + "");
+      return this.http.get<Api>(api_url)
+        .pipe(
+        catchError(this.handle_error) // then handle the error
+      );
+    }
 
   private handle_error(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
