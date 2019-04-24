@@ -14,12 +14,12 @@ export class SignUpComponent implements OnInit {
   ngOnInit() {
   }
 
-  do_request(full_name: string, email: string, username: string, password: string, confirm_password: string)
+  do_request(full_name: string, email: string, username: string, password: string, confirm_password: string, role: string)
   {
     if (password == confirm_password)
     {
-      this.api_service.do_register(full_name, email, username, password)
-      .subscribe( 
+      this.api_service.do_register(full_name, email, username, password, role)
+      .subscribe(
         (data: Api) => this.api = { ...data }, // success path
         error => this.error = error // error path
       );

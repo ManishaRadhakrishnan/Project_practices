@@ -17,13 +17,15 @@ http.createServer(function(req, res) {
   var query_string = query_parse.query;
 
   if (path == './register') {
-    if (query_string.username && query_string.password) {
-      insert_data(query_string.full_name, query_string.email, query_string.username, query_string.password, function(insert_id, message) {
-        let display_message = '{"message" : "' + message +
-          '", "status" : ' + insert_id +
-          '}';
-        res.end(display_message.toString());
-      });
+    if (query_string.username && query_string.password && query_string.role) {
+      insert_data(query_string.full_name, query_string.email, query_string.username,
+        query_string.password, query_string.role,
+        function(insert_id, message) {
+          let display_message = '{"message" : "' + message +
+            '", "status" : ' + insert_id +
+            '}';
+          res.end(display_message.toString());
+        });
     } else {
       res.write("something wrong");
     }
@@ -40,32 +42,35 @@ function return_query_status(status, message) {
   return output_message;
 }
 
-function insert_data(full_name, email, username, password, callback) {
-  let sql = "INSERT INTO user(user_name, password) VALUES(?, ?)";
-  let data = [username, password];
-  con.query(sql, data, function(err, result)
-  {
-    if (err)
-    {
+function insert_data(full_name, email, username, password, role, callback) {
+  let sql = "INSERT INTO user(user_name, password, role) VALUES(?, ?, ?)";
+  let data = [username, password, role];
+  con.query(sql, data, function(err, result) {
+    if (err) {
       callback(0, "Something went wrong");
-    } else
-    {
-      sql = "INSERT INTO student(user_id, stud_name, mail) VALUES (?, ?, ?)";
-      data = [result.insertId.toString(), full_name, email];
-      con.query(sql, data, function(err, result)
-      {
-        if (err)
-        {
+    } else {
+      if (role == "stud") {
+        sql =
+          "INSERT INTO student(user_id, stud_name, mail) VALUES (?, ?, ?)";
+        data = [result.insertId.toString(), full_name, email];
+      } else if (role == "guide") {
+        sql =
+          "INSERT INTO internal_guides(user_id, guide_name, mail) VALUES (?, ?, ?)";
+        data = [result.insertId.toString(), full_name, email];
+      } else if (role == "cood") {
+        sql =
+          "INSERT INTO dept_heads(user_id, head_name, mail) VALUES (?, ?, ?)";
+        data = [result.insertId.toString(), full_name, email];
+      }
+      con.query(sql, data, function(err, result) {
+        if (err) {
           callback(0, "Something went wrong");
-        }
-        else
-        {
+        } else {
           callback(result.insertId.toString(), "Registration Success");
         }
       });
     }
-  }
-);
+  });
 }
 
 function select_data(user, pass) {
