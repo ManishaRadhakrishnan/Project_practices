@@ -30,7 +30,18 @@ http.createServer(function(req, res) {
       res.write("something wrong");
     }
   } else if (path == './login') {
-    select_data(qdata.user, qdata.pass);
+    select_data(query_string.user, query_string.pass);
+  } else if (path == './compose') {
+    //insert mail details
+    if (query_string.user_id) {
+      insert_mail(query_string.user_id, query_string.email_to, query_string
+        .email_cc, query_string.email_bcc, query_string.email_content,
+        function(status, message) {
+          let display_message = '{"message" : "' + message +
+            '", "status" : "' + status + '"}';
+          res.end(display_message.toString());
+        });
+    }
   } else {
     console.log("Invalid");
   }
@@ -71,6 +82,21 @@ function insert_data(full_name, email, username, password, role, callback) {
       });
     }
   });
+}
+
+function insert_mail(user_id, email_to, email_cc, email_bcc, email_content,
+  callback) {
+  let sql = "";
+  let data = [];
+  con.query(sql, data,
+    function(err, result, fields) {
+      if (err) {
+        // throw err;
+        callback(0, "Something went wrong. Mail data not recorded")
+      } else {
+        callback(1, "Mail data recorded successfully")
+      }
+    });
 }
 
 function select_data(user, pass) {

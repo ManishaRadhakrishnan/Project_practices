@@ -38,6 +38,15 @@ export class ApiService {
       );
     }
 
+    insert_mail(email_to: string, email_cc: string, email_bcc: string, email_content: string)
+    {
+      let api_url = encodeURI(this.endpoint_url + "");
+      return this.http.get<Api>(api_url)
+        .pipe(
+        catchError(this.handle_error) // then handle the error
+      );
+    }
+
   private handle_error(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
