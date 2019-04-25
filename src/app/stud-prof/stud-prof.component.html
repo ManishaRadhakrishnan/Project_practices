@@ -16,12 +16,14 @@
                     <img class="avatar border-white" src="assets/img/faces/maneesha.jpg" alt="..."/>
                   </div>
                   <div>
-                    <div class="author">
-                      <h4 class="title">Manisha Radhakrishnan<br />
+                    <div class="" *ngFor="let info of information">
+                      <div class="author">
+                      <h4 class="title">{{info.stud_name}}<br />
                         <a href="#">
-                          <small>rlmanus31@gmail.com</small>
+                          <small>{{info.mail}}</small>
                         </a>
                       </h4>
+                    </div>
                     </div>
                   </div>
                   <hr>
@@ -31,47 +33,49 @@
                 <div class="card">
                   <div style="padding:10px;">
                     <form>
-                      <div class="row">
-                        <div class="col-md-8">
-                          <div class="form-group">
-                            <label>Full Name</label>
-                            <input type="text" class="form-control border-input" value="Manisha" readonly>
+                      <div class="" *ngFor="let info of information">
+                        <div class="row">
+                          <div class="col-md-8">
+                            <div class="form-group">
+                              <label>Full Name</label>
+                              <input type="text" class="form-control border-input" value="{{info.stud_name}}" readonly>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="exampleInputEmail1">Email</label>
-                            <input type="email" class="form-control border-input" value="rlmanus31@gmail.com" readonly>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Email</label>
+                              <input type="email" class="form-control border-input" value="{{info.mail}}" readonly>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Contact</label>
+                              <input type="text" class="form-control border-input" value="{{info.contact}}" readonly>
+                            </div>
                           </div>
                         </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="exampleInputEmail1">Contact</label>
-                            <input type="text" class="form-control border-input" value="9967748118" readonly>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label>Address</label>
+                              <textarea class="form-control border-input"readonly>{{info.address}}</textarea>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label>Address</label>
-                            <textarea class="form-control border-input"readonly>Chembalipurath Marath, Thalore                                </textarea>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Course</label>
+                              <input type="text" class="form-control border-input" value="{{info.course_name}}" readonly>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label>Course</label>
-                            <input type="text" class="form-control border-input" placeholder="Masters in Computer Application" readonly>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label>Department</label>
-                            <input type="text" class="form-control border-input" placeholder="Department"  readonly>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Department</label>
+                              <input type="text" class="form-control border-input" value="{{info.dept_name}}"  readonly>
+                            </div>
                           </div>
                         </div>
                       </div>

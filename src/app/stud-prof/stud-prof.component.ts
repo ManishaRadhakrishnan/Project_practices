@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Api, ApiService } from '../api.service';
 
 @Component({
   selector: 'app-stud-prof',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StudProfComponent implements OnInit {
 
-  constructor() { }
+  information : string[];
+
+  constructor(private api_service: ApiService) { }
 
   ngOnInit() {
-  }
+    this.api_service
+     .view_student_profile()
+     .subscribe(
+       data => {
+         this.information = data.data as string[];
+       },
+       err => {
+         console.log(err);
+       }
+     );
+ }
 
 }

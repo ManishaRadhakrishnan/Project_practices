@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Api, ApiService } from '../api.service';
 
 @Component({
   selector: 'app-activate',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ActivateComponent implements OnInit {
 
-  constructor() { }
+  error: string;
+  api: Api;
+  information : string[];
+  constructor(private api_service: ApiService) { }
 
   ngOnInit() {
-  }
+    this.api_service
+     .list_all_students()
+     .subscribe(
+       data => {
+         this.information = data.data as string[];
+       },
+       err => {
+         console.log(err);
+       }
+     );
+ }
 
 }

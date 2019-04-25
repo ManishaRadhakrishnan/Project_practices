@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, map } from 'rxjs/operators';
 
 export interface Api {
   status: string;
   message: string;
 }
+
+const httpOptions = {
+  headers: new HttpHeaders({ "Content-Type": "application/json", "Authorization": "c31z" })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +62,30 @@ export class ApiService {
       );
     }
 
+    edit_student_profile(): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/edit_student_profile/1");
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
+    view_student_profile(): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/view_student_profile/1");
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
+    list_all_students(): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/list_all_students");
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
   private handle_error(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -74,6 +102,10 @@ export class ApiService {
       'Something bad happened; please try again later.');
   };
 
+  private extract_data(res: Response) {
+   let body = res;
+   return body || {};
+ }
 
   make_intentional_error() {
     return this.http.get('not/a/real/url')

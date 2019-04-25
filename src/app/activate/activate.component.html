@@ -2,7 +2,7 @@
     <aside class="right-side">
       <section class="content-header no-margin">
           <h1 class="text-center">
-            Users
+            Students
           </h1>
       </section>
 
@@ -18,19 +18,28 @@
                         <th> <input type="checkbox" value=""></th>
                         <th>Name</th>
                         <th>E-Mail</th>
-                        <th>Date</th>
-                        <th>Update date</th>
+                        <th>Academic Year</th>
+                        <th>Course</th>
                         <th>Status</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody  *ngFor="let info of information">
                       <tr>
                         <td><input type="checkbox" value=""></td>
-                        <td>Carmon Morga</td>
-                        <td>ExampleAd@example.om</td>
-                        <td>February 26, 2018 4:35 pm</td>
-                        <td>September 12, 2017 6:40 am</td>
-                        <td><button type="button"  class="btn btn-success" name="button">Active</button></td>
+                        <td>{{info.stud_name}}</td>
+                        <td>{{info.mail}}</td>
+                        <td>{{info.curr_acad_yr}}</td>
+                        <td>{{info.course_name}}</td>
+                        <ng-template [ngIf]="info.active  == '1'">
+                          <td>
+                            <button type="button"  class="btn btn-success" name="button">Active</button>
+                          </td>
+                        </ng-template>
+                        <ng-template [ngIf]="info.active  == '0'">
+                          <td>
+                            <button type="button"  class="btn btn-danger" name="button">Inactive</button>
+                          </td>
+                        </ng-template>
                       </tr>
                     </tbody>
                   </table>
