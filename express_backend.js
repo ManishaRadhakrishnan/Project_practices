@@ -82,7 +82,8 @@ app.get('/list_all_students', function (req, res, next) {
     }
   });
 })
-  app.get('/project_details/1', function (req, res, next) {
+
+app.get('/project_details/1', function (req, res, next) {
   var sql = "SELECT project.proj_title,project.proj_desc,project.proj_sub_date,project.proj_domain,project.proj_technology,project.proj_status FROM student, user, project WHERE student.user_id = user.user_id";
 
   con.query(sql, function(err, result, fields) {

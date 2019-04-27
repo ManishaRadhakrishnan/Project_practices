@@ -19,8 +19,7 @@ const httpOptions = {
 })
 export class ApiService {
 
-  endpoint_url = "http://127.0.0.1:8000";
-  select_url = "http://127.0.0.1:8080";
+  endpoint_url = "http://127.0.0.1:8080";
   constructor(private http: HttpClient) { }
 
     do_register(full_name: string, email: string, username: string, password: string, role: string)
@@ -63,7 +62,7 @@ export class ApiService {
     }
 
     edit_student_profile(): Observable<any> {
-      let api_url = encodeURI(this.select_url + "/edit_student_profile/1");
+      let api_url = encodeURI(this.endpoint_url + "/edit_student_profile/1");
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
@@ -71,7 +70,7 @@ export class ApiService {
     }
 
     view_student_profile(): Observable<any> {
-      let api_url = encodeURI(this.select_url + "/view_student_profile/1");
+      let api_url = encodeURI(this.endpoint_url + "/view_student_profile/1");
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
@@ -79,15 +78,23 @@ export class ApiService {
     }
 
     list_all_students(): Observable<any> {
-      let api_url = encodeURI(this.select_url + "/list_all_students");
+      let api_url = encodeURI(this.endpoint_url + "/list_all_students");
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
       );
     }
-    
+
     project_details(): Observable<any> {
-      let api_url = encodeURI(this.select_url + "/project_details/1");
+      let api_url = encodeURI(this.endpoint_url + "/project_details/1");
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
+    login(username: string, password: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/login/" + username + "/" + password);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
