@@ -9,7 +9,7 @@ var con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "mydb"
+  database: "manisha_pms"
 });
 
 app.get('/edit_student_profile/:user_id', function (req, res, next) {
@@ -127,14 +127,13 @@ app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:c
   let full_name = req.params.full_name;
   let email = req.params.email;
   let contact = req.params.contact;
-  let project_description = req.params.project_description;
   let course = req.params.course;
   let department = req.params.department;
 
   let sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, curr_course = ?, dept_id = ? WHERE user_id = ?";
   let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), user_id];
 
-  con.query(sql, function(err, result, fields) {
+  con.query(sql, data, function(err, result, fields) {
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
@@ -162,9 +161,8 @@ app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_te
 
   let data = [user_id, project_title, project_description.trim(), date_time, project_domains, project_technologies];
 
-  con.query(sql,data, function(err, result, fields) {
+  con.query(sql, data, function(err, result, fields) {
     if (err){
-      throw err;
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
       res.json({"status" : 1, "data" : "Project added succesfully"});
@@ -181,13 +179,19 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
   let bcc = req.params.bcc;
   let content = req.params.content;
   let attachment = req.params.attachment;
-   let sql = "INSERT INTO mail(user_id, toaddr, sub, cc, bcc, content, attachment) VALUES(?, ?, ?, ?, ?, ?, ?)";
-  let data = [user_id, mail_to, subject, cc, bcc, content, attachment];
+  let current_date = new Date();
+  let date_time = current_date.getDate() + "/"
+                + (current_date.getMonth() + 1)  + "/"
+                + current_date.getFullYear() + " @ "
+                + current_date.getHours() + ":"
+                + current_date.getMinutes();
+
+  let sql = "INSERT INTO mail(user_id, toaddr, sub, cc, bcc, content, timestamp, attachment) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+  let data = [user_id, mail_to, subject, cc, bcc, content, date_time, attachment];
   con.query(sql, data, function(err, result)
   {
     if (err)
     {
-      throw err;
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else
     {
@@ -196,9 +200,10 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
   }
 );
 });
+
 app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req, res, next) {
 
-  let fullname = req.params.fullname;
+  let full_name = req.params.fullname;
   let username = req.params.username;
   let password= req.params.password;
   let email = req.params.email;
@@ -262,9 +267,30 @@ app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req,
        }
        }
       }
-      // res.json({"status" : 1, "data" : "Mail send sccessfully"});
 );
 });
+
+app.get("/fetch_mail/:user_id",function (req, res, next) {
+
+  let user_id = req.params.user_id;
+
+  let sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND student.user_id = ? AND mail_visible = '1'";
+  let data = [user_id, user_id];
+  con.query(sql, data, function(err, result) {
+    if (err) {
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      if (result.length > 0) {
+        res.json({"status" : 1, "data": result, "mail_count" : result.length});
+      }
+      else {
+        res.json({"status" : 0, "data" : "Something went wrong"});
+      }
+     }
+   }
+ );
+  });
+
 app.listen(8080, function () {
   // var host = server.address().address;
   // var port = server.address().port;
