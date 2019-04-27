@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Api, ApiService } from '../api.service';
 @Component({
   selector: 'app-topic-view',
   templateUrl: './topic-view.component.html',
@@ -7,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopicViewComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private api_service: ApiService) { }
+  information : string[];
   ngOnInit() {
+    this.api_service
+     .project_details()
+     .subscribe(
+       data => {
+         console.log(data);
+         this.information = data.data as string[];
+       },
+       err => {
+         console.log(err);
+       }
+     );
   }
 
 }

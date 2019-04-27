@@ -7,7 +7,7 @@ var con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "manisha_pms"
+  database: "mydb"
 });
 
 app.use(cors())
@@ -73,6 +73,17 @@ app.get('/view_student_profile/1', function (req, res, next) {
 
 app.get('/list_all_students', function (req, res, next) {
   var sql = "SELECT student.stud_name, student.curr_acad_yr, student.mail, user.active, courses.course_name FROM student, user, courses WHERE student.curr_course IN (SELECT courses.course_id from courses) AND student.user_id = user.user_id";
+
+  con.query(sql, function(err, result, fields) {
+    if (err){
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      res.json({"status" : 1, "data" : result});
+    }
+  });
+})
+  app.get('/project_details/1', function (req, res, next) {
+  var sql = "SELECT project.proj_title,project.proj_desc,project.proj_sub_date,project.proj_domain,project.proj_technology,project.proj_status FROM student, user, project WHERE student.user_id = user.user_id";
 
   con.query(sql, function(err, result, fields) {
     if (err){
