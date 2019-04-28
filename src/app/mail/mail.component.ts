@@ -22,10 +22,6 @@ export class MailComponent implements OnInit {
          this.information = data.data as string[];
          this.mail_count = data.mail_count as number;
          this.status = data.status as number;
-           if(this.status == 1)
-           {
-             this.router.navigate(['/mail']);
-           }
        },
        err => {
          console.log(err);

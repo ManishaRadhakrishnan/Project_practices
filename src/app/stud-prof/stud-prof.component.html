@@ -1,107 +1,103 @@
-<div class="wrapper row-offcanvas row-offcanvas-left"> 
+<div class="wrapper row-offcanvas row-offcanvas-left">
   <aside class="right-side">
-    <section class="content-header no-margin">
-      <h1 class="text-center">
-          View Profile
-      </h1>
-    </section>
-    <section class="content-header no-margin">
-      <div class="box box-solid card">
-        <div class="box-body">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-4 col-md-3 card">
-                <div class="card-body">
-                  <div class="image">
-                    <img class="avatar border-white" alt="..."/>
-                  </div>
-                  <div>
-                    <div class="" *ngFor="let info of information">
-                      <div class="author">
-                      <h4 class="title">{{info.stud_name}}<br />
-                        <a href="#">
-                          <small>{{info.mail}}</small>
-                        </a>
-                      </h4>
-                    </div>
-                    </div>
-                  </div>
-                  <hr>
-                </div>
-              </div>
-              <div class="col-lg-8 col-md-7">
-                <div class="card">
-                  <div style="padding:10px;">
-                     <ng-template [ngIf]="status  == '0'">
+     <ng-template [ngIf]="status  == '0'">
       <div class="alert alert-danger">
         Login attempt failed
       </div>
     </ng-template>
-
-    <ng-template [ngIf]="status == '1'">
-      <div class="alert alert-success">
-        Please wait while we redirect you to dashboard
-      </div>
-    </ng-template>
-                    <form>
-                      <div class="" *ngFor="let info of information">
-                        <div class="row">
-                          <div class="col-md-8">
-                            <div class="form-group">
-                              <label>Full Name</label>
-                              <input type="text" class="form-control border-input" value="{{info.stud_name}}" readonly>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">Email</label>
-                              <input type="email" class="form-control border-input" value="{{info.mail}}" readonly>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">Contact</label>
-                              <input type="text" class="form-control border-input" value="{{info.contact}}" readonly>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label>Address</label>
-                              <textarea class="form-control border-input"readonly>{{info.address}}</textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label>Course</label>
-                              <input type="text" class="form-control border-input" value="{{info.course_name}}" readonly>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label>Department</label>
-                              <input type="text" class="form-control border-input" value="{{info.dept_name}}"  readonly>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="text-center">
-                        <a href="/stud-edit" type="submit" class="btn btn-info btn-block btn-wd">Edit Profile</a>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <ng-template [ngIf]="status  == '1'">
+     <section class="content-header no-margin">
+       <h1 class="text-center">
+         View Profile
+       </h1>
+     </section>
+     <section class="content-header no-margin">
+       <div class="box box-solid card">
+         <div class="box-body">
+           <div class="card-body">
+             <div class="row">
+               <div class="col-lg-4 col-md-3 card">
+                 <div class="card-body">
+                   <div class="image">
+                     <img class="avatar border-white" alt="..."/>
+                   </div>
+                   <div>
+                     <div class="" *ngFor="let info of information">
+                       <div class="author">
+                         <h4 class="title">{{info.stud_name}}<br />
+                           <a href="#">
+                             <small>{{info.mail}}</small>
+                           </a>
+                         </h4>
+                       </div>
+                     </div>
+                   </div>
+                   <hr>
+                 </div>
+               </div>
+               <div class="col-lg-8 col-md-7">
+                 <div class="card">
+                   <div style="padding:10px;">
+                     <form>
+                       <div class="" *ngFor="let info of information">
+                         <div class="row">
+                           <div class="col-md-8">
+                             <div class="form-group">
+                               <label>Full Name</label>
+                               <input type="text" class="form-control border-input" value="{{info.stud_name}}" readonly>
+                             </div>
+                           </div>
+                         </div>
+                         <div class="row">
+                           <div class="col-md-6">
+                             <div class="form-group">
+                               <label for="exampleInputEmail1">Email</label>
+                               <input type="email" class="form-control border-input" value="{{info.mail}}" readonly>
+                             </div>
+                           </div>
+                           <div class="col-md-6">
+                             <div class="form-group">
+                               <label for="exampleInputEmail1">Contact</label>
+                               <input type="text" class="form-control border-input" value="{{info.contact}}" readonly>
+                             </div>
+                           </div>
+                         </div>
+                         <div class="row">
+                           <div class="col-md-12">
+                             <div class="form-group">
+                               <label>Address</label>
+                               <textarea class="form-control border-input"readonly>{{info.address}}</textarea>
+                             </div>
+                           </div>
+                         </div>
+                         <div class="row">
+                           <div class="col-md-6">
+                             <div class="form-group">
+                               <label>Course</label>
+                               <input type="text" class="form-control border-input" value="{{info.course_name}}" readonly>
+                             </div>
+                           </div>
+                           <div class="col-md-6">
+                             <div class="form-group">
+                               <label>Department</label>
+                               <input type="text" class="form-control border-input" value="{{info.dept_name}}"  readonly>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                       <div class="text-center">
+                         <a href="/student-edit-profile" type="submit" class="btn btn-info btn-block btn-wd">Edit Profile</a>
+                       </div>
+                     </form>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </section>
+   </ng-template>
   </aside>
 </div>
 <router-outlet></router-outlet>

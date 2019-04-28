@@ -1,14 +1,4 @@
 <div class="wrapper row-offcanvas row-offcanvas-left">
-    <ng-template [ngIf]="status  == '0'">
-       <div class="alert alert-danger">
-          Editing failed
-            </div>
-     </ng-template>
-     <ng-template [ngIf]="status == '1'">
-        <div class="alert alert-success">
-           Please wait while we redirect you to profile page
-        </div>
-     </ng-template>
   <aside class="right-side">
     <section class="content-header no-margin">
       <h1 class="text-center">
@@ -19,82 +9,101 @@
       <div class="box box-solid card">
         <div class="box-body">
           <div class="card-body" style="padding:10px;">
-            <div class="row">
-              <div class="col-lg-4 col-md-3">
-                <div class="card card-body">
-                  <div class="image">
-                    <img class="avatar border-white" src="assets/img/blank_photo.png" alt="..."/>
-                    <h6>Upload a different photo...</h6>
-                    <input type="file" class="text-center center-block file-upload"/>
-                  </div>
+
+            <ng-template [ngIf]="status  == '0'">
+               <div class="alert alert-danger">
+                  Profile not updated. Please try again later.
                 </div>
-              </div>
-              <div class="col-lg-8 col-md-8">
-                <div class="card">                 
-                  <div>
-                    <form>
-                      <div *ngFor="let student of student_data">
-                        <div class="row">
-                          <div class="col-md-8">
-                            <div class="form-group" >
-                              <label>Name</label>
-                              <input type="text" class="form-control border-input" value="{{student.stud_name}}" #full_name>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">Email</label>
-                              <input type="email" class="form-control border-input" value="{{student.mail}}" #email>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">Contact</label>
-                              <input type="number" class="form-control border-input" value="{{student.contact}}" #contact>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label>Address</label>
-                              <textarea class="form-control border-input" #address>{{student.address}}</textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label>Course</label>
-                              <select class="form-control border-input" #course>
-                                <option> -- Select a course -- </option>
-                                <option value="{{course.course_id}}" *ngFor="let course of course_names" >{{course.course_name}}</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label>Department</label>
-                              <select class="form-control border-input" #department>
-                                <option> -- Select a department -- </option>
-                                <option value="{{department.dept_id}}" *ngFor="let department of department_names" >{{department.dept_name}}</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="text-center">
-                          <a class="btn btn-info btn-block btn-wd btn-md" (click)="do_update_student_profile(full_name.value, email.value, contact.value, address.value, course.value, department.value)">Save</a>
-                        </div>
-                        <div class="clearfix">
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
+             </ng-template>
+
+             <ng-template [ngIf]="status  == '1'">
+               <div class="row">
+                 <ng-template [ngIf]="update_status  == '1'">
+                   <div class="alert alert-success">
+                     Profile updated successfully
+                   </div>
+                 </ng-template>
+                 <ng-template [ngIf]="update_status  == '0'">
+                   <div class="alert alert-danger">
+                     Profile update unsuccessful. Please try again later.
+                   </div>
+                 </ng-template>
+                   <div class="col-lg-4 col-md-3">
+                     <div class="card card-body">
+                       <div class="image">
+                         <img class="avatar border-white" src="assets/img/blank_photo.png" alt="..."/>
+                         <h6>Upload a different photo...</h6>
+                         <input type="file" class="text-center center-block file-upload"/>
+                       </div>
+                     </div>
+                   </div>
+                   <div class="col-lg-8 col-md-8">
+                     <div class="card">
+                       <div>
+                         <form>
+                           <div *ngFor="let student of student_data">
+                             <div class="row">
+                               <div class="col-md-8">
+                                 <div class="form-group" >
+                                   <label>Name</label>
+                                   <input type="text" class="form-control border-input" value="{{student.stud_name}}" #full_name>
+                                 </div>
+                               </div>
+                             </div>
+                             <div class="row">
+                               <div class="col-md-6">
+                                 <div class="form-group">
+                                   <label for="exampleInputEmail1">Email</label>
+                                   <input type="email" class="form-control border-input" value="{{student.mail}}" #email>
+                                 </div>
+                               </div>
+                               <div class="col-md-6">
+                                 <div class="form-group">
+                                   <label for="exampleInputEmail1">Contact</label>
+                                   <input type="number" class="form-control border-input" value="{{student.contact}}" #contact>
+                                 </div>
+                               </div>
+                             </div>
+                             <div class="row">
+                               <div class="col-md-12">
+                                 <div class="form-group">
+                                   <label>Address</label>
+                                   <textarea class="form-control border-input" #address>{{student.address}}</textarea>
+                                 </div>
+                               </div>
+                             </div>
+                             <div class="row">
+                               <div class="col-md-6">
+                                 <div class="form-group">
+                                   <label>Course</label>
+                                   <select class="form-control border-input" #course>
+                                     <option> -- Select a course -- </option>
+                                     <option value="{{course.course_id}}" *ngFor="let course of course_names" >{{course.course_name}}</option>
+                                   </select>
+                                 </div>
+                               </div>
+                               <div class="col-md-6">
+                                 <div class="form-group">
+                                   <label>Department</label>
+                                   <select class="form-control border-input" #department>
+                                     <option> -- Select a department -- </option>
+                                     <option value="{{department.dept_id}}" *ngFor="let department of department_names" >{{department.dept_name}}</option>
+                                   </select>
+                                 </div>
+                               </div>
+                             </div>
+                             <div class="text-center">
+                               <a class="btn btn-info btn-block btn-wd btn-md" (click)="do_update_student_profile(full_name.value, email.value, contact.value, address.value, course.value, department.value)">Save</a>
+                             </div>
+                             <div class="clearfix">
+                             </div>
+                           </div>
+                         </form>
+                       </div>
+                     </div>
+                   </div>
+               </div>
+             </ng-template>
           </div>
         </div>
       </div>

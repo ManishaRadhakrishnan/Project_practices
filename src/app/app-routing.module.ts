@@ -13,18 +13,18 @@ import {ActivateComponent} from './activate/activate.component';
 import {GuideProjUpdateComponent} from './guide-proj-update/guide-proj-update.component';
 import {SuggestionComponent} from './suggestion/suggestion.component'
 const routes: Routes = [
-  {path:'login' , component: LoginComponent},
-  {path:'sign-up' , component: SignUpComponent},
-  {path:'mail', component: MailComponent},
+  {path : 'login' , component: LoginComponent},
+  {path : 'register' , component: SignUpComponent},
+  {path : 'mail', component: MailComponent},
   {path : 'compose', component: ComposeComponent},
-  {path : 'topic-sub', component: TopicSubComponent},
-  {path: 'topic-view',component: TopicViewComponent },
-  {path: 'stud-dash', component:StudDashComponent},
-  {path: 'stud-prof', component: StudProfComponent},
-  {path: 'stud-edit', component: StudEditComponent},
-  {path: 'activate', component: ActivateComponent},
-  {path: 'guide-proj-update', component: GuideProjUpdateComponent},
-  {path: 'suggestion', component: SuggestionComponent}
+  {path : 'submit-topic', component: TopicSubComponent},
+  {path : 'topic-view',component: TopicViewComponent },
+  {path : 'student-dashboard', component:StudDashComponent},
+  {path : 'student-profile', component: StudProfComponent},
+  {path : 'student-edit-profile', component: StudEditComponent},
+  {path : 'users', component: ActivateComponent},
+  {path : 'guide-project-update', component: GuideProjUpdateComponent},
+  {path : 'suggestion', component: SuggestionComponent}
 ];
 
 @NgModule({

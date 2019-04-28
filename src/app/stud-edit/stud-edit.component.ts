@@ -12,7 +12,9 @@ export class StudEditComponent implements OnInit {
   student_data : string[];
   course_names: string[];
   department_names: string[];
-  status : number;
+  status : string;
+  update_status : string;
+
   constructor(private router: Router,private api_service: ApiService) { }
 
   ngOnInit() {
@@ -23,11 +25,7 @@ export class StudEditComponent implements OnInit {
          this.student_data = data.student_data as string[];
          this.course_names = data.course_names as string[];
          this.department_names = data.department_names as string[];
-         this.status = data.status as number;
-           if(this.status == 1)
-           {
-             this.router.navigate(['/stud-prof']);
-           }
+         this.status = data.status as string;
        },
        err => {
          console.log(err);
@@ -36,13 +34,17 @@ export class StudEditComponent implements OnInit {
  }
 
 
-  do_update_student_profile(full_name, email, contact, address, course, department)
-  {
+  do_update_student_profile(full_name, email, contact, address, course, department) {
     let user_id = "1";
-    this.api_service.update_student_profile(user_id, full_name, email, contact, address, course, department)
-    .subscribe(
-      (data: Api) => this.api = { ...data }, // success path
-      error => this.error = error // error path
-    );
+    this.api_service
+     .update_student_profile(user_id, full_name, email, contact, address, course, department)
+     .subscribe(
+       data => {
+         this.update_status = data.status as string;
+       },
+       err => {
+         console.log(err);
+       }
+     );
   }
 }

@@ -11,6 +11,7 @@ export class ActivateComponent implements OnInit {
   error: string;
   api: Api;
   information : string[];
+  status : number;
   constructor(private api_service: ApiService) { }
 
   ngOnInit() {
@@ -19,6 +20,7 @@ export class ActivateComponent implements OnInit {
      .subscribe(
        data => {
          this.information = data.data as string[];
+         this.status = data.status as number;
        },
        err => {
          console.log(err);

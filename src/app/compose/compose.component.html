@@ -1,87 +1,86 @@
 <div class="wrapper row-offcanvas row-offcanvas-left">
-    <aside class="right-side">
-        <section class="content-header no-margin">
-            <h1 class="text-center">
-               Compose Message
-            </h1>
-        </section>
+  <aside class="right-side">
+    <section class="content-header no-margin">
+      <h1 class="text-center">
+         Compose Message
+      </h1>
+    </section>
 
-        <section class="content">
-            <div class="mailbox row">
-                <div class="col-xs-12">
-                    <div class="box box-solid">
-                        <div class="box-body">
-                              <ng-template [ngIf]="status  == '0'">
-                                <div class="alert alert-danger">
-                                    Editing failed
-                                      </div>
-                              </ng-template>
-                              <ng-template [ngIf]="status == '1'">
-                                  <div class="alert alert-success">
-                                    Please wait while we redirect you to profile page
-                                  </div>
-                              </ng-template>                          
-                            <div class="row">
-                                <div class="col-md-12 col-sm-6">
-                                  <div class="box-header">
-                                    <div>
-                                      <div class="form-group">
-                                      <div class="input-group">
-                                        <span class="input-group-addon">TO:</span>
-                                        <input name="email_to" type="email" class="form-control" #email_to>
-                                      </div>
-                                      </div>
-                                      <div class="form-group">
-                                        <div class="input-group">
-                                          <span class="input-group-addon">CC:</span>
-                                          <input name="email_to" type="email" class="form-control" #email_cc>
-                                        </div>
-                                      </div>
-                                      <div class="form-group">
-                                        <div class="input-group">
-                                          <span class="input-group-addon">BCC:</span>
-                                          <input name="email_to" type="email" class="form-control" #email_bcc>
-                                        </div>
-                                      </div>
-                                      <div class="form-group">
-                                        <div class="input-group">
-                                          <span class="input-group-addon">Subject:</span>
-                                          <input name="subject" type="email" class="form-control" #subject>
-                                        </div>
-                                      </div>
-                                      <div class="form-group">
-                                      <textarea name="message" id="email_message" class="form-control" placeholder="Message" style="height: 120px;" #email_content></textarea>
-                                      </div>
-                                      <div class="form-group">
-                                      <div class="btn btn-success btn-file">
-                                      <i class="fa fa-paperclip"></i> Attachment
-                                      <input type="file" name="attachment" #attachment/>
-                                      </div>
-                                      <p class="help-block">Max. 2MB</p>
-                                      </div>
-                                    </div>
+    <section class="content">
+      <div class="mailbox row">
+        <div class="col-xs-12">
+          <div class="box box-solid">
+            <div class="box-body">
+              <ng-template [ngIf]="status  == '0'">
+                <div class="alert alert-danger">
+                    Unable to send an email. Please try again later
+                </div>
+              </ng-template>
+              <ng-template [ngIf]="status == '1'">
+                <div class="alert alert-success">
+                  Please wait while we redirect to your mailbox
+                </div>
+              </ng-template>
+              <div class="row">
+                  <div class="col-md-12 col-sm-6">
+                    <div class="box-header">
+                      <div>
+                        <div class="form-group">
+                        <div class="input-group">
+                          <span class="input-group-addon">TO:</span>
+                          <input name="email_to" type="email" class="form-control" #email_to>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="input-group">
+                            <span class="input-group-addon">CC:</span>
+                            <input name="email_to" type="email" class="form-control" #email_cc>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="input-group">
+                            <span class="input-group-addon">BCC:</span>
+                            <input name="email_to" type="email" class="form-control" #email_bcc>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="input-group">
+                            <span class="input-group-addon">Subject:</span>
+                            <input name="subject" type="email" class="form-control" #subject>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                        <textarea name="message" id="email_message" class="form-control" placeholder="Message" style="height: 120px;" #email_content></textarea>
+                        </div>
+                        <div class="form-group">
+                        <div class="btn btn-success btn-file">
+                        <i class="fa fa-paperclip"></i> Attachment
+                        <input type="file" name="attachment" #attachment/>
+                        </div>
+                        <p class="help-block">Max. 2MB</p>
+                        </div>
+                      </div>
 
-                                    <div class="modal-footer clearfix">
-                                      <a href="/mail" class="btn btn-danger">Discard</a>
-                                      <button (click)="do_send_mail(email_to.value, subject.value, email_cc.value, email_bcc.value, email_content.value, attachment.value)" class="btn btn-primary pull-left"><i class="fa fa-envelope"></i> Send Message</button>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-9 col-sm-8">
-                                    <div class="row pad">
-                                        <div class="col-sm-6">
-                                        </div>
-                                        <div class="col-sm-6 search-form">
-                                        </div>
-                                    </div>
-                                </div><!-- /.col (RIGHT) -->
-                            </div><!-- /.row -->
-                        </div><!-- /.box-body -->
-                       <!-- box-footer -->
-                    </div><!-- /.box -->
-                </div><!-- /.col (MAIN) -->
+                      <div class="modal-footer clearfix">
+                        <a href="/mail" class="btn btn-danger">Discard</a>
+                        <button (click)="do_send_mail(email_to.value, subject.value, email_cc.value, email_bcc.value, email_content.value, attachment.value)" class="btn btn-primary pull-left"><i class="fa fa-envelope"></i> Send Message</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-9 col-sm-8">
+                      <div class="row pad">
+                          <div class="col-sm-6">
+                          </div>
+                          <div class="col-sm-6 search-form">
+                          </div>
+                      </div>
+                  </div><!-- /.col (RIGHT) -->
+              </div>
             </div>
-        </section><!-- /.content -->
-    </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+  </aside>
 </div>
 <router-outlet></router-outlet>

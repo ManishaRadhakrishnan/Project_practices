@@ -23,13 +23,12 @@ export class LoginComponent{
            this.status = data.status as number;
            if(this.status == 1)
            {
-             this.router.navigate(['/stud-prof']);
+             this.router.navigate(['/student-profile']);
            }
          },
          err => {
            console.log(err);
          }
        );
-
     }
 }

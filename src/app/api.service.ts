@@ -25,7 +25,6 @@ export class ApiService {
     do_register(full_name: string, email: string, username: string, password: string, role: string)
     {
       let api_url = encodeURI(this.endpoint_url + "/insert_user/" + full_name + "/" + email + "/" + password + "/" + username + "/" + role);
-      console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         // retry(3), // retry a failed request up to 3 times
@@ -35,8 +34,7 @@ export class ApiService {
 
     update_student_profile(user_id : string, full_name : string, email : string, contact : string, address : string, course : string, department : string)
     {
-      let api_url = encodeURI(this.endpoint_url + "/student_profile_update?user_id=" + user_id + "&full_name=" + full_name + "&email=" + email + "&contact=" + contact  + "&address=" + address + "&course=" + course + "&department=" + department);
-      console.log(api_url);
+      let api_url = encodeURI(this.endpoint_url + "/update_student_profile/" + user_id + "/" + full_name + "/" + email + "/" + contact  + "/" + address + "/" + course + "/" + department);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error
@@ -46,7 +44,6 @@ export class ApiService {
     insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string,attachment :string)
     {
       let api_url = encodeURI(this.endpoint_url + "/insert_mail/"+ user_id  + "/" + email_to + "/" + subject + "/" + email_cc + "/" + email_bcc + "/" + email_content + "/" + attachment);
-      console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error
@@ -56,7 +53,6 @@ export class ApiService {
     do_add_project_topic(user_id: string, project_title: string, project_domains: string, project_technologies: string, project_description: string)
     {
       let api_url = encodeURI(this.endpoint_url + "/add_project_topic/" + user_id + "/" + project_title + "/"+ project_domains + "/" + project_technologies + "/" + project_description);
-      console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error

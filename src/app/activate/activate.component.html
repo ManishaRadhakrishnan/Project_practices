@@ -7,22 +7,22 @@
       </section>
 
       <section class="content">
-
-          <div class="col-md-12">
-            <div class="box box-solid">
-              <div class="box-body card">
-                <div class="card-body">
-                  <table class="table table-sm-responsive table-stripped table-hover">
-                    <thead>
-                      <tr class="info">
-                        <th> <input type="checkbox" value=""></th>
-                        <th>Name</th>
-                        <th>E-Mail</th>
-                        <th>Academic Year</th>
-                        <th>Course</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
+        <div class="col-md-12">
+          <div class="box box-solid">
+            <div class="box-body card">
+              <div class="card-body">
+                <table class="table table-sm-responsive table-stripped table-hover">
+                  <thead>
+                    <tr class="info">
+                      <th> <input type="checkbox" value=""></th>
+                      <th>Name</th>
+                      <th>E-Mail</th>
+                      <th>Academic Year</th>
+                      <th>Course</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <ng-template [ngIf]="status  == '1'">
                     <tbody  *ngFor="let info of information">
                       <tr>
                         <td><input type="checkbox" value=""></td>
@@ -42,13 +42,20 @@
                         </ng-template>
                       </tr>
                     </tbody>
-                  </table>
-                </div>
+                  </ng-template>
 
-              </div><!-- /.box-body -->
-            </div><!-- /.box -->
+                  <ng-template [ngIf]="status  == '0'">
+                    <tbody>
+                      <tr class="text-center">
+                        <td colspan="10">No active users</td>
+                      </tr>
+                    </tbody>
+                  </ng-template>
+                </table>
+              </div>
+            </div>
           </div>
-
+        </div>
       </section>
   </aside>
 </div>

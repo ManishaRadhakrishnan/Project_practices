@@ -9,7 +9,7 @@ var con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "mydb"
+  database: "manisha_pms"
 });
 
 app.get('/edit_student_profile/:user_id', function (req, res, next) {
@@ -76,20 +76,30 @@ app.get('/list_all_students', function (req, res, next) {
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
-      res.json({"status" : 1, "data" : result});
+      if (result.length > 0) {
+        res.json({"status" : 1, "data" : result});
+      }
+      else {
+        res.json({"status" : 0, "data" : "No users present"});
+      }
     }
   });
 });
 
-app.get('/project_details/1', function (req, res, next) {
-  // let user
-  var sql = "SELECT project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status FROM student, user, project WHERE project.user_id = 1 AND user.user_id = 1 AND student.user_id = 1 AND project.project_visible = 'visible';"
-
-  con.query(sql, function(err, result, fields) {
+app.get('/project_details/:user_id', function (req, res, next) {
+  let user_id = req.params.user_id;
+  let sql = "SELECT project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status FROM student, user, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible';"
+  let data = [user_id, user_id, user_id];
+  con.query(sql, data, function(err, result, fields) {
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
-      res.json({"status" : 1, "data" : result});
+      if(result.length > 0){
+        res.json({"status" : 1, "data" : result});
+      }
+      else {
+        res.json({"status" : 0, "data" : "No projects to show"});
+      }
     }
   });
 })
@@ -129,6 +139,7 @@ app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:c
   let contact = req.params.contact;
   let course = req.params.course;
   let department = req.params.department;
+  let address = req.params.address;
 
   let sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, curr_course = ?, dept_id = ? WHERE user_id = ?";
   let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), user_id];
@@ -175,7 +186,7 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
   let user_id = req.params.user_id;
   let mail_to = req.params.mail_to;
   let subject = req.params.subject;
-  let cc= req.params.cc;
+  let cc = req.params.cc;
   let bcc = req.params.bcc;
   let content = req.params.content;
   let attachment = req.params.attachment;
@@ -185,12 +196,12 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
                 + current_date.getFullYear() + " @ "
                 + current_date.getHours() + ":"
                 + current_date.getMinutes();
- 
+
   let sql = "INSERT INTO mail(user_id, toaddr, sub, cc, bcc, content, timestamp, attachment) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
   let data = [user_id, mail_to, subject, cc, bcc, content, date_time, attachment];
   con.query(sql, data, function(err, result)
   {
-    
+
     if (err)
     {
       console.log(err);

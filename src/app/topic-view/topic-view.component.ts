@@ -19,10 +19,6 @@ export class TopicViewComponent implements OnInit {
          console.log(data);
          this.information = data.data as string[];
          this.status = data.status as number;
-           if(this.status == 1)
-           {
-             this.router.navigate(['/topic-view']);
-           }
        },
        err => {
          console.log(err);
@@ -30,4 +26,7 @@ export class TopicViewComponent implements OnInit {
      );
   }
 
+  submit_new_topic(){
+    this.router.navigate(['/submit-topic']);
+  }
 }

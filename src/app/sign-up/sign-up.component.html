@@ -7,6 +7,17 @@
             <div class="header">Register New Membership</div>
             <form>
               <div class="body bg-gray">
+                <ng-template [ngIf]="status  == '0'">
+                  <div class="alert alert-danger">
+                    Registration failed. Please try again later.
+                  </div>
+                </ng-template>
+
+                <ng-template [ngIf]="status  == '1'">
+                  <div class="alert alert-success">
+                    Please wait while you are redirected to login page
+                  </div>
+                </ng-template>
                 <div class="form-group">
                   <input type="text" name="full_name" #full_name class="form-control" placeholder="Full name"/>
                 </div>
