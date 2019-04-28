@@ -24,7 +24,7 @@ export class ApiService {
 
     do_register(full_name: string, email: string, username: string, password: string, role: string)
     {
-      let api_url = encodeURI(this.endpoint_url + "/register?full_name=" + full_name + "&email=" + email + "&password=" + password + "&username=" + username + "&role=" + role);
+      let api_url = encodeURI(this.endpoint_url + "/insert_user/" + full_name + "/" + email + "/" + password + "/" + username + "/" + role);
       return this.http.get<Api>(api_url)
         .pipe(
         // retry(3), // retry a failed request up to 3 times
@@ -42,9 +42,10 @@ export class ApiService {
       );
     }
 
-    insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string)
+    insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string,attachment :string)
     {
-      let api_url = encodeURI(this.endpoint_url + "/insert_mail?user_id=" + user_id + "&email_to=" + email_to + "&subject="+ subject + "&email_cc=" + email_cc + "&email_bcc=" + email_bcc + "&email_content=" + email_content);
+      let api_url = encodeURI(this.endpoint_url + "/insert_mail/"+ user_id  + "/" + email_to + "/" + subject + "/" + email_cc + "/" + email_bcc + "/" + email_content + "/" + attachment);
+      console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error
@@ -53,7 +54,7 @@ export class ApiService {
 
     do_add_project_topic(user_id: string, project_title: string, project_domains: string, project_technologies: string, project_description: string)
     {
-      let api_url = encodeURI(this.endpoint_url + "/submit_topic?user_id=" + user_id + "&project_title=" + project_title + "&project_domains="+ project_domains + "&project_technologies=" + project_technologies + "&project_description=" + project_description);
+      let api_url = encodeURI(this.endpoint_url + "/add_project_topic/" + user_id + "/" + project_title + "/"+ project_domains + "/" + project_technologies + "/" + project_description);
       console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
@@ -100,7 +101,9 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
-
+    // insert_mail(user_id: string,mail_to: string,subject: string,cc: string,bcc: string,content: string,attachment: string){
+      
+    // }
   private handle_error(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

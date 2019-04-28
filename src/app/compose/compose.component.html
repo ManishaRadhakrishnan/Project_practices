@@ -45,7 +45,7 @@
                                       <div class="form-group">
                                       <div class="btn btn-success btn-file">
                                       <i class="fa fa-paperclip"></i> Attachment
-                                      <input type="file" name="attachment"/>
+                                      <input type="file" name="attachment" #attachment/>
                                       </div>
                                       <p class="help-block">Max. 2MB</p>
                                       </div>
@@ -53,7 +53,7 @@
 
                                     <div class="modal-footer clearfix">
                                       <a href="/mail" class="btn btn-danger">Discard</a>
-                                      <button (click)="do_send_mail(email_to.value, subject.value, email_cc.value, email_bcc.value, email_content.value)" class="btn btn-primary pull-left"><i class="fa fa-envelope"></i> Send Message</button>
+                                      <button (click)="do_send_mail(email_to.value, subject.value, email_cc.value, email_bcc.value, email_content.value, attachment.value)" class="btn btn-primary pull-left"><i class="fa fa-envelope"></i> Send Message</button>
                                     </div>
                                   </div>
                                 </div>
