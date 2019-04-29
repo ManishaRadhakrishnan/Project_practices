@@ -12,23 +12,27 @@ export class TopicViewComponent implements OnInit {
   information : string[];
   status : number;
   role: string;
+  user_id : string;
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
     if(this.role == "stud") {
-    this.api_service
-     .project_details()
-     .subscribe(
-       data => {
-         console.log(data);
-         this.information = data.data as string[];
-         this.status = data.status as number;
-       },
-       err => {
-         console.log(err);
-       }
-     );
+      this.user_id = window.sessionStorage.getItem("user_id");
+      this.api_service
+       .project_details(this.user_id)
+       .subscribe(
+         data => {
+           this.information = data.data as string[];
+           this.status = data.status as number;
+         },
+         err => {
+           console.log(err);
+         }
+       );
+     }
+     else {
+       this.router.navigate(["/login"]);
+     }
    }
-  }
 
   submit_new_topic(){
     this.router.navigate(['/submit-topic']);

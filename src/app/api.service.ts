@@ -59,16 +59,16 @@ export class ApiService {
       );
     }
 
-    edit_student_profile(): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/edit_student_profile/1");
+    edit_student_profile(user_id: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/edit_student_profile/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
       );
     }
 
-    view_student_profile(): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/view_student_profile/1");
+    view_student_profile(user_id : string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/view_student_profile/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
@@ -83,8 +83,8 @@ export class ApiService {
       );
     }
 
-    project_details(): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/project_details/1");
+    project_details(user_id : string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/project_details/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Api, ApiService } from '../api.service';
+import { RouterModule, Routes, Router } from '@angular/router';
 
 @Component({
   selector: 'app-topic-sub',
@@ -10,21 +11,32 @@ export class TopicSubComponent implements OnInit {
 
   error: string;
   api: Api;
+  user_id : string;
+  role: string;
+  status : string;
 
-  constructor(private api_service: ApiService) { }
+  constructor(private router: Router, private api_service: ApiService) { }
 
   ngOnInit() {
+    this.role = window.sessionStorage.getItem("role");
+    if(this.role = null) {
+      this.router.navigate(["/login"]);
+    }
   }
 
   do_submit_topic(project_title: string, project_domains: string, project_technologies: string, project_description: string)
   {
-
-    let user_id = "1";
-    this.api_service.do_add_project_topic(user_id, project_title, project_domains, project_technologies, project_description)
-    .subscribe(
-      (data: Api) => this.api = { ...data }, // success path
-      error => this.error = error // error path
-    );
+    this.user_id = window.sessionStorage.getItem("user_id");
+    this.api_service
+     .do_add_project_topic(this.user_id, project_title, project_domains, project_technologies, project_description)
+     .subscribe(
+       data => {
+         this.status = data.status as string;
+       },
+       err => {
+         console.log(err);
+       }
+     );
   }
 
 }

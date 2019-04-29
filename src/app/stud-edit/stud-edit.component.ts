@@ -15,14 +15,16 @@ export class StudEditComponent implements OnInit {
   status : string;
   update_status : string;
   role : string;
+  user_id: string;
 
   constructor(private router: Router,private api_service: ApiService) { }
 
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
     if(this.role == "stud") {
+      this.user_id = window.sessionStorage.getItem("user_id");
       this.api_service
-      .edit_student_profile()
+      .edit_student_profile(this.user_id)
       .subscribe(
        data => {
          this.student_data = data.student_data as string[];
@@ -42,9 +44,9 @@ export class StudEditComponent implements OnInit {
 
 
   do_update_student_profile(full_name, email, contact, address, course, department) {
-    let user_id = "1";
+    this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
-     .update_student_profile(user_id, full_name, email, contact, address, course, department)
+     .update_student_profile(this.user_id, full_name, email, contact, address, course, department)
      .subscribe(
        data => {
          this.update_status = data.status as string;
