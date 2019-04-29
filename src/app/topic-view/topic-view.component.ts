@@ -11,7 +11,10 @@ export class TopicViewComponent implements OnInit {
   constructor(private router: Router,private api_service: ApiService) { }
   information : string[];
   status : number;
+  role: string;
   ngOnInit() {
+    this.role = window.sessionStorage.getItem("role");
+    if(this.role == "stud") {
     this.api_service
      .project_details()
      .subscribe(
@@ -24,6 +27,7 @@ export class TopicViewComponent implements OnInit {
          console.log(err);
        }
      );
+   }
   }
 
   submit_new_topic(){

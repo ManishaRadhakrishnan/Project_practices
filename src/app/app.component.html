@@ -1,3 +1,60 @@
-
+<div class="wrapper row-offcanvas row-offcanvas-left">
+  <aside class="left-side sidebar-offcanvas">
+    <section class="sidebar">
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="./assets/img/avatar3.png" class="img-circle" alt="User Image" />
+        </div>
+        <div class="pull-left info">
+          <p>Hello, Manisha</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <ng-template [ngIf]="role  == null">
+          <li>
+            <a href = "/login">
+              <i class="fa fa-user"></i> <span>Login</span>
+            </a>
+          </li>
+        </ng-template>
+         <li>
+          <a href = "/student-profile">
+            <i class="fa fa-eye"></i> <span>View Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="/mail">
+              <i class="fa fa-envelope"></i> <span>Mailbox</span>
+          </a>
+        </li>
+        <li>
+          <a href = "/submit-topic">
+            <i class="fa fa-info"></i> <span>Submit Topic</span>
+          </a>
+        </li>
+        <li>
+            <a href = "/topic-view">
+              <i class="fa fa-eye"></i> <span>View Submitted Topic</span>
+            </a>
+        </li>
+        <li>
+          <a href = "/users">
+            <i class="fa fa-users"></i> <span>Users</span>
+          </a>
+        </li>
+        <li>
+          <a href = "/guide-project-update">
+            <i class="fa fa-question-circle"></i> <span>Project Status</span>
+          </a>
+        </li>
+        <li>
+          <a href = "localhost:3000" target="_blank" >
+            <i class="fa fa-retweet"></i> <span>Chat</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </aside>
 
 <router-outlet></router-outlet>

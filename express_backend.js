@@ -115,11 +115,12 @@ app.get('/login/:username/:password', function (req, res, next) {
     if (err){
       res.json({"status" : 0, "message" : "Something went wrong"});
     } else {
-      console.log(result);
       if(result.length == 1){
         let active = result[0].active;
         if(active == "1") {
-          res.json({"status" : 1, "data" : result});
+          let user_id = result[0].user_id;
+          let role = result[0].role;
+          res.json({"status" : 1, "user_id" : user_id, "role" : role});
         }
         else {
           res.json({"status" : 0, "message" : "User is not currenty active"});

@@ -14,13 +14,16 @@ export class StudEditComponent implements OnInit {
   department_names: string[];
   status : string;
   update_status : string;
+  role : string;
 
   constructor(private router: Router,private api_service: ApiService) { }
 
   ngOnInit() {
-    this.api_service
-     .edit_student_profile()
-     .subscribe(
+    this.role = window.sessionStorage.getItem("role");
+    if(this.role == "stud") {
+      this.api_service
+      .edit_student_profile()
+      .subscribe(
        data => {
          this.student_data = data.student_data as string[];
          this.course_names = data.course_names as string[];
@@ -31,6 +34,10 @@ export class StudEditComponent implements OnInit {
          console.log(err);
        }
      );
+    }
+    else {
+      this.router.navigate(["/login"])
+    }
  }
 
 

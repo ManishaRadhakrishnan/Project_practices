@@ -11,9 +11,16 @@ export class SignUpComponent implements OnInit {
   error: string;
   api: Api;
   status : string;
+  role : string;
   constructor(private router: Router, private api_service: ApiService) { }
 
   ngOnInit() {
+    this.role = window.sessionStorage.getItem("role");
+    if(this.role != null) {
+      if (this.role == "stud") {
+        this.router.navigate(["/student-profile"]);
+      }
+    }
   }
 
   do_request(full_name: string, email: string, username: string, password: string, confirm_password: string, role: string) {
