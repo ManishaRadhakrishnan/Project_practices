@@ -25,6 +25,7 @@ export class ApiService {
     do_register(full_name: string, email: string, username: string, password: string, role: string)
     {
       let api_url = encodeURI(this.endpoint_url + "/insert_user/" + full_name + "/" + email + "/" + password + "/" + username + "/" + role);
+      console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         // retry(3), // retry a failed request up to 3 times

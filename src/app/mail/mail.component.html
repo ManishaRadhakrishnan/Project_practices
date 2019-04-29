@@ -4,18 +4,16 @@
           <h1 class="text-center">
               Mailbox
           </h1>
-      </section>
-
+      </section>      
       <!-- Main content -->
       <section class="content">
           <div class="mailbox row">
-              <div class="col-xs-12">
+              <div class="col-xs-12">                 
                   <div class="box box-solid card">
                       <div class="box-body">
                         <div class="card-body">
                           <div class="row">
-                            <div class="col-md-3 col-sm-4">
-
+                            <div class="col-md-3 col-sm-4">                              
                               <div class="box-header">
                                 <i class="fa fa-inbox"></i>
                                 <h3 class="box-title">INBOX</h3>
@@ -33,13 +31,24 @@
                               </div>
                             </div><!-- /.col (LEFT) -->
                             <div class="col-md-9 col-sm-8">
+                               <ng-template [ngIf]="status  == '0'">
+      <div class="alert alert-danger">
+        Loading failed
+      </div>
+    </ng-template>
+
+    <ng-template [ngIf]="status == '1'">
+      <div class="alert alert-success">
+       Success!!!!
+      </div>
+    </ng-template>
                               <div class="row pad">
                                 <div class="col-sm-6">
                                   <label style="margin-right: 10px;">
                                     <input type="checkbox" id="check-all"/>
                                   </label>
                                   <!-- Action button -->
-                                  <div class="btn-group">
+                                  <div class="btn-group">                                    
                                     <button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">
                                       Action <span class="caret"></span>
                                     </button>

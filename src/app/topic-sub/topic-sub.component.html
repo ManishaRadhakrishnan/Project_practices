@@ -8,6 +8,17 @@
     <!-- Main content -->
     <section class="content">
       <div class="mailbox row">
+          <ng-template [ngIf]="status  == '0'">
+            <div class="alert alert-danger">
+               Topic Submission failed
+            </div>
+          </ng-template>
+
+          <ng-template [ngIf]="status == '1'">
+            <div class="alert alert-success">
+               Successful submission
+            </div>
+          </ng-template>
         <div class="col-xs-12">
           <div class="box box-solid">
             <div class="box-body card">

@@ -9,7 +9,7 @@ var con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "manisha_pms"
+  database: "mydb"
 });
 
 app.get('/edit_student_profile/:user_id', function (req, res, next) {
@@ -185,13 +185,15 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
                 + current_date.getFullYear() + " @ "
                 + current_date.getHours() + ":"
                 + current_date.getMinutes();
-
+ 
   let sql = "INSERT INTO mail(user_id, toaddr, sub, cc, bcc, content, timestamp, attachment) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
   let data = [user_id, mail_to, subject, cc, bcc, content, date_time, attachment];
   con.query(sql, data, function(err, result)
   {
+    
     if (err)
     {
+      console.log(err);
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else
     {
@@ -208,12 +210,13 @@ app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req,
   let password= req.params.password;
   let email = req.params.email;
   let role= req.params.role;
-   let sql = "INSERT INTO user(username, password, role) VALUES(?, ?, ?)";
+   let sql = "INSERT INTO user(user_name, password, role) VALUES(?, ?, ?)";
   let data = [username, password, role];
   con.query(sql, data, function(err, result)
   {
     if (err)
     {
+      //throw(err);
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else
     {

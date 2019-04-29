@@ -11,6 +11,16 @@
                 <div class="col-xs-12">
                     <div class="box box-solid">
                         <div class="box-body">
+                              <ng-template [ngIf]="status  == '0'">
+                                <div class="alert alert-danger">
+                                    Editing failed
+                                      </div>
+                              </ng-template>
+                              <ng-template [ngIf]="status == '1'">
+                                  <div class="alert alert-success">
+                                    Please wait while we redirect you to profile page
+                                  </div>
+                              </ng-template>                          
                             <div class="row">
                                 <div class="col-md-12 col-sm-6">
                                   <div class="box-header">

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Api, ApiService } from '../api.service';
+import { RouterModule, Routes, Router } from '@angular/router';
 @Component({
   selector: 'app-topic-view',
   templateUrl: './topic-view.component.html',
@@ -7,8 +8,9 @@ import { Api, ApiService } from '../api.service';
 })
 export class TopicViewComponent implements OnInit {
 
-  constructor(private api_service: ApiService) { }
+  constructor(private router: Router,private api_service: ApiService) { }
   information : string[];
+  status : number;
   ngOnInit() {
     this.api_service
      .project_details()
@@ -16,6 +18,11 @@ export class TopicViewComponent implements OnInit {
        data => {
          console.log(data);
          this.information = data.data as string[];
+         this.status = data.status as number;
+           if(this.status == 1)
+           {
+             this.router.navigate(['/topic-view']);
+           }
        },
        err => {
          console.log(err);

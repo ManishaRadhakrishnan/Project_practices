@@ -1,4 +1,4 @@
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<div class="wrapper row-offcanvas row-offcanvas-left"> 
   <aside class="right-side">
     <section class="content-header no-margin">
       <h1 class="text-center">
@@ -32,6 +32,17 @@
               <div class="col-lg-8 col-md-7">
                 <div class="card">
                   <div style="padding:10px;">
+                     <ng-template [ngIf]="status  == '0'">
+      <div class="alert alert-danger">
+        Login attempt failed
+      </div>
+    </ng-template>
+
+    <ng-template [ngIf]="status == '1'">
+      <div class="alert alert-success">
+        Please wait while we redirect you to dashboard
+      </div>
+    </ng-template>
                     <form>
                       <div class="" *ngFor="let info of information">
                         <div class="row">

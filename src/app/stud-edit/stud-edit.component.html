@@ -1,4 +1,14 @@
 <div class="wrapper row-offcanvas row-offcanvas-left">
+    <ng-template [ngIf]="status  == '0'">
+       <div class="alert alert-danger">
+          Editing failed
+            </div>
+     </ng-template>
+     <ng-template [ngIf]="status == '1'">
+        <div class="alert alert-success">
+           Please wait while we redirect you to profile page
+        </div>
+     </ng-template>
   <aside class="right-side">
     <section class="content-header no-margin">
       <h1 class="text-center">
@@ -20,7 +30,7 @@
                 </div>
               </div>
               <div class="col-lg-8 col-md-8">
-                <div class="card">
+                <div class="card">                 
                   <div>
                     <form>
                       <div *ngFor="let student of student_data">
