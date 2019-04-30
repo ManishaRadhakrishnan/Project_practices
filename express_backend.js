@@ -207,6 +207,7 @@ app.get('/project_details/:user_id', function (req, res, next) {
   let sql = "SELECT project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status FROM student, user, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible';"
   let data = [user_id, user_id, user_id];
   con.query(sql, data, function(err, result, fields) {
+    // console.log(sql);
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {

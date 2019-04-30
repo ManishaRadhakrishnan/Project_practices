@@ -14,7 +14,8 @@ export class TopicSubComponent implements OnInit {
   user_id : string;
   role: string;
   status : string;
-
+  information:string[];
+  
   constructor(private router: Router, private api_service: ApiService) { }
 
   ngOnInit() {
@@ -38,5 +39,27 @@ export class TopicSubComponent implements OnInit {
        }
      );
   }
+  
+  do_edit_topic()
+{
+  this.role = window.sessionStorage.getItem("role");
+    if(this.role == "stud") {
+      this.user_id = window.sessionStorage.getItem("user_id");
+      this.api_service
+       .project_details(this.user_id)
+       .subscribe(
+         data => {
+           this.information = data.data as string[];
+           this.status = data.status as string;
+         },
+         err => {
+           console.log(err);
+         }
+       );
+     }
+     else {
+       this.router.navigate(["/login"]);
+     }
+}
 
 }
