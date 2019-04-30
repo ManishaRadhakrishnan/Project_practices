@@ -31,6 +31,34 @@ export class StudProfComponent implements OnInit {
         }
       );
     }
+      else if(this.role == "cood"){
+      this.user_id = window.sessionStorage.getItem("user_id");
+      this.api_service
+      .view_cood_profile(this.user_id)
+      .subscribe(
+        data => {
+          this.information = data.data as string[];
+          this.status = data.status as number;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
+      else if(this.role == "guide"){
+      this.user_id = window.sessionStorage.getItem("user_id");
+      this.api_service
+      .view_guide_profile(this.user_id)
+      .subscribe(
+        data => {
+          this.information = data.data as string[];
+          this.status = data.status as number;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
     else {
       this.router.navigate(["/login"]);
     }

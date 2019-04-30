@@ -15,7 +15,7 @@ var con = mysql.createConnection({
 app.get('/edit_student_profile/:user_id', function (req, res, next) {
   let user_id = req.params.user_id;
   let student_data = [], course_names = [], department_names = [];
-  var sql = "SELECT stud_name, address, contact, mail, curr_course, dept_id FROM student WHERE user_id = ?";
+  var sql = "SELECT stud_name as name, address, contact, mail, curr_course, dept_id FROM student WHERE user_id = ?";
   let data = [user_id];
 
   con.query(sql, data, function(err, result, fields) {
@@ -50,10 +50,88 @@ app.get('/edit_student_profile/:user_id', function (req, res, next) {
   });
 });
 
+app.get('/edit_cood_profile/:user_id', function (req, res, next) {
+  let user_id = req.params.user_id;
+  let student_data = [], course_names = [], department_names = [];
+  var sql = "SELECT head_name as name, address, contact, mail, course_id, dept_id FROM dept_heads WHERE user_id = ?";
+  let data = [user_id];
+
+  con.query(sql, data, function(err, result, fields) {
+    if (err){
+      console.log(sql);
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      if(result.length == 1){
+        student_data = result;
+        var sql = "SELECT course_id, course_name FROM courses";
+        con.query(sql, data, function(err, result, fields) {
+          if (err){
+            res.json({"status" : 0, "data" : "Something went wrong"});
+          }
+          else {
+            course_names = result;
+            var sql = "SELECT dept_id, dept_name FROM department";
+            con.query(sql, function(err, result, fields) {
+              if (err){
+                res.json({"status" : 0, "data" : "Something went wrong"});
+              } else {
+                department_names = result;
+                res.json({"status" : 1, "student_data" : student_data, "course_names" : course_names, "department_names" : department_names});
+              }
+            });
+          }
+        });
+      }
+      else {
+        res.json({"status" : 0, "data" : "No data retrieved"});
+      }
+    }
+  });
+});
+
+
+app.get('/edit_guide_profile/:user_id', function (req, res, next) {
+  let user_id = req.params.user_id;
+  let student_data = [], course_names = [], department_names = [];
+  var sql = "SELECT guide_name as name, address, contact, mail, course_id, dept_id FROM internal_guides WHERE user_id = ?";
+  let data = [user_id];
+
+  con.query(sql, data, function(err, result, fields) {
+    if (err){
+      throw(err);
+      //res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      if(result.length == 1){
+        student_data = result;
+        var sql = "SELECT course_id, course_name FROM courses";
+        con.query(sql, data, function(err, result, fields) {
+          if (err){
+            res.json({"status" : 0, "data" : "Something went wrong"});
+          }
+          else {
+            course_names = result;
+            var sql = "SELECT dept_id, dept_name FROM department";
+            con.query(sql, function(err, result, fields) {
+              if (err){
+                res.json({"status" : 0, "data" : "Something went wrong"});
+              } else {
+                department_names = result;
+                res.json({"status" : 1, "student_data" : student_data, "course_names" : course_names, "department_names" : department_names});
+              }
+            });
+          }
+        });
+      }
+      else {
+        res.json({"status" : 0, "data" : "No data retrieved"});
+      }
+    }
+  });
+});
 app.get('/view_student_profile/:user_id', function (req, res, next) {
   let user_id = req.params.user_id;
 
-  var sql = "SELECT student.stud_name, student.address, student.contact, student.mail, department.dept_name, courses.course_name FROM student, courses, department WHERE student.user_id = ?";
+  var sql = "SELECT student.stud_name as name, student.address, student.contact, student.mail, department.dept_name, courses.course_name FROM student, courses, department WHERE student.user_id = ?";
   let data = [user_id];
 
   con.query(sql, data, function(err, result, fields) {
@@ -69,6 +147,44 @@ app.get('/view_student_profile/:user_id', function (req, res, next) {
   });
 })
 
+app.get('/view_cood_profile/:user_id', function (req, res, next) {
+  let user_id = req.params.user_id;
+
+  var sql = "SELECT dept_heads.head_name as name, dept_heads.address, dept_heads.contact, dept_heads.mail, department.dept_name, courses.course_name FROM dept_heads, courses, department WHERE dept_heads.user_id = ?";
+  let data = [user_id];
+
+  con.query(sql, data, function(err, result, fields) {
+    if (err){      
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      if(result.length == 1){
+        res.json({"status" : 1, "data" : result});
+      } else {
+        res.json({"status" : 0, "data" : "No data retrieved"});
+      }
+    }
+  });
+})
+
+app.get('/view_guide_profile/:user_id', function (req, res, next) {
+  let user_id = req.params.user_id;
+
+  var sql = "SELECT internal_guides.guide_name as name, internal_guides.address, internal_guides.contact, internal_guides.mail, department.dept_name, courses.course_name FROM internal_guides, courses, department WHERE internal_guides.user_id = ?";
+  let data = [user_id];
+
+  con.query(sql, data, function(err, result, fields) {
+    if (err){
+      //throw(err);
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      if(result.length == 1){
+        res.json({"status" : 1, "data" : result});
+      } else {
+        res.json({"status" : 0, "data" : "No data retrieved"});
+      }
+    }
+  });
+})
 app.get('/list_all_students', function (req, res, next) {
   var sql = "SELECT student.stud_name, student.curr_acad_yr, student.mail, user.active, courses.course_name FROM student, user, courses WHERE student.curr_course IN (SELECT courses.course_id from courses) AND student.user_id = user.user_id";
 
@@ -142,7 +258,51 @@ app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:c
   let department = req.params.department;
   let address = req.params.address;
 
-  let sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, curr_course = ?, dept_id = ? WHERE user_id = ?";
+  let sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, course_id = ?, dept_id = ? WHERE user_id = ?";
+  let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), user_id];
+
+  con.query(sql, data, function(err, result, fields) {
+    if (err){
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      res.json({"status" : 1, "data" : "Student profile updated succesfully"});
+    }
+  });
+});
+
+app.get("/update_cood_profile/:user_id/:full_name/:email/:contact/:address/:course/:department",function (req, res, next) {
+
+  let user_id = req.params.user_id;
+  let full_name = req.params.full_name;
+  let email = req.params.email;
+  let contact = req.params.contact;
+  let course = req.params.course;
+  let department = req.params.department;
+  let address = req.params.address;
+
+  let sql = "UPDATE dept_heads SET head_name = ?, address = ?, contact = ?, mail = ?, course_id = ?, dept_id = ? WHERE user_id = ?";
+  let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), user_id];
+
+  con.query(sql, data, function(err, result, fields) {
+    if (err){
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      res.json({"status" : 1, "data" : "Student profile updated succesfully"});
+    }
+  });
+});
+
+app.get("/update_guide_profile/:user_id/:full_name/:email/:contact/:address/:course/:department",function (req, res, next) {
+
+  let user_id = req.params.user_id;
+  let full_name = req.params.full_name;
+  let email = req.params.email;
+  let contact = req.params.contact;
+  let course = req.params.course;
+  let department = req.params.department;
+  let address = req.params.address;
+
+  let sql = "UPDATE internal_guides SET guide_name = ?, address = ?, contact = ?, mail = ?, course_id = ?, dept_id = ? WHERE user_id = ?";
   let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), user_id];
 
   con.query(sql, data, function(err, result, fields) {
@@ -235,7 +395,7 @@ app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req,
       if(role == 'stud')
       {
         sql = "INSERT INTO student(user_id, stud_name, mail) VALUES (?, ?, ?)";
-        data = [result.insertId.toString(), full_name, email];
+        data = [result.insertId.toString(), full_name, username];
         con.query(sql, data, function(err, result)
         {
          if (err)
@@ -250,8 +410,8 @@ app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req,
        }
        else if(role == 'cood')
        {
-          sql = "INSERT INTO dept_head(user_id, head_name, mail) VALUES (?, ?, ?)";
-          data = [result.insertId.toString(), full_name, email];
+          sql = "INSERT INTO dept_heads(user_id, head_name, mail) VALUES (?, ?, ?)";
+          data = [result.insertId.toString(), full_name, username];
           con.query(sql, data, function(err, result)
           {
             if (err)
@@ -266,8 +426,8 @@ app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req,
        }
        else
        {
-         sql = "INSERT INTO internal_guide(user_id, guide_name, mail) VALUES (?, ?, ?)";
-          data = [result.insertId.toString(), full_name, email];
+         sql = "INSERT INTO internal_guides(user_id, guide_name, mail) VALUES (?, ?, ?)";
+          data = [result.insertId.toString(), full_name, username];
           con.query(sql, data, function(err, result)
           {
             if (err)

@@ -41,6 +41,26 @@ export class ApiService {
       );
     }
 
+    update_cood_profile(user_id : string, full_name : string, email : string, contact : string, address : string, course : string, department : string)
+    {
+      let api_url = encodeURI(this.endpoint_url + "/update_cood_profile/" + user_id + "/" + full_name + "/" + email + "/" + contact  + "/" + address + "/" + course + "/" + department);
+      console.log(api_url);
+      return this.http.get<Api>(api_url)
+        .pipe(
+        catchError(this.handle_error) // then handle the error
+      );
+    }
+
+    update_guide_profile(user_id : string, full_name : string, email : string, contact : string, address : string, course : string, department : string)
+    {
+      let api_url = encodeURI(this.endpoint_url + "/update_guide_profile/" + user_id + "/" + full_name + "/" + email + "/" + contact  + "/" + address + "/" + course + "/" + department);
+      // console.log(api_url);
+      return this.http.get<Api>(api_url)
+        .pipe(
+        catchError(this.handle_error) // then handle the error
+      );
+    }
+
     insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string,attachment :string)
     {
       let api_url = encodeURI(this.endpoint_url + "/insert_mail/"+ user_id  + "/" + email_to + "/" + subject + "/" + email_cc + "/" + email_bcc + "/" + email_content + "/" + attachment);
@@ -66,6 +86,22 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
+    
+    edit_cood_profile(user_id: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/edit_cood_profile/" + user_id);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+    
+    edit_guide_profile(user_id: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/edit_guide_profile/" + user_id);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
 
     view_student_profile(user_id : string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/view_student_profile/" + user_id);
@@ -74,7 +110,23 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
-
+    
+    view_guide_profile(user_id : string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/view_guide_profile/" + user_id);
+      console.log(api_url);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+    
+    view_cood_profile(user_id : string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/view_cood_profile/" + user_id);    
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
     list_all_students(): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/list_all_students");
       return this.http.get(api_url, httpOptions).pipe(

@@ -21,6 +21,15 @@ export class LoginComponent{
         if (this.role == "stud") {
           this.router.navigate(["/student-profile"]);
         }
+        else if (this.role == "cood") {
+          this.router.navigate(["/student-profile"]);
+        }
+        else if (this.role == "guide"){
+          this.router.navigate(["/student-profile"]);
+        }
+        else{
+          this.router.navigate(["/login"]);
+        }
       }
     }
     do_login(username: string, password: string){

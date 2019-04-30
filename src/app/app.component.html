@@ -28,11 +28,13 @@
               <i class="fa fa-envelope"></i> <span>Mailbox</span>
           </a>
         </li>
+        <ng-template [ngIf]="role  == student">
         <li>
           <a href = "/submit-topic">
             <i class="fa fa-info"></i> <span>Submit Topic</span>
           </a>
         </li>
+        </ng-template>
         <li>
             <a href = "/topic-view">
               <i class="fa fa-eye"></i> <span>View Submitted Topic</span>
@@ -43,11 +45,13 @@
             <i class="fa fa-users"></i> <span>Users</span>
           </a>
         </li>
+        <ng-template [ngIf]="role  == cood">
         <li>
           <a href = "/guide-project-update">
             <i class="fa fa-question-circle"></i> <span>Project Status</span>
           </a>
         </li>
+        </ng-template>
         <li>
           <a href = "localhost:3000" target="_blank" >
             <i class="fa fa-retweet"></i> <span>Chat</span>

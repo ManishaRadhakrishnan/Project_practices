@@ -37,13 +37,47 @@ export class StudEditComponent implements OnInit {
        }
      );
     }
+    else if(this.role == "cood") {
+      this.user_id = window.sessionStorage.getItem("user_id");
+      this.api_service
+      .edit_cood_profile(this.user_id)
+      .subscribe(
+       data => {
+         this.student_data = data.student_data as string[];
+         this.course_names = data.course_names as string[];
+         this.department_names = data.department_names as string[];
+         this.status = data.status as string;
+       },
+       err => {
+         console.log(err);
+       }
+     );
+    }
+    else if(this.role == "guide") {
+      this.user_id = window.sessionStorage.getItem("user_id");
+      this.api_service
+      .edit_guide_profile(this.user_id)
+      .subscribe(
+       data => {
+         this.student_data = data.student_data as string[];
+         this.course_names = data.course_names as string[];
+         this.department_names = data.department_names as string[];
+         this.status = data.status as string;
+       },
+       err => {
+         console.log(err);
+       }
+     );
+    }
+    
     else {
-      this.router.navigate(["/login"])
+      this.router.navigate(["/student_profile"])
     }
  }
 
 
   do_update_student_profile(full_name, email, contact, address, course, department) {
+    if(this.role== "student"){
     this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
      .update_student_profile(this.user_id, full_name, email, contact, address, course, department)
@@ -55,5 +89,32 @@ export class StudEditComponent implements OnInit {
          console.log(err);
        }
      );
+  }else  if(this.role== "cood"){
+    this.user_id = window.sessionStorage.getItem("user_id");
+    this.api_service
+     .update_cood_profile(this.user_id, full_name, email, contact, address, course, department)
+     .subscribe(
+       data => {
+         this.update_status = data.status as string;
+       },
+       err => {
+         console.log(err);
+       }
+     );
+  }else 
+  {
+    this.user_id = window.sessionStorage.getItem("user_id");
+    this.api_service
+     .update_guide_profile(this.user_id, full_name, email, contact, address, course, department)
+     .subscribe(
+       data => {
+         this.update_status = data.status as string;
+       },
+       err => {
+         console.log(err);
+       }
+     );
+  }
+  
   }
 }
