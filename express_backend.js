@@ -58,7 +58,7 @@ app.get('/edit_cood_profile/:user_id', function (req, res, next) {
 
   con.query(sql, data, function(err, result, fields) {
     if (err){
-      console.log(sql);
+      
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
       if(result.length == 1){
@@ -128,6 +128,7 @@ app.get('/edit_guide_profile/:user_id', function (req, res, next) {
     }
   });
 });
+
 app.get('/view_student_profile/:user_id', function (req, res, next) {
   let user_id = req.params.user_id;
 
@@ -154,7 +155,7 @@ app.get('/view_cood_profile/:user_id', function (req, res, next) {
   let data = [user_id];
 
   con.query(sql, data, function(err, result, fields) {
-    if (err){      
+    if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
       if(result.length == 1){
@@ -185,6 +186,7 @@ app.get('/view_guide_profile/:user_id', function (req, res, next) {
     }
   });
 })
+
 app.get('/list_all_students', function (req, res, next) {
   var sql = "SELECT student.stud_name, student.curr_acad_yr, student.mail, user.active, courses.course_name FROM student, user, courses WHERE student.curr_course IN (SELECT courses.course_id from courses) AND student.user_id = user.user_id";
 
@@ -204,10 +206,10 @@ app.get('/list_all_students', function (req, res, next) {
 
 app.get('/project_details/:user_id', function (req, res, next) {
   let user_id = req.params.user_id;
-  let sql = "SELECT project.proj_id,project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status FROM student, user, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible';"
+  let sql = "SELECT project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status FROM student, user, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible';"
   let data = [user_id, user_id, user_id];
   con.query(sql, data, function(err, result, fields) {
-     console.log(sql);
+     
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
@@ -228,7 +230,7 @@ app.get('/project_details_update/:user_id', function (req, res, next) {
   let sql = "UPDATE project.proj_title, project.proj_desc, project.proj_domain, project.proj_technology,  FROM student, user, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible';"
   let data = [user_id, user_id, user_id];
   con.query(sql, data, function(err, result, fields) {
-     console.log(sql);
+     
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
@@ -284,7 +286,7 @@ app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:c
   let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), user_id];
 
   con.query(sql, data, function(err, result, fields) {
-    console.log(sql);
+    
     if (err){
       throw(err);
       // res.json({"status" : 0, "data" : "Something went wrong"});

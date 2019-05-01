@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Api, ApiService } from '../api.service';
 import { RouterModule, Routes, Router } from '@angular/router';
+import { Observable }         from 'rxjs';
+import { ActivatedRoute }     from '@angular/router';
+import { map }                from 'rxjs/operators';
 
 @Component({
   selector: 'app-topic-sub',
@@ -16,13 +19,20 @@ export class TopicSubComponent implements OnInit {
   status : string;
   information:string[];
   button :boolean;
-  constructor(private router: Router, private api_service: ApiService) { }
+
+  project_id : Observable<string>;;
+  constructor(private router: Router, private route: ActivatedRoute, private api_service: ApiService) { }
 
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
     if(this.role != 'stud') {
       this.router.navigate(["/login"]);
-
+    }
+    else {
+      this.project_id = this.route
+                       .queryParamMap
+                       .pipe(map(params => params.get('project_id') || 'None'));
+     console.log(this.project_id);
     }
   }
 
@@ -42,9 +52,9 @@ export class TopicSubComponent implements OnInit {
        err => {
          console.log(err);
        }
-     );        
+     );
   }
-  
+
 //   do_edit_topic()
 // {
 //   this.button=true;

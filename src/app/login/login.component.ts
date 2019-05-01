@@ -17,6 +17,7 @@ export class LoginComponent{
 
     ngOnInit() {
       this.role = window.sessionStorage.getItem("role");
+
       if(this.role != null) {
         if (this.role == "stud") {
           this.router.navigate(["/student-profile"]);
@@ -32,6 +33,7 @@ export class LoginComponent{
         }
       }
     }
+
     do_login(username: string, password: string){
       this.api_service
        .login(username, password)
@@ -45,12 +47,12 @@ export class LoginComponent{
              this.router.navigate(['/student-profile']);
              window.sessionStorage.setItem("role", this.role);
              window.sessionStorage.setItem("user_id", this.user_id);
+             location.reload();
            }
          },
          err => {
            console.log(err);
          }
        );
-       location.reload();
     }
 }

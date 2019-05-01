@@ -8,11 +8,12 @@ import { RouterModule, Routes, Router } from '@angular/router';
 })
 export class TopicViewComponent implements OnInit {
 
-  constructor(private router: Router,private api_service: ApiService) { }
+  constructor(private router: Router, private api_service: ApiService) { }
   information : string[];
   status : number;
   role: string;
   user_id : string;
+
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
     if(this.role == "stud") {
@@ -33,13 +34,12 @@ export class TopicViewComponent implements OnInit {
        this.router.navigate(["/login"]);
      }
    }
-   
-    edit(val)
-    {
+
+  edit_topic(project_id) {
   // this.button=true;
   this.role = window.sessionStorage.getItem("role");
     if(this.role == "stud") {
-       this.router.navigate(["/submit-topic"+val]);
+       this.router.navigate(["/submit-topic"], { queryParams: { project_id: project_id } });
      }
      else {
        this.router.navigate(["/login"]);

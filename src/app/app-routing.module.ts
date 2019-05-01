@@ -18,6 +18,7 @@ const routes: Routes = [
   {path : 'register' , component: SignUpComponent},
   {path : 'mail', component: MailComponent},
   {path : 'compose', component: ComposeComponent},
+  {path : 'submit-topic/:project_id', component: TopicSubComponent},
   {path : 'submit-topic', component: TopicSubComponent},
   {path : 'topic-view',component: TopicViewComponent },
   {path : 'student-dashboard', component:StudDashComponent},

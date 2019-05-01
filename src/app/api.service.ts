@@ -86,7 +86,7 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
-    
+
     edit_cood_profile(user_id: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/edit_cood_profile/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
@@ -94,7 +94,7 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
-    
+
     edit_guide_profile(user_id: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/edit_guide_profile/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
@@ -110,7 +110,7 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
-    
+
     view_guide_profile(user_id : string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/view_guide_profile/" + user_id);
       console.log(api_url);
@@ -119,9 +119,9 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
-    
+
     view_cood_profile(user_id : string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/view_cood_profile/" + user_id);    
+      let api_url = encodeURI(this.endpoint_url + "/view_cood_profile/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
@@ -152,7 +152,7 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
-    
+
     login(username: string, password: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/login/" + username + "/" + password);
       return this.http.get(api_url, httpOptions).pipe(
