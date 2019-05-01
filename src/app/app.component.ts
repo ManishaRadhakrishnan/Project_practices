@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { RouterModule, Routes, Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,9 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent  implements OnInit {
   title = 'pms-app';
+constructor(private router: Router) { }
 
   role : string;
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
+    //  this.router.navigate(['/login']);
   }
 }

@@ -11,7 +11,8 @@ import {StudProfComponent} from './stud-prof/stud-prof.component';
 import {StudEditComponent} from './stud-edit/stud-edit.component';
 import {ActivateComponent} from './activate/activate.component';
 import {GuideProjUpdateComponent} from './guide-proj-update/guide-proj-update.component';
-import {SuggestionComponent} from './suggestion/suggestion.component'
+import {SuggestionComponent} from './suggestion/suggestion.component';
+import {LogoutComponent} from './logout/logout.component';
 const routes: Routes = [
   {path : 'login' , component: LoginComponent},
   {path : 'register' , component: SignUpComponent},
@@ -24,7 +25,8 @@ const routes: Routes = [
   {path : 'student-edit-profile', component: StudEditComponent},
   {path : 'users', component: ActivateComponent},
   {path : 'guide-project-update', component: GuideProjUpdateComponent},
-  {path : 'suggestion', component: SuggestionComponent}
+  {path : 'suggestion', component: SuggestionComponent},
+  {path : 'logout', component : LogoutComponent}
 ];
 
 @NgModule({

@@ -15,13 +15,14 @@ export class TopicSubComponent implements OnInit {
   role: string;
   status : string;
   information:string[];
-  
+  button :boolean;
   constructor(private router: Router, private api_service: ApiService) { }
 
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
-    if(this.role = null) {
+    if(this.role != 'stud') {
       this.router.navigate(["/login"]);
+
     }
   }
 
@@ -33,20 +34,47 @@ export class TopicSubComponent implements OnInit {
      .subscribe(
        data => {
          this.status = data.status as string;
+         if(this.status == "1")
+           {
+              this.router.navigate(['/topic-view']);
+           }
        },
        err => {
          console.log(err);
        }
-     );
+     );        
   }
   
-  do_edit_topic()
+//   do_edit_topic()
+// {
+//   this.button=true;
+//   this.role = window.sessionStorage.getItem("role");
+//     if(this.role == "stud") {
+//       this.user_id = window.sessionStorage.getItem("user_id");
+//       this.api_service
+//        .project_details(this.user_id)
+//        .subscribe(
+//          data => {
+//            this.information = data.data as string[];
+//            this.status = data.status as string;
+//          },
+//          err => {
+//            console.log(err);
+//          }
+//        );
+//      }
+//      else {
+//        this.router.navigate(["/login"]);
+//      }
+// }
+
+do_topic_save()
 {
   this.role = window.sessionStorage.getItem("role");
     if(this.role == "stud") {
       this.user_id = window.sessionStorage.getItem("user_id");
       this.api_service
-       .project_details(this.user_id)
+       .project_details_update(this.user_id)
        .subscribe(
          data => {
            this.information = data.data as string[];

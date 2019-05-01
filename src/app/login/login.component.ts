@@ -51,5 +51,6 @@ export class LoginComponent{
            console.log(err);
          }
        );
+       location.reload();
     }
 }

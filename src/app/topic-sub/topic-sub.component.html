@@ -26,12 +26,12 @@
                 <div class="row">
                   <div class="col-md-12 col-sm-6">
                     <div class="box-header">
-                      <div class="" *ngFor="let info of information">
+                      <!--<div class="" *ngFor="let info of information">-->
                       <div class="modal-body">
                         <div class="form-group">
                           <div class="input-group">
                             <span class="input-group-addon">TITLE:</span>
-                            <input name="project_title" type="text" class="form-control" aria-describedby="project_title_help" value = "{{info.proj_title}}"#project_title>
+                            <input name="project_title" type="text" class="form-control" aria-describedby="project_title_help"  #project_title>
                             </div>
                             <small id="project_title_help" class="form-text text-muted">A concise title for your project</small>
                           </div>
@@ -54,11 +54,11 @@
                                 </textarea>
                               </div>
                             </div>
-                      </div>
+                      <!--</div>-->
                             <div class="modal-footer clearfix">
                               <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value)" class="btn btn-primary">Submit</button>
-                              <button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button>
-                              <button type="submit" class="btn btn-primary pull-left">Save</button>
+                              <!--<button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button>-->
+                              <button (click)="do_topic_save()" type="submit" class="btn btn-primary pull-left">Save</button>
                             </div>
                           </div>
                         </div>

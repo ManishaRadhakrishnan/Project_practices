@@ -17,6 +17,7 @@ import { StudEditComponent } from './stud-edit/stud-edit.component';
 import { ActivateComponent } from './activate/activate.component';
 import { GuideProjUpdateComponent } from './guide-proj-update/guide-proj-update.component';
 import { SuggestionComponent } from './suggestion/suggestion.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { SuggestionComponent } from './suggestion/suggestion.component';
     StudEditComponent,
     ActivateComponent,
     GuideProjUpdateComponent,
-    SuggestionComponent
+    SuggestionComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

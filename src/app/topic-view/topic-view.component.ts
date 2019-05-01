@@ -33,6 +33,18 @@ export class TopicViewComponent implements OnInit {
        this.router.navigate(["/login"]);
      }
    }
+   
+    edit(val)
+    {
+  // this.button=true;
+  this.role = window.sessionStorage.getItem("role");
+    if(this.role == "stud") {
+       this.router.navigate(["/submit-topic"+val]);
+     }
+     else {
+       this.router.navigate(["/login"]);
+     }
+    }
 
   submit_new_topic(){
     this.router.navigate(['/submit-topic']);

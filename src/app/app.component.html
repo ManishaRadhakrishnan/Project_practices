@@ -18,6 +18,7 @@
             </a>
           </li>
         </ng-template>
+        <ng-template [ngIf]="role  != null">
          <li>
           <a href = "/student-profile">
             <i class="fa fa-eye"></i> <span>View Profile</span>
@@ -28,23 +29,25 @@
               <i class="fa fa-envelope"></i> <span>Mailbox</span>
           </a>
         </li>
-        <ng-template [ngIf]="role  == student">
+        <ng-template [ngIf]="role  == stud">
         <li>
           <a href = "/submit-topic">
             <i class="fa fa-info"></i> <span>Submit Topic</span>
           </a>
         </li>
         </ng-template>
+        <!--<ng-template [ngIf]="role  == stud" || [ngIf]="role  == cood">-->
         <li>
             <a href = "/topic-view">
               <i class="fa fa-eye"></i> <span>View Submitted Topic</span>
             </a>
         </li>
-        <li>
+        <!--</ng-template>-->
+        <!--<li>
           <a href = "/users">
             <i class="fa fa-users"></i> <span>Users</span>
           </a>
-        </li>
+        </li>-->
         <ng-template [ngIf]="role  == cood">
         <li>
           <a href = "/guide-project-update">
@@ -57,6 +60,13 @@
             <i class="fa fa-retweet"></i> <span>Chat</span>
           </a>
         </li>
+         <!--<ng-template [ngIf]="role  != null">-->
+         <li>
+          <a href = "/logout">
+            <i class="fa fa-info"></i> <span>Logout</span>
+          </a>
+        </li>
+         </ng-template>
       </ul>
     </section>
   </aside>
