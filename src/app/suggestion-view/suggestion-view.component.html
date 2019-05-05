@@ -1,0 +1,71 @@
+<div class="wrapper row-offcanvas row-offcanvas-left">
+    <aside class="right-side">
+      <section class="content-header no-margin">
+          <h1 class="text-center">
+            Students
+          </h1>
+      </section>
+
+      <section class="content">
+        <div class="col-md-12">
+          <div class="box box-solid">
+            <div class="box-body card">
+              <div class="card-body">
+                <table class="table table-sm-responsive table-stripped table-hover">
+                  <thead>
+                    <tr class="info">
+                      <th>Sl.No</th>
+                      <th>Project Title</th>
+                      <th>Suggestion</th>
+                      <th>Date</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <ng-template [ngIf]="status  == '1'">
+                    <tbody  *ngFor="let info of information; let my_index = index">
+                      <tr>
+                        <td>{{my_index + 1}}</td>
+                        <td>{{info.proj_title}}</td>
+                        <td >{{slice_suggestion(info.suggestion)}}</td>
+                        <td>{{info.date}}</td>
+                          <td>
+                            <a href="#" class="btn btn-info" data-toggle="modal"  data-target="#details">More</a>
+                          </td>
+                      </tr>  <div id="details" class="modal fade" role="dialog">
+                                 <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">{{info.proj_title}}</h4>
+                                      </div>
+                                       <ul class="list-group list-group-flush">
+                                          <li class="list-group-item">Suggestion : {{info.suggestion}}</li>
+                                          <li class="list-group-item">Submitted Date : {{info.date}}</li>
+                                       </ul>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+
+                    </tbody>
+                  </ng-template>
+
+                  <ng-template [ngIf]="status  == '0'">
+                    <tbody>
+                      <tr class="text-center">
+                        <td colspan="10">No active users</td>
+                      </tr>
+                    </tbody>
+                  </ng-template>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+  </aside>
+</div>
+<router-outlet></router-outlet>

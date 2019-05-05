@@ -20,7 +20,7 @@ export class TopicSubComponent implements OnInit {
   information:string[];
   button :boolean;
 
-  project_id : Observable<string>;;
+  project_id : string;
   constructor(private router: Router, private route: ActivatedRoute, private api_service: ApiService) { }
 
   ngOnInit() {
@@ -29,10 +29,11 @@ export class TopicSubComponent implements OnInit {
       this.router.navigate(["/login"]);
     }
     else {
-      this.project_id = this.route
-                       .queryParamMap
-                       .pipe(map(params => params.get('project_id') || 'None'));
-     console.log(this.project_id);
+      this.project_id = this.route.snapshot.paramMap.get("project_id");
+      this.route.queryParamMap.subscribe(queryParams => {
+        this.project_id = queryParams.get("project_id");
+        console.log(this.project_id);
+          })
     }
   }
 

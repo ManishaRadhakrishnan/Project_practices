@@ -18,6 +18,8 @@ import { ActivateComponent } from './activate/activate.component';
 import { GuideProjUpdateComponent } from './guide-proj-update/guide-proj-update.component';
 import { SuggestionComponent } from './suggestion/suggestion.component';
 import { LogoutComponent } from './logout/logout.component';
+import { SuggestionViewComponent } from './suggestion-view/suggestion-view.component';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { LogoutComponent } from './logout/logout.component';
     ActivateComponent,
     GuideProjUpdateComponent,
     SuggestionComponent,
-    LogoutComponent
+    LogoutComponent,
+    SuggestionViewComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

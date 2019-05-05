@@ -34,15 +34,26 @@
                   <input type="password" name="confirm_password" #confirm_password class="form-control" placeholder="Confirm password"/>
                 </div>
                 <div>
+                  <ng-template [ngIf]="role == 'admin'">
                   <select name="role" class="form-control"  #role>
                     <option >--Role-- </option>
                     <option value="cood">Coordinator</option>
                     <option value="guide">Guide</option>
-                    <option value="stud">Student</option>
                   </select>
+                  </ng-template>
+                  <ng-template [ngIf]="role == null">
+                    <div class="form-group">
+                      <small id="role" class="form-text text-muted">Registering as Student</small>
+                    </div>
+                  </ng-template>
                 </div>
                 <div class="form-group">
-                  <button (click)="do_request(full_name.value, email.value, username.value, password.value, confirm_password.value, role.value)" class="btn bg-olive btn-block">Sign me up</button>
+                  <ng-template [ngIf]="role == null">
+                  <button (click)="do_request(full_name.value, email.value, username.value, password.value, confirm_password.value, 'stud')" class="btn bg-olive btn-block">Sign me up</button>
+                  </ng-template>
+                  <ng-template [ngIf]="role == 'admin'">
+                    <button (click)="do_request(full_name.value, email.value, username.value, password.value, confirm_password.value, role.value)" class="btn bg-olive btn-block">Register</button>
+                  </ng-template>
                 </div>
               </div>
             </form>

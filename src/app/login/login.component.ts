@@ -19,20 +19,19 @@ export class LoginComponent{
       this.role = window.sessionStorage.getItem("role");
 
       if(this.role != null) {
-        if (this.role == "stud") {
-          this.router.navigate(["/student-profile"]);
+        if (this.role == "admin") {
+          this.router.navigate(["/register"]);
         }
-        else if (this.role == "cood") {
+        else {
           this.router.navigate(["/student-profile"]);
+
         }
-        else if (this.role == "guide"){
-          this.router.navigate(["/student-profile"]);
-        }
+      }
         else{
           this.router.navigate(["/login"]);
         }
       }
-    }
+
 
     do_login(username: string, password: string){
       this.api_service

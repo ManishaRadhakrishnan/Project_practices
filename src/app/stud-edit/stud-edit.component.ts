@@ -79,7 +79,7 @@ export class StudEditComponent implements OnInit {
 
   do_update_student_profile(full_name, email, contact, address, course, department) {
     if(this.role== "stud"){
-      console.log(this.role);
+      // console.log(this.role);
     this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
      .update_student_profile(this.user_id, full_name, email, contact, address, course, department)

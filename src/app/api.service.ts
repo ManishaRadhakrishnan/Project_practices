@@ -79,6 +79,24 @@ export class ApiService {
       );
     }
 
+    student_project_details(user_id: string): Observable<any> {
+    let api_url = encodeURI(this.endpoint_url + "/student_project_details/" + user_id);
+    console.log(api_url);
+    return this.http.get(api_url, httpOptions).pipe(
+      map(this.extract_data),
+      catchError(this.handle_error)
+    );
+    }
+
+    all_project_details(): Observable<any> {
+    let api_url = encodeURI(this.endpoint_url + "/all_project_details");
+    console.log(api_url);
+    return this.http.get(api_url, httpOptions).pipe(
+      map(this.extract_data),
+      catchError(this.handle_error)
+    );
+    }
+
     edit_student_profile(user_id: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/edit_student_profile/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
@@ -146,6 +164,24 @@ export class ApiService {
 
      project_details_update(user_id : string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/project_details_update/" + user_id);
+      console.log(api_url);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
+     do_suggestion(user_id : string, stud_id : string, proj_id : string,sugg :string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/do_suggestion/"+ user_id+"/"+proj_id+"/"+stud_id+"/"+sugg);
+      console.log(api_url);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
+    select_suggestion(user_id : string):  Observable<any>{
+      let api_url = encodeURI(this.endpoint_url + "/select_suggestion/"+ user_id);
       console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
