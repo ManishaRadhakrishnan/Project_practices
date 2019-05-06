@@ -11,16 +11,17 @@ import { map }                from 'rxjs/operators';
   styleUrls: ['./topic-sub.component.css']
 })
 export class TopicSubComponent implements OnInit {
-
+  count : number;
   error: string;
-  api: Api;
+  // api: Api;
   user_id : string;
   role: string;
   status : string;
   information:string[];
   button :boolean;
-
+  unique:boolean;
   project_id : string;
+  number_of_similar_projects : string[];
   constructor(private router: Router, private route: ActivatedRoute, private api_service: ApiService) { }
 
   ngOnInit() {
@@ -37,18 +38,22 @@ export class TopicSubComponent implements OnInit {
     }
   }
 
-  do_submit_topic(project_title: string, project_domains: string, project_technologies: string, project_description: string)
+  do_submit_topic(project_title: string, project_domains: string, project_technologies: string, project_description: string, _continue: string)
   {
     this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
-     .do_add_project_topic(this.user_id, project_title, project_domains, project_technologies, project_description)
+     .do_add_project_topic(this.user_id, project_title, project_domains, project_technologies, project_description, _continue)
      .subscribe(
        data => {
          this.status = data.status as string;
-         if(this.status == "1")
-           {
-              this.router.navigate(['/topic-view']);
-           }
+         this.number_of_similar_projects = data.data as string[];
+         this.unique = data.unique;
+
+         // console.log(data);
+         // if(this.status == "1" && this.unique== true )
+         //   {
+         //      this.router.navigate(['/topic-view']);
+         //   }
        },
        err => {
          console.log(err);

@@ -29,9 +29,9 @@
                         <td >{{slice_suggestion(info.suggestion)}}</td>
                         <td>{{info.date}}</td>
                           <td>
-                            <a href="#" class="btn btn-info" data-toggle="modal"  data-target="#details">More</a>
+                            <a href="#" class="btn btn-info" data-toggle="modal"  data-target="#details" (click)="modal_pop(info.proj_id)" >More</a>
                           </td>
-                      </tr>  <div id="details" class="modal fade" role="dialog">
+                      </tr>  <div id="{{info.proj_id}}" class="modal fade" role="dialog">
                                  <div class="modal-dialog">
                                     <!-- Modal content-->
                                     <div class="modal-content">

@@ -8,6 +8,8 @@ import { catchError, retry, map } from 'rxjs/operators';
 export interface Api {
   status: string;
   message: string;
+  data : string[];
+  unique : boolean;
 }
 
 const httpOptions = {
@@ -70,9 +72,9 @@ export class ApiService {
       );
     }
 
-    do_add_project_topic(user_id: string, project_title: string, project_domains: string, project_technologies: string, project_description: string)
+    do_add_project_topic(user_id: string, project_title: string, project_domains: string, project_technologies: string, project_description: string, _continue:  string)
     {
-      let api_url = encodeURI(this.endpoint_url + "/add_project_topic/" + user_id + "/" + project_title + "/"+ project_domains + "/" + project_technologies + "/" + project_description);
+      let api_url = encodeURI(this.endpoint_url + "/add_project_topic/" + user_id + "/" + project_title + "/"+ project_domains + "/" + project_technologies + "/" + project_description + "/" + _continue);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error
@@ -171,8 +173,8 @@ export class ApiService {
       );
     }
 
-     do_suggestion(user_id : string, stud_id : string, proj_id : string,sugg :string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/do_suggestion/"+ user_id+"/"+proj_id+"/"+stud_id+"/"+sugg);
+     do_suggestion(sugg :string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/do_suggestion/"+sugg);
       console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),

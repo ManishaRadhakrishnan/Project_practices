@@ -13,8 +13,14 @@
                Topic Submission failed
             </div>
           </ng-template>
-
-          <ng-template [ngIf]="status == '1'">
+          <ng-template [ngIf]="status == '1' && unique== false">
+            <div class="alert alert-warning">
+               There are {{number_of_similar_projects[0]["Count"]}} similar projects.
+               <br/>
+               Do you wish to <a href="#" (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, true)">continue</a>?
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="status == '1' && unique== true">
             <div class="alert alert-success">
                Successful submission
             </div>
@@ -56,7 +62,7 @@
                             </div>
                       <!--</div>-->
                             <div class="modal-footer clearfix">
-                              <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value)" class="btn btn-primary">Submit</button>
+                              <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, false)" class="btn btn- primary">Submit</button>
                               <!--<button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button>-->
                               <button (click)="do_topic_save()" type="submit" class="btn btn-primary pull-left">Save</button>
                             </div>

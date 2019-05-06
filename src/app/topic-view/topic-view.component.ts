@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Api, ApiService } from '../api.service';
 import { RouterModule, Routes, Router } from '@angular/router';
-// import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import * as $ from "jquery";
 @Component({
   selector: 'app-topic-view',
   templateUrl: './topic-view.component.html',
@@ -85,6 +85,11 @@ this.role = window.sessionStorage.getItem("role");
    }
 }
 
+modal_pop(div_id) {
+  let id = "#" + div_id;
+  $(id).modal("show");
+}
+
 // open(content) {
 //     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
 //       this.closeResult = `Closed with: ${result}`;
@@ -92,6 +97,8 @@ this.role = window.sessionStorage.getItem("role");
 //       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
 //     });
 //   }
+
+
 
 
 

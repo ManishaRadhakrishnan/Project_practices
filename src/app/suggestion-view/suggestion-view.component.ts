@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Api, ApiService } from '../api.service';
 import { RouterModule, Routes, Router } from '@angular/router';
+// import $ from "jquery";
+
 @Component({
   selector: 'app-suggestion-view',
   templateUrl: './suggestion-view.component.html',
@@ -44,4 +46,9 @@ role :string;
   slice_suggestion(suggestion_string : string) {
     return suggestion_string.slice(0, 50) + " ... ";
   }
+
+  // modal_pop(div_id) {
+  //   let id = "#" + div_id;
+  //   $(id).modal();
+  // }
 }

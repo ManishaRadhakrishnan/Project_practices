@@ -43,12 +43,12 @@ export class SuggestionComponent implements OnInit {
 
 
 do_suggestion(suggestion :string){
-  this.user_id = window.sessionStorage.getItem("user_id");
-  this.stud_id = window.sessionStorage.getItem("stud_id");
-  this.proj_id = window.sessionStorage.getItem("proj_id");
+  // this.user_id = window.sessionStorage.getItem("user_id");
+  // this.stud_id = window.sessionStorage.getItem("stud_id");
+  // this.proj_id = window.sessionStorage.getItem("proj_id");
 
   this.api_service
-     .do_suggestion(this.user_id, this.proj_id,this.stud_id,suggestion)
+     .do_suggestion(suggestion)
      .subscribe(
        data => {
          this.sugg_status = data.status as string;

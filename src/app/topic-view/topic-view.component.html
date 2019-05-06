@@ -8,128 +8,78 @@
     <section class="content">
       <ng-template [ngIf]="status == '1'">
         <div class="mailbox row">
-          <ng-template [ngIf]="role == 'cood'">
-            <div class="col-md-12">
+          <div class="" *ngFor="let info of information">
+            <div class="col-md-4">
               <div class="box box-solid">
-                <div class="box-body card">
-                  <div class="card-body">
-                    <table class="table table-sm-responsive table-stripped table-hover">
-                      <thead>
-                        <tr class="info">
-                          <th>Project Title </th>
-                          <th>Project Description </th>
-                          <th>Submitted By</th>
-                          <th>Date</th>
-                          <th>Domain</th>
-                          <th>Technology</th>
-                          <th>Status</th>
-                          <th>Edit/Update</th>
-                        </tr>
-                      </thead>
-                      <ng-template [ngIf]="status  == '1'">
-                        <tbody  *ngFor="let info of information">
-                          <tr contenteditable="true">
-                            <td>{{info.proj_title}}</td>
-                            <td>{{info.proj_desc}}</td>
-                            <td>{{info.proj_sub_by}}</td>
-                            <td>{{info.proj_sub_date}}</td>
-                            <td>{{info.proj_domain}}</td>
-                            <td>{{info.proj_technology}}</td>
-                              <td>
-                                <button type="button"  class="btn btn-success" name="button" value = "info.proj_id">Approve</button>
-                              </td>
-                            <td> <i class = "fa fa-pencil" ></i></td>
-                          </tr>
-                        </tbody>
-                      </ng-template>
-
-                      <ng-template [ngIf]="status  == '0'">
-                        <tbody>
-                          <tr class="text-center">
-                            <td colspan="10">No active users</td>
-                          </tr>
-                        </tbody>
-                      </ng-template>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ng-template>
-          <ng-template [ngIf]="role != 'cood'">
-            <div class="" *ngFor="let info of information">
-              <div class="col-md-4">
-                <div class="box box-solid">
-                  <div class="box-body">
-                    <div class="form-group">
-                      <div class="row">
-                        <div class="card">
-                          <div class="col-lg-12 col-md-12">
-                            <h4 class="card-title">{{info.proj_title}}</h4>
+                <div class="box-body">
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="card">
+                        <div class="col-lg-12 col-md-12">
+                          <h4 class="card-title">{{info.proj_title}}</h4>
                             <div class="card-body">
                               <p class="card-text">
                                 {{info.proj_desc}}
                               </p>
-                              <a href="#" class="card-link" data-toggle="modal"  data-target="#mymodal">More ...</a>
+                              <a href="#" class="card-link" data-toggle="modal"  data-target="#{{info?.proj_id}}" (click)="modal_pop(info.proj_id)">More ...</a>
 
-                              <div id="mymodal" class="modal fade" role="dialog">
-                                <div class="modal-dialog">
-                                  <!-- Modal content-->
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                      <h4 class="modal-title">{{info.proj_title}}</h4>
-                                    </div>
-                                    <ul class="list-group list-group-flush">
-                                      <li class="list-group-item">student : {{info.user_id}}</li>
-                                      <li class="list-group-item">Id : {{info.proj_id}}</li>
-                                      <li class="list-group-item">Description : {{info.proj_desc}}</li>
-                                      <li class="list-group-item">Submitted Date : {{info.proj_sub_date}}</li>
-                                      <li class="list-group-item">Domain : {{info.proj_domain}}</li>
-                                      <li class="list-group-item">Technology : {{info.proj_technology}}</li>
-                                      <li class="list-group-item">Status : {{info.proj_status}}</li>
-                                    </ul>
-                                    <!--<div class="modal-body">
-                                      <p>Description : {{info.proj_desc}}</p>
-                                      <p>Submitted Date : {{info.proj_sub_date}}</p>
-                                      <p>Domain : {{info.proj_domain}}</p>
-                                      <p>Technology : {{info.proj_technology}}</p>
-                                      <p>Status : {{info.proj_status}}</p>
-                                    </div>-->
-                                    <div class="modal-footer">
-                                      <button (click)="make_suggestion(info.proj_id,info.user_id)" type="submit" class="btn btn-info pull-left">Suggestion</button>
-                                      <ng-template [ngIf]="role  == 'stud'">
-                                        <button (click)="edit_topic(info.proj_id)" type="submit" class="btn btn-info pull-left">Edit</button>
-                                      </ng-template>
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              <div id="{{info.proj_id}}" class="modal fade" role="dialog">
+                                 <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">{{info.proj_title}}</h4>
+                                      </div>
+                                       <ul class="list-group list-group-flush">
+                                         <li class="list-group-item">student : {{info.user_id}}</li>
+                                          <li class="list-group-item">Id : {{info.proj_id}}</li>
+                                          <li class="list-group-item">Description : {{info.proj_desc}}</li>
+                                          <li class="list-group-item">Submitted Date : {{info.proj_sub_date}}</li>
+                                          <li class="list-group-item">Domain : {{info.proj_domain}}</li>
+                                          <li class="list-group-item">Technology : {{info.proj_technology}}</li>
+                                          <li class="list-group-item">Status : {{info.proj_status}}</li>
+                                       </ul>
+                                      <!--<div class="modal-body">
+                                        <p>Description : {{info.proj_desc}}</p>
+                                        <p>Submitted Date : {{info.proj_sub_date}}</p>
+                                        <p>Domain : {{info.proj_domain}}</p>
+                                        <p>Technology : {{info.proj_technology}}</p>
+                                        <p>Status : {{info.proj_status}}</p>
+                                      </div>-->
+                                      <div class="modal-footer">
+                                        <button (click)="make_suggestion(info.proj_id,info.user_id)" type="submit" class="btn btn-info pull-left">Suggestion</button>
+                                        <ng-template [ngIf]="role  == 'stud'">
+                                          <button (click)="edit_topic(info.proj_id)" type="submit" class="btn btn-info pull-left">Edit</button>
+                                        </ng-template>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
                               </div>
                               <div class="card-footer text-muted">
 
                                 <ng-template [ngIf]="info.proj_status  == 'pending'">
-                                  <h5><span class="badge bg-yellow">Pending</span></h5>
+                                <h5><span class="badge bg-yellow">Pending</span></h5>
                                 </ng-template>
 
-                                <ng-template [ngIf]="info.proj_status  == 'approved'">
-                                  <h5><span class="badge bg-green">Approved</span></h5>
+                                 <ng-template [ngIf]="info.proj_status  == 'approved'">
+                                <h5><span class="badge bg-green">Approved</span></h5>
                                 </ng-template>
 
-                                <ng-template [ngIf]="info.proj_status  == 'rejected'">
-                                  <h5><span class="badge bg-red">Rejected</span></h5>
+                                 <ng-template [ngIf]="info.proj_status  == 'rejected'">
+                                <h5><span class="badge bg-red">Rejected</span></h5>
                                 </ng-template>
                               </div>
-                            </div>
-                          </div>
+                              </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div><!-- /.box-body -->
-              </div>
+                </div>
+              </div><!-- /.box-body -->
             </div>
-          </ng-template>
+          </div>
         </div>
       </ng-template>
       <ng-template [ngIf]="status == '0'">

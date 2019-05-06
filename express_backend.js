@@ -376,32 +376,70 @@ app.get("/update_guide_profile/:user_id/:full_name/:email/:contact/:address/:cou
   });
 });
 
-app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_technologies/:project_description",function (req, res, next) {
+app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_technologies/:project_description/:_continue",function (req, res, next) {
 
   let user_id = req.params.user_id;
   let project_title = req.params.project_title;
   let project_domains = req.params.project_domains;
   let project_technologies = req.params.project_technologies;
   let project_description = req.params.project_description;
-
-  let sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
-
-  let current_date = new Date();
-  let date_time = current_date.getDate() + "/"
-                + (current_date.getMonth() + 1)  + "/"
-                + current_date.getFullYear() + " @ "
-                + current_date.getHours() + ":"
-                + current_date.getMinutes();
-
-  let data = [user_id, project_title, project_description.trim(), date_time, project_domains, project_technologies];
-
-  con.query(sql, data, function(err, result, fields) {
+  let _continue = req.params._continue;
+  // let sql = "SELECT COUNT(*) as Count FROM project WHERE proj_title LIKE %?% AND proj_domain in (SELECT domain.domain_name FROM domain WHERE domain.domain_name LIKE %?%) AND proj_technology LIKE %?%";
+  let sql = "SELECT COUNT(*) as Count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND proj_domain in (SELECT domain.domain_name FROM domain WHERE domain.domain_name LIKE '%" + project_domains + "%') AND proj_technology LIKE '%" + project_technologies + "%'";
+  // let sql = "SELECT COUNT(*) as Count FROM project WHERE proj_title LIKE '%" + project_title + "'";
+  // let sql = "SELECT domain.domain_name FROM domain WHERE domain.domain_name LIKE %?%";
+  // let data = [project_title];
+  // let data = {$proj_title : project_title};
+  con.query(sql, function (err, result, fields) {
     if (err){
+      console.log(err);
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
-      res.json({"status" : 1, "data" : "Project added succesfully"});
+      if(result["Count"]==0){
+        let sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
+
+        let current_date = new Date();
+        let date_time = current_date.getDate() + "/"
+                      + (current_date.getMonth() + 1)  + "/"
+                      + current_date.getFullYear() + " @ "
+                      + current_date.getHours() + ":"
+                      + current_date.getMinutes();
+
+        let data = [user_id, project_title, project_description.trim(), date_time, project_domains, project_technologies];
+
+        con.query(sql, data, function(err, result, fields) {
+          if (err){
+            res.json({"status" : 0, "data" : "Something went wrong"});
+          } else {
+            res.json({"status" : 1, "data" : "Project added succesfully", "unique":true});
+          }
+        });
+      }else{
+        res.json({"status" : 1, "data" : result, "unique": false});
+        if(_continue==true){
+          let sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
+
+          let current_date = new Date();
+          let date_time = current_date.getDate() + "/"
+                        + (current_date.getMonth() + 1)  + "/"
+                        + current_date.getFullYear() + " @ "
+                        + current_date.getHours() + ":"
+                        + current_date.getMinutes();
+
+          let data = [user_id, project_title, project_description.trim(), date_time, project_domains, project_technologies];
+
+          con.query(sql, data, function(err, result, fields) {
+            if (err){
+              res.json({"status" : 0, "data" : "Something went wrong"});
+            } else {
+              res.json({"status" : 1, "data" : "Project added succesfully", "unique":true});
+            }
+          });
+        }
+      }
     }
-  });
+  })
+
 });
 
 app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",function (req, res, next) {
@@ -528,14 +566,14 @@ app.get("/fetch_mail/:user_id",function (req, res, next) {
  );
   });
 
-  app.get("/do_suggestion/:user_id/:proj_id/:stud_id/:suggestion",function (req, res, next) {
+  app.get("/do_suggestion/:suggestion",function (req, res, next) {
 
-  let user_id = req.params.user_id;
-  let proj_id = req.params.proj_id;
-  let stud_id = req.params.stud_id;
+  // let user_id = req.params.user_id;
+  // let proj_id = req.params.proj_id;
+  // let stud_id = req.params.stud_id;
   let suggestion = req.params.suggestion;
-  let sql = "INSERT INTO suggestions(user_id,proj_id,stud_id,suggestion) VALUES (?, ?, ?,?)"
-  let data = [user_id, proj_id, stud_id,suggestion];
+  let sql = "INSERT INTO suggestions(suggestion) VALUES (?)"
+  let data = [suggestion];
   con.query(sql, data, function(err, result) {
     if (err) {
       res.json({"status" : 0, "data" : "Something went wrong"});
@@ -551,7 +589,7 @@ app.get("/select_suggestion/:user_id",function (req, res, next) {
   let user_id = req.params.user_id;
   // let proj_id = req.params.proj_id;
   // let stud_id = req.params.stud_id;
-  var sql = "SELECT suggestions.suggestion, suggestions.date, project.proj_title from suggestions, student, project WHERE suggestions.proj_id = project.proj_id and project.proj_status = 'approved' AND suggestions.stud_user_id = student.user_id and student.user_id = ?";
+  var sql = "SELECT suggestions.proj_id,suggestions.suggestion, suggestions.date, project.proj_title from suggestions, student, project WHERE suggestions.proj_id = project.proj_id and project.proj_status = 'approved' AND suggestions.stud_user_id = student.user_id and student.user_id = ?";
 
   let data = [user_id];
   con.query(sql, data, function(err, result) {
