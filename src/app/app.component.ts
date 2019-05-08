@@ -10,7 +10,9 @@ export class AppComponent  implements OnInit {
 constructor(private router: Router) { }
 
   role : string;
+  user_name : string;
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
+    this.user_name = window.sessionStorage.getItem("user_name");
   }
 }

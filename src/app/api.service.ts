@@ -212,8 +212,9 @@ export class ApiService {
       );
     }
 
-    inbox_mail(user_id: string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/inbox_mail/" + user_id);
+    inbox_mail(mail : string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/inbox_mail/" + mail);
+      console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
@@ -222,6 +223,7 @@ export class ApiService {
 
     sent_mail(user_id: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/sent_mail/" + user_id);
+
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)

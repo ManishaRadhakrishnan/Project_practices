@@ -284,10 +284,10 @@ app.get('/login/:username/:password', function (req, res, next) {
   let username = req.params.username;
   let password = req.params.password;
 
-  var sql = "SELECT user_id, role, active FROM user WHERE user_name = ? AND password = ?";
-  let data = [username, password];
+    var sql = "SELECT user_id, role, active, user_name  FROM user WHERE user_name = ? AND password = ?";
+    let data = [username, password];
 
-  con.query(sql, data, function(err, result, fields) {
+    con.query(sql, data, function(err, result, fields) {
     if (err){
       res.json({"status" : 0, "message" : "Something went wrong"});
     } else {
@@ -296,7 +296,8 @@ app.get('/login/:username/:password', function (req, res, next) {
         if(active == "1") {
           let user_id = result[0].user_id;
           let role = result[0].role;
-          res.json({"status" : 1, "user_id" : user_id, "role" : role});
+          let username = result[0].user_name;
+          res.json({"status" : 1, "user_id" : user_id, "role" : role, "user_name" : username});
         }
         else {
           res.json({"status" : 0, "message" : "User is not currenty active"});
@@ -625,12 +626,12 @@ app.get("/select_suggestion/:user_id",function (req, res, next) {
  );
   });
 
-app.get("/inbox_mail/:user_id",function (req, res, next) {
+app.get("/inbox_mail/:mail",function (req, res, next) {
 
     let user_id = req.params.user_id;
-
-    let sql = "SELECT * FROM mail WHERE mail.user_id <> ? AND mail.toaddr IN (SELECT student.mail FROM student WHERE student.user_id <> ?)";
-    let data = [user_id, user_id];
+    let to_user_email_id = req.params.mail;
+    let sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.toaddr = ? AND mail.user_id = student.user_id AND mail.mail_visible =1";
+    let data = [to_user_email_id];
     con.query(sql, data, function(err, result) {
       if (err) {
         res.json({"status" : 0, "data" : "Something went wrong"});
@@ -642,15 +643,14 @@ app.get("/inbox_mail/:user_id",function (req, res, next) {
           res.json({"status" : 0, "data" : "Something went wrong"});
         }
        }
-     }
-   );
+     });
     });
 
 app.get("/sent_mail/:user_id",function (req, res, next) {
 
   let user_id = req.params.user_id;
-  let sql = "SELECT * FROM mail WHERE mail.user_id = ?";
-  let data = [user_id];
+  let sql = "SELECT *, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND student.user_id = ?";
+  let data = [user_id, user_id];
   con.query(sql, data, function(err, result) {
     if (err) {
       res.json({"status" : 0, "data" : "Something went wrong"});

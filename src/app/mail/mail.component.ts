@@ -16,14 +16,17 @@ export class MailComponent implements OnInit {
   user_id: string;
   role: string;
   inbox_content : string;
+  sent_mail_content : string[];
+  mail : string;
   constructor(private router: Router,private api_service: ApiService) { }
 
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
+    this.mail = window.sessionStorage.getItem("mail");
     if(this.role != null) {
       this.user_id = window.sessionStorage.getItem("user_id");
       this.api_service
-      .fetch_mail(this.user_id)
+      .inbox_mail(this.mail)
       .subscribe(
         data => {
           this.information = data.data as string[];
@@ -41,39 +44,42 @@ export class MailComponent implements OnInit {
   }
 
   get_sent_mail() {
+    window.reload();
     this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
     .sent_mail(this.user_id)
     .subscribe(
       data => {
-        this.information = data.data as string[];
         this.mail_count = data.mail_count as number;
         this.status = data.status as number;
+        this.sent_mail_content = data.data as string[];
       },
       err => {
         console.log(err);
       }
     );
 
-    // this.inbox_content = $("#right-mail-content").html();
+    this.inbox_content = $("#right-mail-content").html();
     // $("#right-mail-content").html("test");
     // $("#inbox-mail").removeClass("active");
     // $("#sent-mail").addClass("active");
-    $("#right-mail-content").html(this.inbox_content);
-    $("#sent-mail").removeClass("active");
-    $("#inbox-mail").addClass("active");
+    $("#right-mail-content").html(this.sent_mail_content);
+    $("#inbox-mail").removeClass("active");
+    $("#sent-mail").addClass("active");
   }
 
   get_inbox_mail() {
 
     this.user_id = window.sessionStorage.getItem("user_id");
+    this.mail = window.sessionStorage.getItem("mail");
     this.api_service
-    .inbox_mail(this.user_id)
+    .inbox_mail(this.mail)
     .subscribe(
       data => {
         this.information = data.data as string[];
         this.mail_count = data.mail_count as number;
         this.status = data.status as number;
+        console.log(this.information);
       },
       err => {
         console.log(err);
