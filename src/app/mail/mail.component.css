@@ -1,0 +1,29 @@
+.nav.nav-pills.nav-stacked > li {
+    border-top: 0;
+    border-left: 3px solid transparent;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    color: #444;
+}
+.nav.nav-pills > li {
+    border-top: 3px solid transparent;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    color: #444;
+}
+.nav-pills>li {
+    border-radius: 4px;
+}
+.nav>li {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+.nav.nav-pills.nav-stacked > li.active, .nav.nav-pills.nav-stacked > li.active > li:hover {
+    background-color: #f6f6f6;
+    border-left-color: #007bff;
+    color: #444;
+}

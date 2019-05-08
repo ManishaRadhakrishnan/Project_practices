@@ -97,7 +97,7 @@ app.get('/edit_guide_profile/:user_id', function (req, res, next) {
 
   con.query(sql, data, function(err, result, fields) {
     if (err){
-      throw(err);
+
       //res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
       if(result.length == 1){
@@ -174,7 +174,7 @@ app.get('/view_guide_profile/:user_id', function (req, res, next) {
 
   con.query(sql, data, function(err, result, fields) {
     if (err){
-      //throw(err);
+
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
       if(result.length == 1){
@@ -318,18 +318,38 @@ app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:c
   let department = req.params.department;
   let address = req.params.address;
 
-  let sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, curr_course = ?, dept_id = ? WHERE user_id = ?";
+  var sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, curr_course = ?, dept_id = ? WHERE user_id = ?";
   let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), user_id];
 
   con.query(sql, data, function(err, result, fields) {
 
     if (err){
-      throw(err);
-      // res.json({"status" : 0, "data" : "Something went wrong"});
+      res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
-      res.json({"status" : 1, "data" : "Student profile updated succesfully"});
+      // res.json({"status" : 1, "data" : "Student profile updated succesfully"});
+      sql = "SELECT COUNT(curr_course) as count FROM student WHERE curr_course = ?";
+      let data =[course.trim()];
+      con.query(sql, data, function(err, result, fields) {
+        if (err){
+          res.json({"status" : 0, "data" : "Something went wrong"});
+        } else {
+          sql = "UPDATE courses SET no_of_stud_enrol = ? WHERE course_id = ?";
+          let data = [result[0]['count'], course.trim()];
+
+          con.query(sql, data, function(err, result, fields) {
+            if (err){
+              console.log(err);
+              res.json({"status" : 0, "data" : "Something went wrong"});
+            } else {
+              res.json({"status" : 1, "data" : "Course count updated succesfully"});
+            }
+          });
+        }
+      });
     }
   });
+
+
 });
 
 app.get("/update_cood_profile/:user_id/:full_name/:email/:contact/:address/:course/:department",function (req, res, next) {
@@ -349,7 +369,7 @@ app.get("/update_cood_profile/:user_id/:full_name/:email/:contact/:address/:cour
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
-      res.json({"status" : 1, "data" : "Student profile updated succesfully"});
+      res.json({"status" : 1, "data" : "Coordinator profile updated succesfully"});
     }
   });
 });
@@ -371,7 +391,7 @@ app.get("/update_guide_profile/:user_id/:full_name/:email/:contact/:address/:cou
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
-      res.json({"status" : 1, "data" : "Student profile updated succesfully"});
+      res.json({"status" : 1, "data" : "Guide profile updated succesfully"});
     }
   });
 });
@@ -392,7 +412,6 @@ app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_te
   // let data = {$proj_title : project_title};
   con.query(sql, function (err, result, fields) {
     if (err){
-      console.log(err);
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
       if(result["Count"]==0){
@@ -465,7 +484,6 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
 
     if (err)
     {
-      console.log(err);
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else
     {
@@ -488,7 +506,7 @@ app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req,
   {
     if (err)
     {
-      //throw(err);
+
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else
     {
@@ -566,19 +584,24 @@ app.get("/fetch_mail/:user_id",function (req, res, next) {
  );
   });
 
-  app.get("/do_suggestion/:suggestion",function (req, res, next) {
+app.get("/do_suggestion/:user_id/:student_id/:project_id/:suggestion",function (req, res, next) {
 
-  // let user_id = req.params.user_id;
-  // let proj_id = req.params.proj_id;
-  // let stud_id = req.params.stud_id;
+  let user_id = req.params.user_id;
+  let proj_id = req.params.project_id;
+  let stud_id = req.params.student_id;
   let suggestion = req.params.suggestion;
-  let sql = "INSERT INTO suggestions(suggestion) VALUES (?)"
-  let data = [suggestion];
+  let current_date = new Date();
+  let date_time = current_date.getDate() + "/"
+                + (current_date.getMonth() + 1)  + "/"
+                + current_date.getFullYear();
+
+  let sql = "INSERT INTO suggestions(guide_user_id, stud_user_id, proj_id, suggestion, date) VALUES (?, ?, ?, ?, ?)"
+  let data = [user_id, stud_id,  proj_id, suggestion, date_time];
   con.query(sql, data, function(err, result) {
     if (err) {
       res.json({"status" : 0, "data" : "Something went wrong"});
     }else{
-      res.json({"status" : 1, "data" : "Suggestion inserted sccessfully"});
+      res.json({"status" : 1, "data" : "Suggestion inserted successfully"});
     }
    }
  );
@@ -589,13 +612,11 @@ app.get("/select_suggestion/:user_id",function (req, res, next) {
   let user_id = req.params.user_id;
   // let proj_id = req.params.proj_id;
   // let stud_id = req.params.stud_id;
-  var sql = "SELECT suggestions.proj_id,suggestions.suggestion, suggestions.date, project.proj_title from suggestions, student, project WHERE suggestions.proj_id = project.proj_id and project.proj_status = 'approved' AND suggestions.stud_user_id = student.user_id and student.user_id = ?";
+  var sql = "SELECT suggestions.proj_id,suggestions.suggestion, suggestions.date, project.proj_title from suggestions, student, project WHERE suggestions.proj_id = project.proj_id and project.proj_status = 'approved' AND suggestions.stud_user_id = student.user_id and student.user_id = ? ORDER BY date DESC";
 
   let data = [user_id];
   con.query(sql, data, function(err, result) {
-    // console.log(sql);
     if (err) {
-      // throw(err);
       res.json({"status" : 0, "data" : "Something went wrong"});
     }else{
       res.json({"status" : 1, "data" : result});
@@ -603,6 +624,46 @@ app.get("/select_suggestion/:user_id",function (req, res, next) {
    }
  );
   });
+
+app.get("/inbox_mail/:user_id",function (req, res, next) {
+
+    let user_id = req.params.user_id;
+
+    let sql = "SELECT * FROM mail WHERE mail.user_id <> ? AND mail.toaddr IN (SELECT student.mail FROM student WHERE student.user_id <> ?)";
+    let data = [user_id, user_id];
+    con.query(sql, data, function(err, result) {
+      if (err) {
+        res.json({"status" : 0, "data" : "Something went wrong"});
+      } else {
+        if (result.length > 0) {
+          res.json({"status" : 1, "data": result, "mail_count" : result.length});
+        }
+        else {
+          res.json({"status" : 0, "data" : "Something went wrong"});
+        }
+       }
+     }
+   );
+    });
+
+app.get("/sent_mail/:user_id",function (req, res, next) {
+
+  let user_id = req.params.user_id;
+  let sql = "SELECT * FROM mail WHERE mail.user_id = ?";
+  let data = [user_id];
+  con.query(sql, data, function(err, result) {
+    if (err) {
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      if (result.length > 0) {
+        res.json({"status" : 1, "data": result, "mail_count" : result.length});
+      }else {
+        res.json({"status" : 0, "data" : "Something went wrong"});
+      }
+    }
+  }
+  );
+});
 
 app.listen(8080, function () {
   // var host = server.address().address;

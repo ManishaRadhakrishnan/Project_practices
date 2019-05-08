@@ -25,10 +25,6 @@ export class ComposeComponent implements OnInit {
   do_send_mail(email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string, attachment : string)
   {
     this.user_id = window.sessionStorage.getItem("user_id");
-
-    if(attachment == null) {
-      attachment = "";
-    }
     this.api_service
      .insert_mail(this.user_id, email_to, subject, email_cc, email_bcc, email_content, attachment)
      .subscribe(

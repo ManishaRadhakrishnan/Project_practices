@@ -32,12 +32,11 @@
                           <th>Technology</th>
                           <th>Guide</th>
                           <th>Status</th>
-                          <th>Edit/Update</th>
                         </tr>
                       </thead>
                       <ng-template [ngIf]="status  == '1'">
                         <tbody  *ngFor="let info of information">
-                          <tr contenteditable="true">
+                          <tr>
                             <td>{{info.proj_title}}</td>
                             <td>{{info.proj_desc}}</td>
                             <td>{{info.proj_sub_by}}</td>
@@ -51,10 +50,29 @@
                                 <option value="2">Prof. Jesna Jamal</option>
                               </select>
                             </td>
-                              <td>
-                                <button type="button"  class="btn btn-success" name="button" value = "info.proj_id">Approve</button>
-                              </td>
-                            <td> <i class = "fa fa-pencil" contenteditable="true"></i></td>
+                            <ng-template [ngIf]="info.proj_status=='approved'">
+                            <td>
+                              <button type="button"  class="btn btn-success" name="button" value = "info.proj_id">Approve</button>
+                            </td>
+                            </ng-template>
+
+                            <ng-template [ngIf]="info.proj_status=='pending'">
+                            <td>
+                              <button type="button"  class="btn btn-warning" name="button" value = "info.proj_id">Pending</button>
+                            </td>
+                            </ng-template>
+
+                            <ng-template [ngIf]="info.proj_status=='reject'">
+                            <td>
+                              <button type="button"  class="btn btn-danger" name="button" value = "info.proj_id">Rejected</button>
+                            </td>
+                            </ng-template>
+
+                            <ng-template [ngIf]="info.proj_status=='verified'">
+                            <td>
+                              <button type="button"  class="btn btn-info" name="button" value = "info.proj_id">Verified</button>
+                            </td>
+                            </ng-template>
                           </tr>
                         </tbody>
                       </ng-template>
@@ -113,7 +131,9 @@
                                         <p>Status : {{info.proj_status}}</p>
                                       </div>-->
                                       <div class="modal-footer">
+                                        <ng-template [ngIf]="role  == 'guide'">
                                         <button (click)="make_suggestion(info.proj_id,info.user_id)" type="submit" class="btn btn-info pull-left">Suggestion</button>
+                                        </ng-template>
                                         <ng-template [ngIf]="role  == 'stud'">
                                           <button (click)="edit_topic(info.proj_id)" type="submit" class="btn btn-info pull-left">Edit</button>
                                         </ng-template>

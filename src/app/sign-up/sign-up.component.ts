@@ -16,6 +16,7 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
+
     if(this.role != null) {
       if (this.role == "stud") {
         this.router.navigate(["/student-profile"]);

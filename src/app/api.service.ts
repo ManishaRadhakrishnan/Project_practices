@@ -65,6 +65,11 @@ export class ApiService {
 
     insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string,attachment :string)
     {
+
+      if(attachment == null || attachment == "") {
+        attachment = "%20";
+      }
+
       let api_url = encodeURI(this.endpoint_url + "/insert_mail/"+ user_id  + "/" + email_to + "/" + subject + "/" + email_cc + "/" + email_bcc + "/" + email_content + "/" + attachment);
       return this.http.get<Api>(api_url)
         .pipe(
@@ -173,8 +178,8 @@ export class ApiService {
       );
     }
 
-     do_suggestion(sugg :string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/do_suggestion/"+sugg);
+     do_suggestion(user_id:string, student_id:string, project_id:string, sugg :string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/do_suggestion/" + user_id + "/" + student_id + "/" + project_id + "/" + sugg);
       console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
@@ -201,6 +206,22 @@ export class ApiService {
 
     fetch_mail(user_id: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/fetch_mail/" + user_id);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
+    inbox_mail(user_id: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/inbox_mail/" + user_id);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
+    sent_mail(user_id: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/sent_mail/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)

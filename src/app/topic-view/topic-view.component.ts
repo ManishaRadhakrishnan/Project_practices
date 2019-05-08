@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Api, ApiService } from '../api.service';
 import { RouterModule, Routes, Router } from '@angular/router';
-import * as $ from "jquery";
+import * as $AB from 'jquery';
 @Component({
   selector: 'app-topic-view',
   templateUrl: './topic-view.component.html',
@@ -87,7 +87,7 @@ this.role = window.sessionStorage.getItem("role");
 
 modal_pop(div_id) {
   let id = "#" + div_id;
-  $(id).modal("show");
+  $(id).modal();
 }
 
 // open(content) {

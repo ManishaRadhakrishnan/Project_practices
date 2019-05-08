@@ -24,8 +24,8 @@
                               <div style="margin-top: 15px;">
                                 <ul class="nav nav-pills nav-stacked">
                                   <li class="header">Folders</li>
-                                  <li class="active"><a href="#"><i class="fa fa-inbox"></i> Inbox <ng-template>mail_count</ng-template></a></li>
-                                  <li><a href="#"><i class="fa fa-mail-forward"></i> Sent</a></li>
+                                  <li class="active" (click)="get_inbox_mail()" id="inbox-mail"><i class="fa fa-inbox"></i> Inbox <ng-template>mail_count</ng-template></li>
+                                  <li  (click)="get_sent_mail()" id="sent-mail"><i class="fa fa-mail-forward"></i> Sent</li>
                                   <li><a href="#"><i class="fa fa-folder"></i> Trash</a></li>
                                 </ul>
                               </div>
@@ -62,7 +62,7 @@
                               </div>
                             </div>
                             <ng-template [ngIf]="status == '1'">
-                              <div class="table-responsive table-hover table-stripped">
+                              <div class="table-responsive table-hover table-stripped"  id="right-mail-content">
                                 <!-- THE MESSAGES -->
                                 <table class="table table-mailbox" *ngFor="let info of information">
                                   <!-- <tr class="unread">

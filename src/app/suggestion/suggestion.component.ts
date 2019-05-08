@@ -30,12 +30,12 @@ export class SuggestionComponent implements OnInit {
   this.project_id = this.route.snapshot.paramMap.get("project_id");
   this.route.queryParamMap.subscribe(queryParams => {
     this.project_id = queryParams.get("project_id");
-    console.log(this.project_id);
+    // console.log(this.project_id);
       })
     this.student_id = this.route.snapshot.paramMap.get("student_id");
     this.route.queryParamMap.subscribe(queryParams => {
       this.student_id = queryParams.get("student_id");
-      console.log(this.student_id);
+      // console.log(this.student_id);
         })
   }
   // window.location.reload();
@@ -43,12 +43,12 @@ export class SuggestionComponent implements OnInit {
 
 
 do_suggestion(suggestion :string){
-  // this.user_id = window.sessionStorage.getItem("user_id");
+  this.user_id = window.sessionStorage.getItem("user_id");
   // this.stud_id = window.sessionStorage.getItem("stud_id");
   // this.proj_id = window.sessionStorage.getItem("proj_id");
 
   this.api_service
-     .do_suggestion(suggestion)
+     .do_suggestion(this.user_id, this.student_id, this.project_id, suggestion)
      .subscribe(
        data => {
          this.sugg_status = data.status as string;
