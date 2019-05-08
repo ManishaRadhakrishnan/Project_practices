@@ -15,7 +15,7 @@ var con = mysql.createConnection({
 app.get('/edit_student_profile/:user_id', function (req, res, next) {
   let user_id = req.params.user_id;
   let student_data = [], course_names = [], department_names = [];
-  var sql = "SELECT stud_name as name, address, contact, mail, curr_course, dept_id FROM student WHERE user_id = ?";
+  var sql = "SELECT stud_name as name, address, contact, mail, curr_acad_yr,curr_course, dept_id FROM student WHERE user_id = ?";
   let data = [user_id];
 
   con.query(sql, data, function(err, result, fields) {
@@ -131,7 +131,7 @@ app.get('/edit_guide_profile/:user_id', function (req, res, next) {
 app.get('/view_student_profile/:user_id', function (req, res, next) {
   let user_id = req.params.user_id;
 
-  var sql = "SELECT student.stud_name as name, student.address, student.contact, student.mail, department.dept_name, courses.course_name FROM student, courses, department WHERE student.user_id = ?";
+  var sql = "SELECT student.stud_name as name, student.address, student.contact, student.mail, student.curr_acad_yr, department.dept_name, courses.course_name FROM student, courses, department WHERE student.user_id = ?";
   let data = [user_id];
 
   con.query(sql, data, function(err, result, fields) {

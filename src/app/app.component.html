@@ -55,13 +55,13 @@
                 </li>
                 </ng-template>
 
-                  <ng-template [ngIf]="role == 'guide'">
+                  <!-- <ng-template [ngIf]="role == 'guide'">
                     <li>
                       <a href = "/users">
                         <i class="fa fa-users"></i> <span>Users</span>
                       </a>
                     </li>
-                  </ng-template>
+                  </ng-template> -->
                 <ng-template [ngIf]="role  == 'cood'">
                   <li>
                     <a href = "/guide-project-update">
@@ -69,11 +69,11 @@
                     </a>
                   </li>
                 </ng-template>
-                <li>
+                <!-- <li>
                   <a href = "localhost:3000" target="_blank" >
                     <i class="fa fa-retweet"></i> <span>Chat</span>
                   </a>
-                </li>
+                </li> -->
                 <ng-template [ngIf]="role  != null">
                   <li>
                     <a href = "/logout">

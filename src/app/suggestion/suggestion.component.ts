@@ -37,6 +37,10 @@ export class SuggestionComponent implements OnInit {
       this.student_id = queryParams.get("student_id");
       // console.log(this.student_id);
         })
+    if(this.student_id == null && this.project_id == null){
+      alert("Select a topic to make suggestion....!");
+      this.router.navigate(["/topic-view"]);
+    }
   }
   // window.location.reload();
   }
