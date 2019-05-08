@@ -44,7 +44,7 @@ export class MailComponent implements OnInit {
   }
 
   get_sent_mail() {
-    window.reload();
+    // window.location.reload();
     this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
     .sent_mail(this.user_id)
