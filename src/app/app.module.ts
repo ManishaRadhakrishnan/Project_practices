@@ -21,6 +21,7 @@ import { SuggestionComponent } from './suggestion/suggestion.component';
 import { LogoutComponent } from './logout/logout.component';
 import { SuggestionViewComponent } from './suggestion-view/suggestion-view.component';
 import { AdminComponent } from './admin/admin.component';
+import { SentComponent } from './sent/sent.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { AdminComponent } from './admin/admin.component';
     SuggestionComponent,
     LogoutComponent,
     SuggestionViewComponent,
-    AdminComponent
+    AdminComponent,
+    SentComponent
   ],
   imports: [
     BrowserModule,

@@ -229,6 +229,15 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
+
+    move_mail(user_id: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/move_mail/" + user_id);
+
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
     // insert_mail(user_id: string,mail_to: string,subject: string,cc: string,bcc: string,content: string,attachment: string){
 
     // }

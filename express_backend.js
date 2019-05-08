@@ -665,6 +665,24 @@ app.get("/sent_mail/:user_id",function (req, res, next) {
   );
 });
 
+app.get("/move_mail/:user_id",function (req, res, next) {
+
+  let user_id = req.params.user_id;
+  let sql = "UPDATE mail SET mail_visible= 0 WHERE user_id = ?";
+  let data = [user_id];
+  con.query(sql, data, function(err, result) {
+    if (err) {
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      if (result.length > 0) {
+        res.json({"status" : 1, "data": result, "mail_count" : result.length});
+      }else {
+        res.json({"status" : 0, "data" : "Something went wrong"});
+      }
+    }
+  }
+  );
+});
 app.listen(8080, function () {
   // var host = server.address().address;
   // var port = server.address().port;
