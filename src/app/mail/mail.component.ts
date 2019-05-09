@@ -96,11 +96,25 @@ export class MailComponent implements OnInit {
     $("#inbox-mail").addClass("active");
   }
 
-  move_mail(){
+  redirect()
+  {
+    this.router.navigate(["/sent"]);
+  }
+
+  reload()
+  {
+    this.router.navigate(["/mail"]);
+  }
+
+  load()
+  {
+    this.router.navigate(["/trash"]);
+  }
+  move_mail(mail_id: string){
     this.user_id = window.sessionStorage.getItem("user_id");
     // this.mail = window.sessionStorage.getItem("mail");
     this.api_service
-    .move_mail(this.mail)
+    .move_mail(mail_id)
     .subscribe(
       data => {
         this.information = data.data as string[];
@@ -112,6 +126,6 @@ export class MailComponent implements OnInit {
         console.log(err);
       }
     );
-
+    window.location.reload();
   }
 }

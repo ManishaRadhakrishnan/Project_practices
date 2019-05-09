@@ -14,5 +14,8 @@ constructor(private router: Router) { }
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
     this.user_name = window.sessionStorage.getItem("user_name");
+    if(this.role == null) {
+      this.router.navigate(["/login"]);
+    }
   }
 }

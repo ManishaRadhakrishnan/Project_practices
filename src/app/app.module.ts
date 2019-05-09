@@ -22,6 +22,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { SuggestionViewComponent } from './suggestion-view/suggestion-view.component';
 import { AdminComponent } from './admin/admin.component';
 import { SentComponent } from './sent/sent.component';
+import { TrashComponent } from './trash/trash.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { SentComponent } from './sent/sent.component';
     LogoutComponent,
     SuggestionViewComponent,
     AdminComponent,
-    SentComponent
+    SentComponent,
+    TrashComponent
   ],
   imports: [
     BrowserModule,

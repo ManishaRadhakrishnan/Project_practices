@@ -230,16 +230,23 @@ export class ApiService {
       );
     }
 
-    move_mail(user_id: string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/move_mail/" + user_id);
-
+    move_mail(mail_id: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/move_mail/" + mail_id);
+      console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
       );
     }
     // insert_mail(user_id: string,mail_to: string,subject: string,cc: string,bcc: string,content: string,attachment: string){
-
+    trash_mail(mail: string, user_id: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/trash_mail/" +mail+"/"+ user_id);
+      console.log(api_url);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
     // }
   private handle_error(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

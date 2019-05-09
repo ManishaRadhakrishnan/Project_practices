@@ -221,7 +221,7 @@ app.get('/project_details/:user_id', function (req, res, next) {
     }
   });
 })
-//
+//m
 //project-update
 //
 app.get('/project_details_update/:user_id', function (req, res, next) {
@@ -630,7 +630,7 @@ app.get("/inbox_mail/:mail",function (req, res, next) {
 
     let user_id = req.params.user_id;
     let to_user_email_id = req.params.mail;
-    let sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.toaddr = ? AND mail.user_id = student.user_id AND mail.mail_visible =1";
+    let sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.toaddr = ? AND mail.user_id = student.user_id AND mail.mail_visible = '1'";
     let data = [to_user_email_id];
     con.query(sql, data, function(err, result) {
       if (err) {
@@ -649,7 +649,7 @@ app.get("/inbox_mail/:mail",function (req, res, next) {
 app.get("/sent_mail/:user_id",function (req, res, next) {
 
   let user_id = req.params.user_id;
-  let sql = "SELECT *, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND student.user_id = ?";
+  let sql = "SELECT *, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND student.user_id = ? AND mail.mail_visible= '1'";
   let data = [user_id, user_id];
   con.query(sql, data, function(err, result) {
     if (err) {
@@ -665,22 +665,38 @@ app.get("/sent_mail/:user_id",function (req, res, next) {
   );
 });
 
-app.get("/move_mail/:user_id",function (req, res, next) {
+app.get("/move_mail/:mail_id",function (req, res, next) {
 
-  let user_id = req.params.user_id;
-  let sql = "UPDATE mail SET mail_visible= 0 WHERE user_id = ?";
-  let data = [user_id];
+  let mail_id = req.params.mail_id;
+  let sql = "UPDATE mail SET mail_visible= '0' WHERE mail_id = ?";
+  let data = [mail_id];
   con.query(sql, data, function(err, result) {
     if (err) {
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
-      if (result.length > 0) {
-        res.json({"status" : 1, "data": result, "mail_count" : result.length});
+      if (result.affectedRows == 1) {
+        res.json({"status" : 1, "data": "Data updated successfully"});
       }else {
         res.json({"status" : 0, "data" : "Something went wrong"});
       }
     }
   }
+  );
+});
+
+app.get("/trash_mail/:mail/:user_id",function (req, res, next) {
+  let mail = req.params.mail;
+  let user_id = req.params.user_id;
+  let sql = "SELECT *, student.stud_name as name FROM mail, student WHERE mail.mail_visible= '0' AND mail.user_id = ? AND student.user_id = ? OR mail.toaddr = ?";
+  let data = [user_id,user_id,mail];
+  con.query(sql, data, function(err, result) {
+    if (err) {
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+        res.json({"status" : 1, "data" : result});
+      }
+  }
+
   );
 });
 app.listen(8080, function () {

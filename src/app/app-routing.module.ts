@@ -15,6 +15,7 @@ import {SuggestionComponent} from './suggestion/suggestion.component';
 import {LogoutComponent} from './logout/logout.component';
 import {SuggestionViewComponent} from './suggestion-view/suggestion-view.component';
 import {SentComponent} from './sent/sent.component';
+import {TrashComponent} from './trash/trash.component';
 const routes: Routes = [
   {path : 'login' , component: LoginComponent},
   {path : 'register' , component: SignUpComponent},
@@ -32,7 +33,8 @@ const routes: Routes = [
   {path : 'suggestion/:project_id/:student_id', component: SuggestionComponent},
   {path : 'logout', component : LogoutComponent},
   {path : 'suggestion-view', component : SuggestionViewComponent},
-  {path : 'sent', component : SentComponent }
+  {path : 'sent', component : SentComponent },
+  {path : 'trash', component : TrashComponent }
 ];
 
 @NgModule({
