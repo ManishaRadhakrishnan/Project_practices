@@ -70,19 +70,19 @@ export class StudEditComponent implements OnInit {
        }
      );
     }
-    
+
     else {
       this.router.navigate(["/student_profile"])
     }
  }
 
 
-  do_update_student_profile(full_name, email, contact, address, course, department) {
+  do_update_student_profile(full_name, email, contact, address, course, department, curr_acad_yr) {
     if(this.role== "stud"){
       // console.log(this.role);
     this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
-     .update_student_profile(this.user_id, full_name, email, contact, address, course, department)
+     .update_student_profile(this.user_id, full_name, email, contact, address, course, department, curr_acad_yr)
      .subscribe(
        data => {
          this.update_status = data.status as string;
@@ -103,7 +103,7 @@ export class StudEditComponent implements OnInit {
          console.log(err);
        }
      );
-  }else 
+  }else
   {
     this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
@@ -117,6 +117,6 @@ export class StudEditComponent implements OnInit {
        }
      );
   }
-  
+
   }
 }

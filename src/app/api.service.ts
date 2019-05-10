@@ -34,9 +34,10 @@ export class ApiService {
       );
     }
 
-    update_student_profile(user_id : string, full_name : string, email : string, contact : string, address : string, course : string, department : string)
+    update_student_profile(user_id : string, full_name : string, email : string, contact : string, address : string, course : string, department : string, curr_acad_yr : string)
     {
-      let api_url = encodeURI(this.endpoint_url + "/update_student_profile/" + user_id + "/" + full_name + "/" + email + "/" + contact  + "/" + address + "/" + course + "/" + department);
+      let api_url = encodeURI(this.endpoint_url + "/update_student_profile/" + user_id + "/" + full_name + "/" + email + "/" + contact  + "/" + address + "/" + course + "/" + department + "/" + curr_acad_yr);
+      console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error

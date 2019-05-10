@@ -15,7 +15,7 @@ var con = mysql.createConnection({
 app.get('/edit_student_profile/:user_id', function (req, res, next) {
   let user_id = req.params.user_id;
   let student_data = [], course_names = [], department_names = [];
-  var sql = "SELECT stud_name as name, address, contact, mail, curr_acad_yr,curr_course, dept_id FROM student WHERE user_id = ?";
+  var sql = "SELECT stud_name as name, address, contact, mail, curr_course, dept_id, curr_acad_yr FROM student WHERE user_id = ?";
   let data = [user_id];
 
   con.query(sql, data, function(err, result, fields) {
@@ -309,7 +309,7 @@ app.get('/login/:username/:password', function (req, res, next) {
   });
 });
 
-app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:course/:department",function (req, res, next) {
+app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:course/:department/:academic",function (req, res, next) {
 
   let user_id = req.params.user_id;
   let full_name = req.params.full_name;
@@ -318,13 +318,14 @@ app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:c
   let course = req.params.course;
   let department = req.params.department;
   let address = req.params.address;
-
-  var sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, curr_course = ?, dept_id = ? WHERE user_id = ?";
-  let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), user_id];
+  let academic = req.params.academic;
+  var sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, curr_course = ?, dept_id = ?, curr_acad_yr = ? WHERE user_id = ?";
+  let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), academic.trim(), user_id];
 
   con.query(sql, data, function(err, result, fields) {
 
     if (err){
+      console.log(err);
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
       // res.json({"status" : 1, "data" : "Student profile updated succesfully"});

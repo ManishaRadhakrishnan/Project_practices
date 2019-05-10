@@ -65,21 +65,15 @@
                                </div>
                              </div>
                              <div class="row">
-                               <div class="col-md-8">
+                               <div class="col-md-12">
                                  <div class="form-group">
                                    <label>Address</label>
                                    <textarea class="form-control border-input" #address>{{student.address}}</textarea>
                                  </div>
                                </div>
-                               <div class="col-md-4">
-                                 <div class="form-group">
-                                   <label>Address</label>
-                                   <textarea class="form-control border-input"readonly>{{info.curr_acad_yr}}</textarea>
-                                 </div>
-                               </div>
                              </div>
                              <div class="row">
-                               <div class="col-md-6">
+                               <div class="col-md-4">
                                  <div class="form-group">
                                    <label>Course</label>
                                    <select class="form-control border-input" #course>
@@ -88,7 +82,7 @@
                                    </select>
                                  </div>
                                </div>
-                               <div class="col-md-6">
+                               <div class="col-md-4">
                                  <div class="form-group">
                                    <label>Department</label>
                                    <select class="form-control border-input" #department>
@@ -97,9 +91,15 @@
                                    </select>
                                  </div>
                                </div>
+                               <div class="col-md-4">
+                                 <div class="form-group">
+                                   <label>Academic Year</label>
+                                   <input type="text" class="form-control border-input" #curr_acad_yr>{{student.curr_acad_yr}}
+                                 </div>
+                               </div>
                              </div>
                              <div class="text-center">
-                               <a class="btn btn-info btn-block btn-wd btn-md" (click)="do_update_student_profile(full_name.value, email.value, contact.value, address.value, course.value, department.value)">Save</a>
+                               <a class="btn btn-info btn-block btn-wd btn-md" (click)="do_update_student_profile(full_name.value, email.value, contact.value, address.value, course.value, department.value, curr_acad_yr.value)">Save</a>
                              </div>
                              <div class="clearfix">
                              </div>

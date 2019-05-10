@@ -14,7 +14,10 @@ constructor(private router: Router) { }
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
     this.user_name = window.sessionStorage.getItem("user_name");
-    if(this.role == null) {
+    let current_url = window.location.href.split("/");
+    let current_page = current_url[current_url.length - 1];
+
+    if(this.role == null && current_page != "register") {
       this.router.navigate(["/login"]);
     }
   }
