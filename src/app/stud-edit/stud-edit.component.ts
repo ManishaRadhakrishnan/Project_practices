@@ -12,8 +12,8 @@ export class StudEditComponent implements OnInit {
   student_data : string[];
   course_names: string[];
   department_names: string[];
-  status : string;
-  update_status : string;
+  status : number;
+  update_status : number;
   role : string;
   user_id: string;
 
@@ -31,7 +31,7 @@ export class StudEditComponent implements OnInit {
          this.student_data = data.student_data as string[];
          this.course_names = data.course_names as string[];
          this.department_names = data.department_names as string[];
-         this.status = data.status as string;
+         this.status = data.status as number;
        },
        err => {
          console.log(err);
@@ -47,7 +47,7 @@ export class StudEditComponent implements OnInit {
          this.student_data = data.student_data as string[];
          this.course_names = data.course_names as string[];
          this.department_names = data.department_names as string[];
-         this.status = data.status as string;
+         this.status = data.status as number;
        },
        err => {
          console.log(err);
@@ -63,7 +63,7 @@ export class StudEditComponent implements OnInit {
          this.student_data = data.student_data as string[];
          this.course_names = data.course_names as string[];
          this.department_names = data.department_names as string[];
-         this.status = data.status as string;
+         this.status = data.status as number;
        },
        err => {
          console.log(err);
@@ -85,7 +85,7 @@ export class StudEditComponent implements OnInit {
      .update_student_profile(this.user_id, full_name, email, contact, address, course, department, curr_acad_yr)
      .subscribe(
        data => {
-         this.update_status = data.status as string;
+         this.update_status = data.status as number;
        },
        err => {
          console.log(err);
@@ -97,7 +97,7 @@ export class StudEditComponent implements OnInit {
      .update_cood_profile(this.user_id, full_name, email, contact, address, course, department)
      .subscribe(
        data => {
-         this.update_status = data.status as string;
+         this.update_status = data.status as number;
        },
        err => {
          console.log(err);
@@ -110,7 +110,7 @@ export class StudEditComponent implements OnInit {
      .update_guide_profile(this.user_id, full_name, email, contact, address, course, department)
      .subscribe(
        data => {
-         this.update_status = data.status as string;
+         this.update_status = data.status as number;
        },
        err => {
          console.log(err);
