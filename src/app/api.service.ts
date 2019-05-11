@@ -25,9 +25,10 @@ export class ApiService {
   endpoint_url = "http://127.0.0.1:8080";
   constructor(private http: HttpClient) { }
 
-    do_register(full_name: string, email: string, username: string, password: string, role: string)
+    do_register(full_name: string, email: string, password: string, role: string)
     {
-      let api_url = encodeURI(this.endpoint_url + "/insert_user/" + full_name + "/" + email + "/" + password + "/" + username + "/" + role);
+      let api_url = encodeURI(this.endpoint_url + "/insert_user/" + full_name + "/" + email + "/" + password + "/" + role);
+      // console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         // retry(3), // retry a failed request up to 3 times
@@ -35,10 +36,10 @@ export class ApiService {
       );
     }
 
-    update_student_profile(user_id : string, full_name : string, email : string, contact : string, address : string, course : string, department : string, curr_acad_yr : string)
+    update_student_profile(user_id : string, full_name : string, email : string, contact : string, address : string, course : string, department : string)
     {
-      let api_url = encodeURI(this.endpoint_url + "/update_student_profile/" + user_id + "/" + full_name + "/" + email + "/" + contact  + "/" + address + "/" + course + "/" + department + "/" + curr_acad_yr);
-      console.log(api_url);
+      let api_url = encodeURI(this.endpoint_url + "/update_student_profile/" + user_id + "/" + full_name + "/" + email + "/" + contact  + "/" + address + "/" + course + "/" + department);
+      // console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error
@@ -70,6 +71,18 @@ export class ApiService {
 
       if(attachment == null || attachment == "") {
         attachment = "%20";
+      }
+
+      if(email_cc == null || email_cc == "") {
+        email_cc = "%20";
+      }
+
+      if(email_bcc == null || email_bcc == "") {
+        email_bcc = "%20";
+      }
+
+      if(subject == null || subject == "") {
+        subject = "%20";
       }
 
       let api_url = encodeURI(this.endpoint_url + "/insert_mail/"+ user_id  + "/" + email_to + "/" + subject + "/" + email_cc + "/" + email_bcc + "/" + email_content + "/" + attachment);
@@ -253,6 +266,14 @@ export class ApiService {
     trash_mail(mail: string, user_id: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/trash_mail/" + mail + "/" + user_id);
       console.log(api_url);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
+    single_project_details(user_id : string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/single_project_details/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)

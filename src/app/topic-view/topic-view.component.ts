@@ -59,7 +59,7 @@ export class TopicViewComponent implements OnInit {
            }
          );
         //NOTE: modal content display
-         this.api_service
+         this.  api_service
           .all_guide_details()
           .subscribe(
             data => {
@@ -108,5 +108,9 @@ this.role = window.sessionStorage.getItem("role");
 
   get_upper_case_text(text) {
     return text.charAt(0).toUpperCase() + text.slice(1, text.length);
+  }
+
+  set_desc_length(text){
+    return text.slice(0,30)+'...';
   }
 }

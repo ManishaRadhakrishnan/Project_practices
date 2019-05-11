@@ -31,7 +31,7 @@
                         <tbody  *ngFor="let info of information">
                           <tr>
                             <td>{{get_upper_case_text(info.proj_title)}}</td>
-                            <td>{{get_upper_case_text(info.proj_desc)}}</td>
+                            <td>{{set_desc_length(get_upper_case_text(info.proj_desc))}}</td>
                             <td>{{info.name}}</td>
                             <td>{{info.proj_sub_date}}</td>
                             <td>{{info.domain}}</td>
@@ -138,7 +138,7 @@
                             <h4 class="card-title">{{get_upper_case_text(info.proj_title)}}</h4>
                             <div class="card-body">
                               <p class="card-text">
-                                {{get_upper_case_text(info.proj_desc)}}
+                                {{set_desc_length(get_upper_case_text(info.proj_desc))}}
                               </p>
                               <a href="#" class="card-link" data-toggle="modal"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">More ...</a>
 
@@ -160,6 +160,7 @@
                                           <li class="list-group-item">Domain : {{get_upper_case_text(info.proj_domain)}}</li>
                                           <li class="list-group-item">Technology : {{get_upper_case_text(info.proj_technology)}}</li>
                                           <li class="list-group-item">Status : {{get_upper_case_text(info.proj_status)}}</li>
+                                          <li class="list-group-item">Guide : {{get_upper_case_text(info.guide_name)}}</li>
                                        </ul>
                                       <!--<div class="modal-body">
                                         <p>Description : {{info.proj_desc}}</p>

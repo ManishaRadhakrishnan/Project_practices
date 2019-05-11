@@ -205,22 +205,51 @@ app.get('/list_all_students', function (req, res, next) {
 
 app.get('/project_details/:user_id', function (req, res, next) {
   let user_id = req.params.user_id;
-  let sql = "SELECT project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status FROM student, user, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible';"
-  let data = [user_id, user_id, user_id];
+  let sql = "SELECT count(*) as count FROM student WHERE student.user_id = ? AND student.guide_id='0';"
+  let data = [user_id];
   con.query(sql, data, function(err, result, fields) {
 
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
-      if(result.length > 0){
-        res.json({"status" : 1, "data" : result});
+      if(result[0]["count"] == 0){
+        sql = "SELECT project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_date, internal_guides.guide_name, project.proj_domain, project.proj_technology, project.proj_status FROM student, user, internal_guides, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND student.guide_id = internal_guides.user_id AND project.project_visible = 'visible';"
+        data = [user_id, user_id, user_id];
+        con.query(sql, data, function(err, result, fields) {
+
+          if (err){
+            res.json({"status" : 0, "data" : "Something went wrong"});
+          } else {
+            if(result.length > 0){
+              res.json({"status" : 1, "data" : result});
+            }
+            else {
+              res.json({"status" : 0, "data" : "No projects to show"});
+            }
+          }
+        });
       }
       else {
-        res.json({"status" : 0, "data" : "No projects to show"});
+        sql = "SELECT project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status FROM student, user, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible';"
+        data = [user_id, user_id, user_id];
+        con.query(sql, data, function(err, result, fields) {
+
+          if (err){
+            res.json({"status" : 0, "data" : "Something went wrong"});
+          } else {
+            if(result.length > 0){
+              res.json({"status" : 1, "data" : result});
+            }
+            else {
+              res.json({"status" : 0, "data" : "No projects to show"});
+            }
+          }
+        });
       }
     }
   });
 })
+
 //m
 //project-update
 app.get('/all_guide_details', function (req, res, next) {
@@ -325,7 +354,7 @@ app.get('/login/:username/:password', function (req, res, next) {
   });
 });
 
-app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:course/:department/:academic",function (req, res, next) {
+app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:course/:department",function (req, res, next) {
 
   let user_id = req.params.user_id;
   let full_name = req.params.full_name;
@@ -335,8 +364,8 @@ app.get("/update_student_profile/:user_id/:full_name/:email/:contact/:address/:c
   let department = req.params.department;
   let address = req.params.address;
   let academic = req.params.academic;
-  var sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, curr_course = ?, dept_id = ?, curr_acad_yr = ? WHERE user_id = ?";
-  let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), academic.trim(), user_id];
+  var sql = "UPDATE student SET stud_name = ?, address = ?, contact = ?, mail = ?, curr_course = ?, dept_id = ? WHERE user_id = ?";
+  let data = [full_name.trim(), address.trim(), contact.trim(), email.trim(), course.trim(), department.trim(), user_id];
 
   con.query(sql, data, function(err, result, fields) {
 
@@ -591,7 +620,7 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
 );
 });
 
-app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req, res, next) {
+app.get("/insert_user/:fullname/:email/:password/:role",function (req, res, next) {
 
   let full_name = req.params.fullname;
   let username = req.params.username;
@@ -599,24 +628,26 @@ app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req,
   let email = req.params.email;
   let role= req.params.role;
   let current_date = new Date();
-  let date_time = current_date.getFullYear() + "-" + current_date.getFullYear()+1;
-  let month = current_date.getMonth();
-  if(month >= 8 && month <=12){
+  let next_year = current_date.getFullYear()+1;
+  let date_time = current_date.getFullYear() + "-" + next_year;
+  let month = current_date.getMonth()+1;
+  console.log(month);
+  if(month >= 5 && month <=12){
 
     let sql = "INSERT INTO user(user_name, password, role) VALUES(?, ?, ?)";
-    let data = [username, password, role];
+    let data = [email, password, role];
     con.query(sql, data, function(err, result)
     {
       if (err)
       {
-
+      console.log(err);
         res.json({"status" : 0, "data" : "Something went wrong"});
       } else
       {
         if(role == 'stud')
         {
           sql = "INSERT INTO student(user_id, stud_name, mail, curr_acad_yr) VALUES (?, ?, ?, ?)";
-          data = [result.insertId.toString(), full_name, username, date_time];
+          data = [result.insertId.toString(), full_name, email, date_time];
           con.query(sql, data, function(err, result)
           {
             if (err)
@@ -797,6 +828,23 @@ app.get("/trash_mail/:mail/:user_id",function (req, res, next) {
   let data = [user_id,user_id,mail];
   con.query(sql, data, function(err, result) {
     if (err) {
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+        res.json({"status" : 1, "data" : result});
+      }
+  }
+
+  );
+});
+
+app.get("/single_project_details/:user_id",function (req, res, next) {
+  let mail = req.params.mail;
+  let user_id = req.params.user_id;
+  let sql = "SELECT * FROM project WHERE proj_id = ?";
+  let data = [user_id];
+  con.query(sql, data, function(err, result) {
+    if (err) {
+      console.log(err);
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
         res.json({"status" : 1, "data" : result});

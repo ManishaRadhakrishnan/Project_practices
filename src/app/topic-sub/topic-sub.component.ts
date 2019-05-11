@@ -22,6 +22,7 @@ export class TopicSubComponent implements OnInit {
   unique:boolean;
   project_id : string;
   number_of_similar_projects : string[];
+
   constructor(private router: Router, private route: ActivatedRoute, private api_service: ApiService) { }
 
   ngOnInit() {
@@ -33,12 +34,34 @@ export class TopicSubComponent implements OnInit {
       this.project_id = this.route.snapshot.paramMap.get("project_id");
       this.route.queryParamMap.subscribe(queryParams => {
         this.project_id = queryParams.get("project_id");
-          })
+      });
+      if(this.project_id != null) {
+
+        this.button = true;
+        this.role = window.sessionStorage.getItem("role");
+        if(this.role == "stud") {
+          this.user_id = window.sessionStorage.getItem("user_id");
+          this.api_service
+           .single_project_details(this.project_id)
+           .subscribe(
+             data => {
+               this.information = data.data as string[];
+               this.status = data.status as number;
+               console.log(data);
+             },
+             err => {
+               console.log(err);
+             }
+           );
+         }
+        else {
+             this.router.navigate(["/login"]);
+           }
+      }
     }
   }
 
-  do_submit_topic(project_title: string, project_domains: string, project_technologies: string, project_description: string, _continue: string)
-  {
+  do_submit_topic(project_title: string, project_domains: string, project_technologies: string, project_description: string, _continue: string) {
     this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
      .do_add_project_topic(this.user_id, project_title, project_domains, project_technologies, project_description, _continue)
@@ -61,31 +84,11 @@ export class TopicSubComponent implements OnInit {
      );
   }
 
-//   do_edit_topic()
-// {
-//   this.button=true;
-//   this.role = window.sessionStorage.getItem("role");
-//     if(this.role == "stud") {
-//       this.user_id = window.sessionStorage.getItem("user_id");
-//       this.api_service
-//        .project_details(this.user_id)
-//        .subscribe(
-//          data => {
-//            this.information = data.data as string[];
-//            this.status = data.status as number;
-//          },
-//          err => {
-//            console.log(err);
-//          }
-//        );
-//      }
-//      else {
-//        this.router.navigate(["/login"]);
-//      }
-// }
+  do_edit_topic() {
 
-do_topic_save()
-{
+  }
+
+  do_topic_save() {
   this.role = window.sessionStorage.getItem("role");
     if(this.role == "stud") {
       this.user_id = window.sessionStorage.getItem("user_id");

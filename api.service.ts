@@ -20,10 +20,10 @@ const httpOptions = {
 export class ApiService {
 
   endpoint_url = "http://127.0.0.1:8080";
+
   constructor(private http: HttpClient) { }
 
-    do_register(full_name: string, email: string, username: string, password: string, role: string)
-    {
+  do_register(full_name: string, email: string, username: string, password: string, role: string) {
       let api_url = encodeURI(this.endpoint_url + "/register?full_name=" + full_name + "&email=" + email + "&password=" + password + "&username=" + username + "&role=" + role);
       return this.http.get<Api>(api_url)
         .pipe(
@@ -32,8 +32,7 @@ export class ApiService {
       );
     }
 
-    update_student_profile(user_id : string, full_name : string, email : string, contact : string, address : string, course : string, department : string)
-    {
+  update_student_profile(user_id : string, full_name : string, email : string, contact : string, address : string, course : string, department : string) {
       let api_url = encodeURI(this.endpoint_url + "/student_profile_update?user_id=" + user_id + "&full_name=" + full_name + "&email=" + email + "&contact=" + contact  + "&address=" + address + "&course=" + course + "&department=" + department);
       console.log(api_url);
       return this.http.get<Api>(api_url)
@@ -42,8 +41,7 @@ export class ApiService {
       );
     }
 
-    insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string)
-    {
+  insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string) {
       let api_url = encodeURI(this.endpoint_url + "/insert_mail?user_id=" + user_id + "&email_to=" + email_to + "&subject="+ subject + "&email_cc=" + email_cc + "&email_bcc=" + email_bcc + "&email_content=" + email_content);
       return this.http.get<Api>(api_url)
         .pipe(
@@ -51,8 +49,7 @@ export class ApiService {
       );
     }
 
-    do_add_project_topic(user_id: string, project_title: string, project_domains: string, project_technologies: string, project_description: string)
-    {
+  do_add_project_topic(user_id: string, project_title: string, project_domains: string, project_technologies: string, project_description: string) {
       let api_url = encodeURI(this.endpoint_url + "/submit_topic?user_id=" + user_id + "&project_title=" + project_title + "&project_domains="+ project_domains + "&project_technologies=" + project_technologies + "&project_description=" + project_description);
       console.log(api_url);
       return this.http.get<Api>(api_url)
@@ -61,15 +58,23 @@ export class ApiService {
       );
     }
 
-    edit_student_profile(): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/edit_student_profile/1");
-      return this.http.get(api_url, httpOptions).pipe(
+  single_project_details(user_id : string): Observable<any> {
+    let api_url = encodeURI(this.endpoint_url + "/single_project_details/" + user_id);
+    return this.http.get(api_url, httpOptions).pipe(
+      map(this.extract_data),
+      catchError(this.handle_error)
+    );
+  }
+
+  edit_student_profile(): Observable<any> {
+    let api_url = encodeURI(this.endpoint_url + "/edit_student_profile/1");
+    return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
       );
     }
 
-    view_student_profile(): Observable<any> {
+  view_student_profile(): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/view_student_profile/1");
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
@@ -77,7 +82,7 @@ export class ApiService {
       );
     }
 
-    list_all_students(): Observable<any> {
+  list_all_students(): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/list_all_students");
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
@@ -85,15 +90,15 @@ export class ApiService {
       );
     }
 
-    project_details(): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/project_details/1");
+  project_details(user_id : string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/project_details/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
       );
     }
 
-    login(username: string, password: string): Observable<any> {
+  login(username: string, password: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/login/" + username + "/" + password);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
@@ -101,7 +106,7 @@ export class ApiService {
       );
     }
 
-    fetch_mail(user_id: string): Observable<any> {
+  fetch_mail(user_id: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/fetch_mail/" + user_id);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
