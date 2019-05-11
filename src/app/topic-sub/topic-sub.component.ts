@@ -16,7 +16,7 @@ export class TopicSubComponent implements OnInit {
   // api: Api;
   user_id : string;
   role: string;
-  status : string;
+  status : number;
   information:string[];
   button :boolean;
   unique:boolean;
@@ -33,7 +33,6 @@ export class TopicSubComponent implements OnInit {
       this.project_id = this.route.snapshot.paramMap.get("project_id");
       this.route.queryParamMap.subscribe(queryParams => {
         this.project_id = queryParams.get("project_id");
-        console.log(this.project_id);
           })
     }
   }
@@ -45,15 +44,16 @@ export class TopicSubComponent implements OnInit {
      .do_add_project_topic(this.user_id, project_title, project_domains, project_technologies, project_description, _continue)
      .subscribe(
        data => {
-         this.status = data.status as string;
-         this.number_of_similar_projects = data.data as string[];
+         console.log(data);
+         this.status = data.status as number;
+         this.number_of_similar_projects = data.number_of_similar_projects as string[];
          this.unique = data.unique;
 
-         // console.log(data);
-         // if(this.status == "1" && this.unique== true )
-         //   {
-         //      this.router.navigate(['/topic-view']);
-         //   }
+         console.log(this.number_of_similar_projects);
+         if(this.status == 1 && this.unique == true )
+           {
+              this.router.navigate(['/topic-view']);
+           }
        },
        err => {
          console.log(err);
@@ -72,7 +72,7 @@ export class TopicSubComponent implements OnInit {
 //        .subscribe(
 //          data => {
 //            this.information = data.data as string[];
-//            this.status = data.status as string;
+//            this.status = data.status as number;
 //          },
 //          err => {
 //            console.log(err);
@@ -94,7 +94,7 @@ do_topic_save()
        .subscribe(
          data => {
            this.information = data.data as string[];
-           this.status = data.status as string;
+           this.status = data.status as number;
          },
          err => {
            console.log(err);

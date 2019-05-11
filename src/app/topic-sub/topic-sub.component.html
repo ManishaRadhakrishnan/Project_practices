@@ -13,14 +13,15 @@
                Topic Submission failed
             </div>
           </ng-template>
-          <ng-template [ngIf]="status == '1' && unique== false">
+          <ng-template [ngIf]="status == '1' && unique == false">
             <div class="alert alert-warning">
-               There are {{number_of_similar_projects[0]["Count"]}} similar projects.
+               There are {{number_of_similar_projects[0]["count"]}} similar project(s).
                <br/>
-               Do you wish to <a href="#" (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, true)">continue</a>?
+               <li id="submit-anyway" (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, true)">Submit anyway</li>&nbsp;
+               <a href="/submit-topic">Reset form content</a>?
             </div>
           </ng-template>
-          <ng-template [ngIf]="status == '1' && unique== true">
+          <ng-template [ngIf]="status == '1' && unique == true">
             <div class="alert alert-success">
                Successful submission
             </div>
@@ -56,13 +57,12 @@
                                 <small id="technology_help" class="form-text text-muted">Technologies that would be used in your project. Please separate multiple technologies names with a comma</small>
                               </div>
                               <div class="form-group">
-                                <textarea name="topic_description" id="topic_description" class="form-control" placeholder="Description of the idea" rows="10" #project_description>
-                                </textarea>
+                                <textarea name="topic_description" id="topic_description" class="form-control" placeholder="Description of the idea" rows="10" #project_description></textarea>
                               </div>
                             </div>
                       <!--</div>-->
                             <div class="modal-footer clearfix">
-                              <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, false)" class="btn btn- primary">Submit</button>
+                              <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, false)" class="btn btn-info">Submit</button>
                               <!--<button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button>-->
                               <button (click)="do_topic_save()" type="submit" class="btn btn-primary pull-left">Save</button>
                             </div>

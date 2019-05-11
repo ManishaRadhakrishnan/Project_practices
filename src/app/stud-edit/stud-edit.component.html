@@ -10,13 +10,13 @@
         <div class="box-body">
           <div class="card-body" style="padding:10px;">
 
-            <ng-template [ngIf]="status  == '0'">
+            <ng-template [ngIf]="status  == 0">
                <div class="alert alert-danger">
                   Profile not updated. Please try again later.
                 </div>
              </ng-template>
 
-             <ng-template [ngIf]="status  == '1'">
+             <ng-template [ngIf]="status  == 1">
                <div class="row">
                  <ng-template [ngIf]="update_status  == '1'">
                    <div class="alert alert-success">

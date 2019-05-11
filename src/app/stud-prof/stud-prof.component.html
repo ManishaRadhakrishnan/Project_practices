@@ -1,11 +1,11 @@
 <div class="wrapper row-offcanvas row-offcanvas-left">
   <aside class="right-side">
-     <ng-template [ngIf]="status  == '0'">
+     <ng-template [ngIf]="status  == 0">
       <div class="alert alert-danger">
         Login attempt failed
       </div>
     </ng-template>
-    <ng-template [ngIf]="status  == '1'">
+    <ng-template [ngIf]="status  == 1">
      <section class="content-header no-margin">
        <h1 class="text-center">
          View Profile

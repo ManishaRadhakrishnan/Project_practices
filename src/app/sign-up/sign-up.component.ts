@@ -10,7 +10,7 @@ import { RouterModule, Routes, Router } from '@angular/router';
 export class SignUpComponent implements OnInit {
   error: string;
   api: Api;
-  status : string;
+  status : number;
   role : string;
   constructor(private router: Router, private api_service: ApiService) { }
 
@@ -31,8 +31,8 @@ export class SignUpComponent implements OnInit {
      .do_register(full_name, email, username, password, role)
      .subscribe(
        data => {
-         this.status = data.status as string;
-         if(this.status == "1") {
+         this.status = data.status as number;
+         if(this.status == 1) {
            this.router.navigate(['/login']);
          }
        },
@@ -42,7 +42,7 @@ export class SignUpComponent implements OnInit {
      );
    }
    else {
-     this.status = "0";
+     this.status = 0;
    }
   }
 

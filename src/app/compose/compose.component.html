@@ -11,12 +11,12 @@
         <div class="col-xs-12">
           <div class="box box-solid">
             <div class="box-body">
-              <ng-template [ngIf]="status  == '0'">
+              <ng-template [ngIf]="status  == 0">
                 <div class="alert alert-danger">
                     Unable to send an email. Please try again later
                 </div>
               </ng-template>
-              <ng-template [ngIf]="status == '1'">
+              <ng-template [ngIf]="status == 1">
                 <div class="alert alert-success">
                   Please wait while we redirect to your mailbox
                 </div>

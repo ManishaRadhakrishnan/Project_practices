@@ -75,7 +75,7 @@ export class TopicViewComponent implements OnInit {
      }
     }
 
-make_suggestion(project_id,student_id){
+  make_suggestion(project_id,student_id){
 this.role = window.sessionStorage.getItem("role");
   if(this.role == 'guide') {
      this.router.navigate(["/suggestion"], { queryParams: { project_id: project_id, student_id: student_id } });
@@ -85,24 +85,16 @@ this.role = window.sessionStorage.getItem("role");
    }
 }
 
-modal_pop(div_id) {
+  modal_pop(div_id) {
   let id = "#" + div_id;
   $(id).modal();
 }
 
-// open(content) {
-//     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-//       this.closeResult = `Closed with: ${result}`;
-//     }, (reason) => {
-//       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-//     });
-//   }
-
-
-
-
-
   submit_new_topic(){
     this.router.navigate(['/submit-topic']);
+  }
+
+  get_upper_case_text(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1, text.length);
   }
 }

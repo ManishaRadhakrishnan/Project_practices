@@ -39,6 +39,7 @@ export class StudProfComponent implements OnInit {
       data => {
         this.information = data.data as string[];
         this.status = data.status as number;
+        console.log(data);
       },
       err => {
         console.log(err);

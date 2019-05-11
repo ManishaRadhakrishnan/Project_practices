@@ -6,10 +6,11 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry, map } from 'rxjs/operators';
 
 export interface Api {
-  status: string;
+  status: number;
   message: string;
   data : string[];
   unique : boolean;
+  number_of_similar_projects : string[];
 }
 
 const httpOptions = {
@@ -81,6 +82,7 @@ export class ApiService {
     do_add_project_topic(user_id: string, project_title: string, project_domains: string, project_technologies: string, project_description: string, _continue:  string)
     {
       let api_url = encodeURI(this.endpoint_url + "/add_project_topic/" + user_id + "/" + project_title + "/"+ project_domains + "/" + project_technologies + "/" + project_description + "/" + _continue);
+      console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error
@@ -241,7 +243,7 @@ export class ApiService {
     }
     // insert_mail(user_id: string,mail_to: string,subject: string,cc: string,bcc: string,content: string,attachment: string){
     trash_mail(mail: string, user_id: string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/trash_mail/" +mail+"/"+ user_id);
+      let api_url = encodeURI(this.endpoint_url + "/trash_mail/" + mail + "/" + user_id);
       console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),

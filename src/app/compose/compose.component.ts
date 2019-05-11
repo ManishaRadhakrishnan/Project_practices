@@ -10,7 +10,7 @@ import { RouterModule, Routes, Router } from '@angular/router';
 export class ComposeComponent implements OnInit {
   error: string;
   api : Api
-  status : string;
+  status : number;
   user_id: string;
   role: string;
   constructor(private router: Router, private api_service: ApiService) { }
@@ -29,8 +29,8 @@ export class ComposeComponent implements OnInit {
      .insert_mail(this.user_id, email_to, subject, email_cc, email_bcc, email_content, attachment)
      .subscribe(
        data => {
-         this.status = data.status as string;
-         if(this.status == "1") {
+         this.status = data.status as number;
+         if(this.status == 1) {
            this.router.navigate(['/mail']);
          }
        },

@@ -406,60 +406,141 @@ app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_te
   let project_technologies = req.params.project_technologies;
   let project_description = req.params.project_description;
   let _continue = req.params._continue;
-  // let sql = "SELECT COUNT(*) as Count FROM project WHERE proj_title LIKE %?% AND proj_domain in (SELECT domain.domain_name FROM domain WHERE domain.domain_name LIKE %?%) AND proj_technology LIKE %?%";
-  let sql = "SELECT COUNT(*) as Count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND proj_domain in (SELECT domain.domain_name FROM domain WHERE domain.domain_name LIKE '%" + project_domains + "%') AND proj_technology LIKE '%" + project_technologies + "%'";
-  // let sql = "SELECT COUNT(*) as Count FROM project WHERE proj_title LIKE '%" + project_title + "'";
-  // let sql = "SELECT domain.domain_name FROM domain WHERE domain.domain_name LIKE %?%";
-  // let data = [project_title];
-  // let data = {$proj_title : project_title};
-  con.query(sql, function (err, result, fields) {
-    if (err){
-      res.json({"status" : 0, "data" : "Something went wrong"});
-    } else {
-      if(result["Count"]==0){
-        let sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
+  let project_domains_list = project_domains.split(",");
 
-        let current_date = new Date();
-        let date_time = current_date.getDate() + "/"
+  let sql = "";
+  let data = [];
+  let domain_id_for_project_table = [];
+  let count = 0;
+  let count_again = 0;
+  for(number=0;number < project_domains_list.length;number ++) {
+    sql = "SELECT * FROM domain WHERE domain_name = ?";
+    let domain = project_domains_list[number].trim();
+    data = [domain];
+    con.query(sql, data, function(err, result) {
+    if (err)
+    {
+      res.json({"status" : 0, "data" : "Error 505 : Something went wrong"});
+    } else
+    {
+      if(result.length == 0) {
+        sql = "INSERT INTO domain(domain_name) VALUES (?)";
+        data = [domain];
+
+        con.query(sql, data, function(err, result, fields) {
+          if (err){
+            res.json({"status" : 0, "data" : "Error 514 : Something went wrong"});
+          } else {
+            if(_continue == "false") {
+              domain_id_for_project_table.push(result["insertId"]);
+
+            sql = "SELECT count(*) as count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND '%" + project_technologies + "%'";
+            console.log(sql);
+            con.query(sql, function(err, result, fields) {
+              if (err){
+                console.log(err);
+                res.json({"status" : 0, "data" : "Something went wrong"});
+              } else {
+                  if(result[0]["count"] == 0) {
+                    count_again += 1
+                    if(count_again == project_domains_list.length) {
+                      sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
+
+                      let current_date = new Date();
+                      let date_time = current_date.getDate() + "/"
                       + (current_date.getMonth() + 1)  + "/"
                       + current_date.getFullYear() + " @ "
                       + current_date.getHours() + ":"
                       + current_date.getMinutes();
 
-        let data = [user_id, project_title, project_description.trim(), date_time, project_domains, project_technologies];
+                      let data = [user_id, project_title, project_description.trim(), date_time, domain_id_for_project_table.join(","), project_technologies];
 
-        con.query(sql, data, function(err, result, fields) {
-          if (err){
-            res.json({"status" : 0, "data" : "Something went wrong"});
-          } else {
-            res.json({"status" : 1, "data" : "Project added succesfully", "unique":true});
+                      con.query(sql, data, function(err, result, fields) {
+                        if (err){
+                          res.json({"status" : 0, "data" : "Something went wrong"});
+                        } else {
+                          res.json({"status" : 1, "data" : "Domain inserted. Project added", "unique" : true});
+                        }
+                      });
+
+                    }
+                  }
+                  else {
+                    res.json({"status" : 1, "data" : "Domain inserted. Project not added", "unique" : false, "number_of_similar_projects" : result});
+                  }
+              }
+            });
           }
-        });
-      }else{
-        res.json({"status" : 1, "data" : result, "unique": false});
-        if(_continue==true){
-          let sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
+          else {
+            if(_continue == "false") {
+              count_again += 1
+              if(count_again == project_domains_list.length) {
+                sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
 
-          let current_date = new Date();
-          let date_time = current_date.getDate() + "/"
-                        + (current_date.getMonth() + 1)  + "/"
-                        + current_date.getFullYear() + " @ "
-                        + current_date.getHours() + ":"
-                        + current_date.getMinutes();
+                let current_date = new Date();
+                let date_time = current_date.getDate() + "/"
+                + (current_date.getMonth() + 1)  + "/"
+                + current_date.getFullYear() + " @ "
+                + current_date.getHours() + ":"
+                + current_date.getMinutes();
 
-          let data = [user_id, project_title, project_description.trim(), date_time, project_domains, project_technologies];
+                let data = [user_id, project_title, project_description.trim(), date_time, domain_id_for_project_table.join(","), project_technologies];
 
-          con.query(sql, data, function(err, result, fields) {
+                con.query(sql, data, function(err, result, fields) {
+                  if (err){
+                    res.json({"status" : 0, "data" : "Something went wrong"});
+                  } else {
+                    res.json({"status" : 1, "data" : "Domain inserted. Project added", "unique" : true});
+                  }
+                });
+              }
+            }
+          }
+        }
+      });
+    }
+      else {
+        domain_id_for_project_table.push(result[0]["domain_id"]);
+        count += 1;
+        // console.log(count + " : " + project_domains_list.length);
+        if(count == project_domains_list.length) {
+          sql = "SELECT count(*) as count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND proj_technology LIKE '%" + project_technologies + "%'";
+          console.log(sql);
+          con.query(sql, function(err, result, fields) {
             if (err){
-              res.json({"status" : 0, "data" : "Something went wrong"});
+              console.log(err);
+              res.json({"status" : 0, "data" : "Error 558 : Something went wrong"});
             } else {
-              res.json({"status" : 1, "data" : "Project added succesfully", "unique":true});
+                if(result[0]["count"] == 0) {
+                  sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
+
+                  let current_date = new Date();
+                  let date_time = current_date.getDate() + "/"
+                                + (current_date.getMonth() + 1)  + "/"
+                                + current_date.getFullYear() + " @ "
+                                + current_date.getHours() + ":"
+                                + current_date.getMinutes();
+
+                  let data = [user_id, project_title, project_description.trim(), date_time, domain_id_for_project_table.join(","), project_technologies];
+
+                  con.query(sql, data, function(err, result, fields) {
+                    if (err){
+                      res.json({"status" : 0, "data" : "Error 574 : Something went wrong"});
+                    } else {
+                      res.json({"status" : 1, "data" : "Domain inserted. Project added", "unique" : true});
+                    }
+                  });
+                }
+                else {
+                  res.json({"status" : 1, "data" : "Domain inserted. Project not added", "unique" : false,  "number_of_similar_projects" : result});
+                }
             }
           });
         }
       }
     }
-  })
+  });
+  }
 
 });
 
@@ -481,8 +562,7 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
 
   let sql = "INSERT INTO mail(user_id, toaddr, sub, cc, bcc, content, timestamp, attachment) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
   let data = [user_id, mail_to, subject, cc, bcc, content, date_time, attachment];
-  con.query(sql, data, function(err, result)
-  {
+  con.query(sql, data, function(err, result) {
 
     if (err)
     {
@@ -700,6 +780,7 @@ app.get("/trash_mail/:mail/:user_id",function (req, res, next) {
 
   );
 });
+
 app.listen(8080, function () {
   // var host = server.address().address;
   // var port = server.address().port;
