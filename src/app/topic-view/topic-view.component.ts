@@ -14,7 +14,7 @@ export class TopicViewComponent implements OnInit {
   status : number;
   role: string;
   user_id : string;
-
+  guides : string[];
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
     if(this.role == "stud") {
@@ -58,6 +58,18 @@ export class TopicViewComponent implements OnInit {
              console.log(err);
            }
          );
+        //NOTE: modal content display
+         this.api_service
+          .all_guide_details()
+          .subscribe(
+            data => {
+              this.guides = data.data as string[];
+              this.status = data.status as number;
+            },
+            err => {
+              console.log(err);
+            }
+          );
       }
      else {
        this.router.navigate(["/login"]);

@@ -223,7 +223,23 @@ app.get('/project_details/:user_id', function (req, res, next) {
 })
 //m
 //project-update
-//
+app.get('/all_guide_details', function (req, res, next) {
+  let user_id = req.params.user_id;
+  let sql = "SELECT guide_id, guide_name FROM internal_guides;"
+  con.query(sql, function(err, result, fields) {
+    if (err){
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else {
+      if(result.length > 0){
+        res.json({"status" : 1, "data" : result});
+      }
+      else {
+        res.json({"status" : 0, "data" : "No guides to show"});
+      }
+    }
+  });
+})
+
 app.get('/project_details_update/:user_id', function (req, res, next) {
   let user_id = req.params.user_id;
   let sql = "UPDATE project.proj_title, project.proj_desc, project.proj_domain, project.proj_technology,  FROM student, user, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible';"
@@ -264,7 +280,7 @@ app.get('/student_project_details/:user_id', function(req,res,next){
 
 app.get('/all_project_details', function(req,res,next){
   // let user_id = req.params.user_id;
-  let sql = "SELECT project.user_id,project.proj_id,project.proj_title, project.proj_desc, project.proj_sub_by, project.proj_sub_date, project.proj_domain, project.proj_technology,project.proj_status FROM project WHERE project.project_visible='visible'"
+  let sql = "SELECT project.user_id,project.proj_id,project.proj_title, project.proj_desc, project.proj_sub_by, project.proj_sub_date, project.proj_domain, project.proj_technology,project.proj_status,student.stud_name as name, domain.domain_name as domain FROM project,student,domain WHERE project.project_visible='visible' AND project.user_id=student.user_id AND domain.domain_id=project.proj_domain"
   con.query(sql, function(err, result, fields) {
 
     if (err){
@@ -582,67 +598,76 @@ app.get("/insert_user/:fullname/:username/:password/:email/:role",function (req,
   let password= req.params.password;
   let email = req.params.email;
   let role= req.params.role;
-   let sql = "INSERT INTO user(user_name, password, role) VALUES(?, ?, ?)";
-  let data = [username, password, role];
-  con.query(sql, data, function(err, result)
-  {
-    if (err)
-    {
+  let current_date = new Date();
+  let date_time = current_date.getFullYear() + "-" + current_date.getFullYear()+1;
+  let month = current_date.getMonth();
+  if(month >= 8 && month <=12){
 
-      res.json({"status" : 0, "data" : "Something went wrong"});
-    } else
+    let sql = "INSERT INTO user(user_name, password, role) VALUES(?, ?, ?)";
+    let data = [username, password, role];
+    con.query(sql, data, function(err, result)
     {
-      if(role == 'stud')
+      if (err)
       {
-        sql = "INSERT INTO student(user_id, stud_name, mail) VALUES (?, ?, ?)";
-        data = [result.insertId.toString(), full_name, username];
-        con.query(sql, data, function(err, result)
+
+        res.json({"status" : 0, "data" : "Something went wrong"});
+      } else
+      {
+        if(role == 'stud')
         {
-         if (err)
+          sql = "INSERT INTO student(user_id, stud_name, mail, curr_acad_yr) VALUES (?, ?, ?, ?)";
+          data = [result.insertId.toString(), full_name, username, date_time];
+          con.query(sql, data, function(err, result)
           {
-            res.json({"status" : 0, "data" : "Something went wrong"});
-          }
-          else
-          {
-             res.json({"status" : 1, "data" : "User inserted sccessfully"});
-          }
-        });
-       }
-       else if(role == 'cood')
-       {
+            if (err)
+            {
+              res.json({"status" : 0, "data" : "Something went wrong"});
+            }
+            else
+            {
+              res.json({"status" : 1, "data" : "User inserted sccessfully"});
+            }
+          });
+        }
+        else if(role == 'cood')
+        {
           sql = "INSERT INTO dept_heads(user_id, head_name, mail) VALUES (?, ?, ?)";
           data = [result.insertId.toString(), full_name, username];
           con.query(sql, data, function(err, result)
           {
             if (err)
             {
-               res.json({"status" : 0, "data" : "Something went wrong"});
+              res.json({"status" : 0, "data" : "Something went wrong"});
             }
             else
             {
-               res.json({"status" : 1, "data" : "User inserted sccessfully"});
+              res.json({"status" : 1, "data" : "User inserted sccessfully"});
             }
           });
-       }
-       else
-       {
-         sql = "INSERT INTO internal_guides(user_id, guide_name, mail) VALUES (?, ?, ?)";
+        }
+        else
+        {
+          sql = "INSERT INTO internal_guides(user_id, guide_name, mail) VALUES (?, ?, ?)";
           data = [result.insertId.toString(), full_name, username];
           con.query(sql, data, function(err, result)
           {
             if (err)
             {
-               res.json({"status" : 0, "data" : "Something went wrong"});
+              res.json({"status" : 0, "data" : "Something went wrong"});
             }
             else
             {
-               res.json({"status" : 1, "data" : "User inserted sccessfully"});
+              res.json({"status" : 1, "data" : "User inserted sccessfully"});
             }
           });
-       }
-       }
+        }
       }
-);
+    }
+  );
+  }
+  else{
+      res.json({"status" : 0, "data" : "Can't register as given time expired"});
+  }
 });
 
 app.get("/fetch_mail/:user_id",function (req, res, next) {

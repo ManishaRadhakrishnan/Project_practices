@@ -32,9 +32,9 @@
                           <tr>
                             <td>{{get_upper_case_text(info.proj_title)}}</td>
                             <td>{{get_upper_case_text(info.proj_desc)}}</td>
-                            <td>{{info.proj_sub_by}}</td>
+                            <td>{{info.name}}</td>
                             <td>{{info.proj_sub_date}}</td>
-                            <td>{{info.proj_domain}}</td>
+                            <td>{{info.domain}}</td>
                             <td>{{get_upper_case_text(info.proj_technology)}}</td>
                             <ng-template [ngIf]="info.proj_status=='approved'">
                             <td>
@@ -80,12 +80,10 @@
                                          </select>
                                        </li>
                                         <li class="list-group-item">
-                                          <select class="form-control" name="">
-                                            <option value=""> -- Select project guide -- </option>
-                                            <option value="">Manisha</option>
-                                            <option value="">Sowmya</option>
-                                            <option value="">Jithu</option>
-                                            <option value="">Ammu</option>
+                                          <label>Select Project guide </label>
+                                          <select class="form-control" name="" *ngFor="let guide of guides">
+                                            <option value="guide.guide_id">{{guide.guide_name}}</option>
+
                                           </select>
                                         </li>
                                         <li class="list-group-item">

@@ -172,6 +172,14 @@ export class ApiService {
       );
     }
 
+    all_guide_details(): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/all_guide_details");
+      console.log(api_url);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
      project_details_update(user_id : string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/project_details_update/" + user_id);
       console.log(api_url);
