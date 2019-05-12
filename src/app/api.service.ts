@@ -28,7 +28,7 @@ export class ApiService {
     do_register(full_name: string, email: string, password: string, role: string)
     {
       let api_url = encodeURI(this.endpoint_url + "/insert_user/" + full_name + "/" + email + "/" + password + "/" + role);
-      // console.log(api_url);
+      console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         // retry(3), // retry a failed request up to 3 times
@@ -193,8 +193,8 @@ export class ApiService {
         catchError(this.handle_error)
       );
     }
-     project_details_update(user_id : string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/project_details_update/" + user_id);
+     project_details_update(user_id : string, project_title: string, project_domains: string, project_technologies: string, project_description: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/project_details_update/" + user_id + "/" + project_title + "/"+ project_domains + "/" + project_technologies + "/" + project_description );
       console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
@@ -222,6 +222,16 @@ export class ApiService {
 
     login(username: string, password: string): Observable<any> {
       let api_url = encodeURI(this.endpoint_url + "/login/" + username + "/" + password);
+      console.log(api_url);
+      return this.http.get(api_url, httpOptions).pipe(
+        map(this.extract_data),
+        catchError(this.handle_error)
+      );
+    }
+
+    allocate(project_id: string,user_id: string, guide: string, status: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/allocate/" +project_id+"/"+user_id+"/"+guide +"/"+status);
+      console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)

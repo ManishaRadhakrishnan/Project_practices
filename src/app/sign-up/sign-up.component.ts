@@ -24,8 +24,7 @@ export class SignUpComponent implements OnInit {
     }
   }
 
-  do_request(full_name: string, email: string, password: string, confirm_password: string, role: string) {
-
+  do_request(full_name: string, email: string, password: string, confirm_password: string, role: string) {  
    if (password == confirm_password) {
     this.api_service
      .do_register(full_name, email, password, role)

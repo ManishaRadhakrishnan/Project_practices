@@ -59,12 +59,16 @@
                               <div class="form-group">
                                 <textarea name="topic_description" id="topic_description" class="form-control" placeholder="Description of the idea" rows="10" value="{{information[0]['proj_desc']}}"#project_description></textarea>
                               </div>
-                            </div>
+                      </div>
                       <!--</div>-->
                             <div class="modal-footer clearfix">
+                              <ng-template [ngIf]="information[0]['proj_id'] == ''">
                               <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, false)" class="btn btn-info">Submit</button>
+                              </ng-template>
                               <!--<button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button>-->
-                              <button (click)="do_topic_save()" type="submit" class="btn btn-primary pull-left">Save</button>
+                              <ng-template [ngIf]="information[0]['proj_id'] != ''">
+                              <button (click)="do_topic_save(project_title.value, project_domains.value, project_technologies.value, project_description.value)" type="submit" class="btn btn-primary pull-left">Save</button>
+                              </ng-template>
                             </div>
                           </div>
                         </div>

@@ -36,27 +36,27 @@
                             <td>{{info.proj_sub_date}}</td>
                             <td>{{info.domain}}</td>
                             <td>{{get_upper_case_text(info.proj_technology)}}</td>
-                            <ng-template [ngIf]="info.proj_status=='approved'">
+                            <ng-template [ngIf]="info.proj_status == 'approved'">
                             <td>
-                              <a href="#" class="btn btn-success" data-toggle="modal"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Approved</a>
+                              <a href="#" class="btn btn-success {{info.proj_id}}" data-toggle="modal" data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Approved</a>
                             </td>
                             </ng-template>
 
-                            <ng-template [ngIf]="info.proj_status=='pending'">
+                            <ng-template [ngIf]="info.proj_status == 'pending'">
                             <td>
                               <a href="#" class="btn btn-warning" data-toggle="modal"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Pending</a>
                             </td>
                             </ng-template>
 
-                            <ng-template [ngIf]="info.proj_status=='reject'">
+                            <ng-template [ngIf]="info.proj_status == 'reject'">
                             <td>
-                              <a href="#" class="btn btn-danger" data-toggle="modal"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Rejected</a>
+                              <a href="#" class="btn btn-danger" data-toggle="modal" disabled="true"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Rejected</a>
                             </td>
                             </ng-template>
 
-                            <ng-template [ngIf]="info.proj_status=='verified'">
+                            <ng-template [ngIf]="info.proj_status == 'verified'">
                             <td>
-                              <a href="#" class="btn btn-info" data-toggle="modal"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Verified</a>
+                              <a href="#" class="btn btn-info" data-toggle="modal" disabled="true" data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Verified</a>
                             </td>
                             </ng-template>
                           </tr>
@@ -71,23 +71,22 @@
                                     </div>
                                      <ul class="list-group list-group-flush">
                                        <li class="list-group-item">
-                                         <select class="form-control" name="">
-                                           <option value=""> -- Select project status -- </option>
-                                           <option value="">Approved</option>
-                                           <option value="">Pending</option>
-                                           <option value="">Rejected</option>
-                                           <option value="">Verified</option>
+                                         <select class="form-control" name="status" id="status" #status>
+                                           <!-- <option value=""> -- Select project status -- </option> -->
+                                           <option value="approved">Approved</option>
+                                           <option value="pending">Pending</option>
+                                           <option value="reject">Rejected</option>
+                                           <option value="verified">Verified</option>
                                          </select>
                                        </li>
                                         <li class="list-group-item">
                                           <label>Select Project guide </label>
-                                          <select class="form-control" name="" *ngFor="let guide of guides">
-                                            <option value="guide.guide_id">{{guide.guide_name}}</option>
-
+                                          <select class="form-control" name="status"  #leader>
+                                            <option value="{{guide.user_id}}"  *ngFor="let guide of guides">{{guide.guide_name}}</option>
                                           </select>
                                         </li>
                                         <li class="list-group-item">
-                                          <button type="button" class="btn btn-primary" name="button">Update</button>
+                                          <button type="button" class="btn btn-primary" name="button" (click)="allocate(info.proj_id, info.user_id, status.value, leader.value)">Update</button>
                                         </li>
                                      </ul>
                                     <!--<div class="modal-body">

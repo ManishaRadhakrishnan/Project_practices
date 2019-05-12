@@ -254,7 +254,7 @@ app.get('/project_details/:user_id', function (req, res, next) {
 //project-update
 app.get('/all_guide_details', function (req, res, next) {
   let user_id = req.params.user_id;
-  let sql = "SELECT guide_id, guide_name FROM internal_guides;"
+  let sql = "SELECT user_id, guide_name FROM internal_guides;"
   con.query(sql, function(err, result, fields) {
     if (err){
       res.json({"status" : 0, "data" : "Something went wrong"});
@@ -269,24 +269,103 @@ app.get('/all_guide_details', function (req, res, next) {
   });
 })
 
-app.get('/project_details_update/:user_id', function (req, res, next) {
+app.get('/project_details_update/:user_id/:project_title/:project_domains/:project_technologies/:project_description', function (req, res, next) {
   let user_id = req.params.user_id;
-  let sql = "UPDATE project.proj_title, project.proj_desc, project.proj_domain, project.proj_technology,  FROM student, user, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible';"
-  let data = [user_id, user_id, user_id];
-  con.query(sql, data, function(err, result, fields) {
-
+  let project_title = req.params.project_title;
+  let project_domains = req.params.project_domains;
+  let project_technologies = req.params.project_technologies;
+  let project_description = req.params.project_description;
+  let project_domain_ids_list = [];
+  let project_domains_list = project_domains.split(",");
+  let index_count = 0;
+  for(index=0;index<project_domains_list.length;index++) {
+    sql = "SELECT * FROM domain WHERE domain_name = ?";
+    data = [project_domains_list[index].trim()];
+    let domain_name = project_domains_list[index];
+    con.query(sql, data, function(err, result, fields) {
     if (err){
-      res.json({"status" : 0, "data" : "Something went wrong"});
+      res.json({"status" : 0, "message" : "Something went wrong"});
     } else {
-      if(result.length > 0){
-        res.json({"status" : 1, "data" : result});
+      if(result.length == 0) {
+        sql = "INSERT INTO domain(domain_name) VALUES(?)";
+        data = [domain_name];
+        con.query(sql, data, function(err, result, fields) {
+        if (err){
+          res.json({"status" : 0, "message" : "Error 296: Something went wrong"});
+        }
+        else {
+          project_domain_ids_list.push(result["insertId"]);
+        }
+      });
       }
       else {
-        res.json({"status" : 0, "data" : "No projects to show"});
+        project_domain_ids_list.push(result[0]["domain_id"]);
+      }
+
+      if(project_domain_ids_list.length == 0) {
+        res.json({"status" : 0, "data": [], "message" : "Error 299 : No domain names collected. Ftal error"});
+      }
+      else {
+        index_count += 1;
+        console.log(project_domain_ids_list);
+        if(index_count == project_domains_list.length) {
+          let sql = "UPDATE project SET proj_title = ?,  proj_domain = ?, proj_technology= ? ,proj_desc = ?  WHERE project.user_id = ?;"
+          let data = [project_title, project_domain_ids_list.join(","), project_technologies, project_description, user_id ];
+          con.query(sql, data, function(err, result, fields) {
+            if (err){
+              res.json({"status" : 0, "data" : "Something went wrong"});
+            } else {
+              sql = "SELECT * FROM project WHERE user_id = ?";
+              data = [user_id];
+              con.query(sql, data, function(err, result, fields) {
+                if (err){
+                  res.json({"status" : 0, "data" : "Something went wrong"});
+                } else {
+                  res.json({"status" : 1, "data" : result});
+                }
+              });
+            }
+          });
+        }
       }
     }
   });
-})
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
 
 app.get('/student_project_details/:user_id', function(req,res,next){
   let user_id = req.params.user_id;
@@ -328,11 +407,18 @@ app.get('/all_project_details', function(req,res,next){
 app.get('/login/:username/:password', function (req, res, next) {
   let username = req.params.username;
   let password = req.params.password;
+   // var passwordHash = require('./lib/password-hash');
+  // var passwordHash = require('password-hash');
+  // var hashedPassword = passwordHash.generate(password);
+  // const bcrypt = require('bcrypt');
+  // let hash = bcrypt.hashSync(password,10);
+  // console.log(hash);
 
     var sql = "SELECT user_id, role, active, user_name  FROM user WHERE user_name = ? AND password = ?";
     let data = [username, password];
 
     con.query(sql, data, function(err, result, fields) {
+      console.log(sql);
     if (err){
       res.json({"status" : 0, "message" : "Something went wrong"});
     } else {
@@ -631,9 +717,13 @@ app.get("/insert_user/:fullname/:email/:password/:role",function (req, res, next
   let next_year = current_date.getFullYear()+1;
   let date_time = current_date.getFullYear() + "-" + next_year;
   let month = current_date.getMonth()+1;
-  console.log(month);
+  // console.log(month);
   if(month >= 5 && month <=12){
-
+    // var passwordHash = require('password-hash');
+    // var hashedPassword = passwordHash.generate(password);
+    // const bcrypt = require('bcrypt');
+    // let hash = bcrypt.hashSync(password,10);
+    // console.log(hash);
     let sql = "INSERT INTO user(user_name, password, role) VALUES(?, ?, ?)";
     let data = [email, password, role];
     con.query(sql, data, function(err, result)
@@ -842,16 +932,73 @@ app.get("/single_project_details/:user_id",function (req, res, next) {
   let user_id = req.params.user_id;
   let sql = "SELECT * FROM project WHERE proj_id = ?";
   let data = [user_id];
+  let domain_names_list = [];
+  let count = 0;
+  let project_details = null;
   con.query(sql, data, function(err, result) {
     if (err) {
-      console.log(err);
       res.json({"status" : 0, "data" : "Something went wrong"});
     } else {
-        res.json({"status" : 1, "data" : result});
+        project_details = result;
+        domain_id_values = result[0]["proj_domain"];
+        domain_id_values_list  = domain_id_values.split(",");
+        for(number=0;number<domain_id_values_list.length;number++) {
+          sql = "SELECT * FROM domain WHERE domain_id = ?";
+          data = [domain_id_values_list[number]];
+          con.query(sql, data, function(err, result, fields) {
+          if (err){
+            console.log(err);
+            res.json({"status" : 0, "message" : "Error 867 : Something went wrong"});
+          } else {
+            count += 1;
+            domain_names_list.push(result[0]["domain_name"]);
+            if(count == domain_id_values_list.length) {
+              project_details[0]["proj_domain"] = domain_names_list.join(", ");
+              res.json({"status" : 1, "data" : project_details});
+            }
+          }
+        });
+        }
+
       }
   }
 
   );
+});
+
+app.get('/allocate/:project_id/:user_id/:status/:guide', function (req, res, next) {
+  let user_id = req.params.user_id;
+  let guide = req.params.guide;
+  let status = req.params.status;
+  let project_id = req.params.project_id;
+
+   // var passwordHash = require('./lib/password-hash');
+  // var passwordHash = require('password-hash');
+  // var hashedPassword = passwordHash.generate(password);
+  // const bcrypt = require('bcrypt');
+  // let hash = bcrypt.hashSync(password,10);
+  // console.log(hash);
+
+  var sql = "UPDATE project SET proj_status = ? WHERE proj_id = ?";
+    let data = [status, project_id];
+
+    con.query(sql, data, function(err, result, fields) {
+      // console.log(sql);
+    if (err){
+      res.json({"status" : 0, "message" : "Something went wrong"});
+    } else {
+      sql = "UPDATE student SET guide_id = ? WHERE user_id = ?";
+      data = [guide, user_id];
+      con.query(sql, data, function(err, result, fields) {
+        // console.log(sql);
+      if (err){
+        res.json({"status" : 0, "message" : "Something went wrong in student table"});
+      } else {
+        res.json({"status" : 1, "message" : "Updated in student table"});
+      }
+    });
+    }
+  });
 });
 
 app.listen(8080, function () {

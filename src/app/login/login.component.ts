@@ -50,7 +50,7 @@ export class LoginComponent{
              window.sessionStorage.setItem("user_id", this.user_id);
              window.sessionStorage.setItem("mail", username);
              window.sessionStorage.setItem("user_name", this.user_name);
-             console.log(window.sessionStorage.getItem("mail"));
+             // console.log(window.sessionStorage.getItem("mail"));
              location.reload();
            }
          },

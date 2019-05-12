@@ -59,7 +59,7 @@ export class TopicViewComponent implements OnInit {
            }
          );
         //NOTE: modal content display
-         this.  api_service
+         this.api_service
           .all_guide_details()
           .subscribe(
             data => {
@@ -100,6 +100,14 @@ this.role = window.sessionStorage.getItem("role");
   modal_pop(div_id) {
   let id = "#" + div_id;
   $(id).modal();
+
+
+  let button_text = $("." + div_id).text();
+
+  if(button_text.trim() == "Approved") {
+    $("#status").remove();
+    // $("option[value='pending']").remove();
+  }
 }
 
   submit_new_topic(){
@@ -112,5 +120,20 @@ this.role = window.sessionStorage.getItem("role");
 
   set_desc_length(text){
     return text.slice(0,30)+'...';
+  }
+
+  allocate(project_id:string, user_id :string, guide : string, status: string){
+    this.api_service
+    .allocate(project_id,user_id,guide, status)
+     .subscribe(
+       data => {
+         // this.information = data.data as string[];
+         this.status = data.status as number;
+         window.location.reload();
+       },
+       err => {
+         console.log(err);
+       }
+     );
   }
 }
