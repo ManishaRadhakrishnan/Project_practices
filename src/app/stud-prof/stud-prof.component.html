@@ -83,12 +83,14 @@
                                <input type="text" class="form-control border-input" value="{{info.dept_name}}"  readonly>
                              </div>
                            </div>
-                           <div class="col-md-4">
-                             <div class="form-group">
-                               <label>Academic Year</label>
-                               <input type="text" class="form-control border-input" value="{{info.curr_acad_yr}}"  readonly>
+                           <ng-template [ngIf]="role == 'stud'">
+                             <div class="col-md-4">
+                               <div class="form-group">
+                                 <label>Academic Year</label>
+                                 <input type="text" class="form-control border-input" value="{{info.curr_acad_yr}}"  readonly>
+                               </div>
                              </div>
-                           </div>
+                            </ng-template>
                          </div>
                        </div>
                        <div class="text-center">

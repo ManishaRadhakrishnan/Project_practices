@@ -68,9 +68,8 @@ export class ApiService {
 
     insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string,attachment :string)
     {
-
-      if(attachment == null || attachment == "") {
-        attachment = "%20";
+      if(subject == null || subject == "") {
+        subject = "%20";
       }
 
       if(email_cc == null || email_cc == "") {
@@ -81,11 +80,12 @@ export class ApiService {
         email_bcc = "%20";
       }
 
-      if(subject == null || subject == "") {
-        subject = "%20";
+      if(attachment == null || attachment == "") {
+        attachment = "%20";
       }
 
       let api_url = encodeURI(this.endpoint_url + "/insert_mail/"+ user_id  + "/" + email_to + "/" + subject + "/" + email_cc + "/" + email_bcc + "/" + email_content + "/" + attachment);
+      // console.log(api_url);
       return this.http.get<Api>(api_url)
         .pipe(
         catchError(this.handle_error) // then handle the error
@@ -255,9 +255,9 @@ export class ApiService {
       );
     }
 
-    sent_mail(user_id: string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/sent_mail/" + user_id);
-
+    sent_mail(user_id: string, role: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/sent_mail/" + user_id +"/"+role);
+      console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
         catchError(this.handle_error)
@@ -273,8 +273,8 @@ export class ApiService {
       );
     }
     // insert_mail(user_id: string,mail_to: string,subject: string,cc: string,bcc: string,content: string,attachment: string){
-    trash_mail(mail: string, user_id: string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/trash_mail/" + mail + "/" + user_id);
+    trash_mail(mail: string, user_id: string, role : string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/trash_mail/" + mail + "/" + user_id + "/" + role);
       console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),

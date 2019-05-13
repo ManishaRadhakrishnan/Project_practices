@@ -102,11 +102,24 @@ this.role = window.sessionStorage.getItem("role");
   $(id).modal();
 
 
-  let button_text = $("." + div_id).text();
+  let button_text = $("." + div_id).html();
 
   if(button_text.trim() == "Approved") {
-    $("#status").remove();
-    // $("option[value='pending']").remove();
+    let options = "<option value=\"\"></option><option value=\"approved\">Approved</option><option value=\"verified\">Verified</option>";
+    $("select[name='status']").html(options);
+  }
+  else if(button_text.trim() == "Pending") {
+    let options = "<option value=\"\"></option><option value=\"approved\">Approved</option><option value=\"pending\">Pending</option><option value=\"reject\">Rejected</option><option value=\"verified\">Verified</option>";
+    $("select[name='status']").html(options);
+
+  }
+  else if(button_text.trim() == "Rejected") {
+    $("select[name='status']").remove();
+    alert("Inji ippo nee guide allocate cheyyanda");
+  }
+  else if(button_text.trim() == "Verified") {
+    alert("Guide allocate cheyth mathiyayille");
+    $("select[name='status']").attr("disabled", "true");
   }
 }
 

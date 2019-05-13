@@ -44,19 +44,19 @@
 
                             <ng-template [ngIf]="info.proj_status == 'pending'">
                             <td>
-                              <a href="#" class="btn btn-warning" data-toggle="modal"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Pending</a>
+                              <a href="#" class="btn btn-warning {{info.proj_id}}" data-toggle="modal"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Pending</a>
                             </td>
                             </ng-template>
 
                             <ng-template [ngIf]="info.proj_status == 'reject'">
                             <td>
-                              <a href="#" class="btn btn-danger" data-toggle="modal" disabled="true"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Rejected</a>
+                              <a href="#" class="btn btn-danger {{info.proj_id}}" data-toggle="modal" disabled="true"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Rejected</a>
                             </td>
                             </ng-template>
 
                             <ng-template [ngIf]="info.proj_status == 'verified'">
                             <td>
-                              <a href="#" class="btn btn-info" data-toggle="modal" disabled="true" data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Verified</a>
+                              <a href="#" class="btn btn-info {{info.proj_id}}" data-toggle="modal" disabled="true" data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">Verified</a>
                             </td>
                             </ng-template>
                           </tr>
@@ -71,8 +71,9 @@
                                     </div>
                                      <ul class="list-group list-group-flush">
                                        <li class="list-group-item">
+                                         <label for="status">Select project status</label>
                                          <select class="form-control" name="status" id="status" #status>
-                                           <!-- <option value=""> -- Select project status -- </option> -->
+                                           <option value=""></option>
                                            <option value="approved">Approved</option>
                                            <option value="pending">Pending</option>
                                            <option value="reject">Rejected</option>
@@ -81,7 +82,8 @@
                                        </li>
                                         <li class="list-group-item">
                                           <label>Select Project guide </label>
-                                          <select class="form-control" name="status"  #leader>
+                                          <select class="form-control" name="leader"  #leader>
+                                            <option value=""></option>
                                             <option value="{{guide.user_id}}"  *ngFor="let guide of guides">{{guide.guide_name}}</option>
                                           </select>
                                         </li>
@@ -140,7 +142,7 @@
                                 {{set_desc_length(get_upper_case_text(info.proj_desc))}}
                               </p>
                               <a href="#" class="card-link" data-toggle="modal"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">More ...</a>
-
+                              <ng-template [ngIf]="info.proj_status != 'reject'">
                               <div id="{{info.proj_id}}" class="modal fade" role="dialog">
                                  <div class="modal-dialog">
                                     <!-- Modal content-->
@@ -180,6 +182,7 @@
                                     </div>
                                   </div>
                               </div>
+                              </ng-template>
                               <div class="card-footer text-muted">
 
                                 <ng-template [ngIf]="info.proj_status  == 'pending'">
@@ -190,9 +193,13 @@
                                 <h5><span class="badge bg-green">Approved</span></h5>
                                 </ng-template>
 
-                                 <ng-template [ngIf]="info.proj_status  == 'rejected'">
+                                 <ng-template [ngIf]="info.proj_status  == 'reject'">
                                 <h5><span class="badge bg-red">Rejected</span></h5>
                                 </ng-template>
+
+                                <ng-template [ngIf]="info.proj_status  == 'verified'">
+                               <h5><span class="badge bg-blue">Verified</span></h5>
+                               </ng-template>
                               </div>
                               </div>
                         </div>

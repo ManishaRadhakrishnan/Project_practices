@@ -24,7 +24,7 @@ export class TrashComponent implements OnInit {
     if(this.role != null) {
       this.user_id = window.sessionStorage.getItem("user_id");
       this.api_service
-      .trash_mail(this.mail,this.user_id)
+      .trash_mail(this.mail,this.user_id,this.role)
       .subscribe(
         data => {
           this.information = data.data as string[];
