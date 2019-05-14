@@ -33,9 +33,14 @@ export class ComposeComponent implements OnInit {
          if(this.status == 1) {
            this.router.navigate(['/mail']);
          }
+         else{
+           alert("This user is not registered");
+         }
        },
        err => {
          console.log(err);
+         alert("This user is not registered");
+
        }
      );
   }

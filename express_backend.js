@@ -690,15 +690,16 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
                 + current_date.getFullYear() + " @ "
                 + current_date.getHours() + ":"
                 + current_date.getMinutes();
-  console.log(mail_to);
+  // console.log(mail_to);
   let sql = "SELECT role,user_id as id FROM user WHERE user_name = ?"
   let data = [mail_to];
   con.query(sql, data, function(err, result) {
 
     if (err)
     {
-      console.log(err);
-      res.json({"status" : 0, "data" : "ERROR 699: Something went wrong "});
+      console.log(result);
+      // alert("This user i not registered.! Please check the mail id");
+      // res.json({"status" : 0, "data" : "ERROR 699: Something went wrong "});
     } else
     {
       sql = "INSERT INTO mail(user_id, toaddr, sub, cc, bcc, content, timestamp, attachment,role,id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?)";

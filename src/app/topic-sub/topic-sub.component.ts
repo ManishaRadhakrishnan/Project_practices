@@ -98,7 +98,6 @@ export class TopicSubComponent implements OnInit {
          data => {
            this.information = data.data as string[];
            this.status = data.status as number;
-
            if(this.status == 1) {
              this.router.navigate(["/topic-view"]);
            }
