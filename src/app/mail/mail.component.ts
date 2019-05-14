@@ -26,7 +26,7 @@ export class MailComponent implements OnInit {
     if(this.role != null) {
       this.user_id = window.sessionStorage.getItem("user_id");
       this.api_service
-      .inbox_mail(this.mail)
+      .inbox_mail(this.user_id)
       .subscribe(
         data => {
           this.information = data.data as string[];

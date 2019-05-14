@@ -870,116 +870,121 @@ app.get("/select_suggestion/:user_id",function (req, res, next) {
  );
   });
 
-app.get("/inbox_mail/:mail",function (req, res, next) {
+app.get("/inbox_mail/:user_id",function (req, res, next) {
 
     let user_id = req.params.user_id;
     let to_user_email_id = req.params.mail;
-    let sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.toaddr = ? AND mail.user_id = student.user_id AND mail.mail_visible = '1'";
-    let data = [to_user_email_id];
-    con.query(sql, data, function(err, result) {
-      if (err) {
-        res.json({"status" : 0, "data" : "Something went wrong"});
-      } else {
-        if (result.length > 0) {
-          res.json({"status" : 1, "data": result, "mail_count" : result.length});
-        }
-        else {
-          res.json({"status" : 0, "data" : "Something went wrong"});
-        }
-       }
-     });
+
+    async function fetch_sent_mail(){
+      let result_dictionary = [];
+      let sql = "SELECT mail.*, internal_guides.guide_name FROM mail, internal_guides WHERE mail.user_id = ? AND mail.toaddr = internal_guides.mail;";
+      let data = [user_id];
+      await new Promise(function(resolve, reject){
+        con.query(sql, data, function(err, result) {
+          if (err) {
+            res.json({"status" : 0, "data" : "Something went wrong"});
+          } else {
+            if (result.length > 0) {
+              result_dictionary.push(result);
+              resolve();
+            }
+          }
+        });
+      }).catch(function(err){});
+
+      sql = "SELECT mail.*, dept_heads.mail FROM mail, dept_heads WHERE mail.user_id = 14 AND mail.toaddr = dept_heads.mail;";
+      data = [user_id];
+      await new Promise(function(resolve, reject){
+        con.query(sql, data, function(err, result) {
+          if (err) {
+            res.json({"status" : 0, "data" : "Something went wrong"});
+          } else {
+            if (result.length > 0) {
+              result_dictionary.push(result);
+              resolve();
+            }
+          }
+        });
+      }).catch(function(err){});
+
+
+      sql = "SELECT mail.*, student.mail FROM mail, student WHERE mail.user_id = 14 AND mail.toaddr = student.mail;";
+      data = [user_id];
+      await new Promise(function(resolve, reject){
+        con.query(sql, data, function(err, result) {
+          if (err) {
+            res.json({"status" : 0, "data" : "Something went wrong"});
+          } else {
+            result_dictionary.push(result);
+            resolve();
+          }
+        });
+      }).catch(function(err){});
+
+      // const r = Object.assign({}, result_dictionary[0], result_dictionary[1]);
+      res.json({"status" : 0, "data" : result_dictionary});
+      // console.log(result_dictionary);
+    }
+
+    fetch_sent_mail();
     });
 
 app.get("/sent_mail/:user_id/:role",function (req, res, next) {
   let user_id = req.params.user_id;
   let role = req.params.role;
 
-  let sql = "SELECT role,id FROM mail WHERE user_id = ?";
-  let data = [user_id];
-  con.query(sql, data, function(err, result) {
-    console.log(result);
-    if (err) {
-      res.json({"status" : 0, "data" : "ERROR 899: Something went wrong"});
-    } else {
-      if(role == 'stud')
-      {
-        console.log(result[result.length-1]['role']);
-        if(result[result.length-1]['role'] == 'cood'){
-        sql = "SELECT *, dept_heads.head_name as name FROM mail, dept_heads WHERE mail.user_id = ? AND dept_heads.user_id = ? AND mail.mail_visible= '1'";
-      }else if(result[result.length-1]['role'] == 'stud'){
-        sql = "SELECT *, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND student.user_id = ? AND mail.mail_visible= '1'";
-      }else{
-        sql = "SELECT *, internal_guides.guide_name as name FROM mail, internal_guides WHERE mail.user_id = ? AND internal_guides.user_id = ? AND mail.mail_visible= '1'";
-      }
-      // console.log(result[result.length-1]['id']);
-        // sql = "SELECT *, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND student.user_id = ? AND mail.mail_visible= '1'";
-        data = [user_id, result[result.length-1]['id']];
-        // console.log(result);
-        con.query(sql, data, function(err, result) {
-          if (err) {
-            res.json({"status" : 0, "data" : "ERROR 937:Something went wrong"});
-          } else {
-            console.log(result.length);
-            if (result.length > 0) {
-              res.json({"status" : 1, "data": result, "mail_count" : result.length});
-            }else {
-              res.json({"status" : 0, "data" : "ERROR 921: Something went wrong heads table"});
-            }
+  async function fetch_sent_mail(){
+    let result_dictionary = [];
+    let sql = "SELECT mail.*, internal_guides.guide_name FROM mail, internal_guides WHERE mail.user_id = ? AND mail.toaddr = internal_guides.mail;";
+    let data = [user_id];
+    await new Promise(function(resolve, reject){
+      con.query(sql, data, function(err, result) {
+        if (err) {
+          res.json({"status" : 0, "data" : "Something went wrong"});
+        } else {
+          if (result.length > 0) {
+            result_dictionary.push(result);
+            resolve();
           }
-          // console.log(result);
         }
-        );
-      }else if(role == 'guide'){
+      });
+    }).catch(function(err){});
 
-        if(result[result.length-1]['role'] == 'cood'){
-        sql = "SELECT *, dept_heads.head_name as name FROM mail, dept_heads WHERE mail.user_id = ? AND dept_heads.user_id = ? AND mail.mail_visible= '1'";
-      }else if(result[result.length-1]['role'] == 'stud'){
-        sql = "SELECT *, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND student.user_id = ? AND mail.mail_visible= '1'";
-      }else{
-        sql = "SELECT *, internal_guides.guide_name as name FROM mail, internal_guides WHERE mail.user_id = ? AND internal_guides.user_id = ? AND mail.mail_visible= '1'";
-      }
-        // sql = "SELECT *, internal_guides.guide_name as name FROM mail, internal_guides WHERE mail.user_id = ? AND internal_guides.user_id = ? AND mail.mail_visible= '1'";
-        data = [user_id, result[result.length-1]['id']];
-        con.query(sql, data, function(err, result) {
-          // console.log(result);
-          if (err) {
-            console.log(err);
-            res.json({"status" : 0, "data" : "ERROR 922:Something went wrong"});
-          } else {
-            if (result.length > 0) {
-              res.json({"status" : 1, "data": result, "mail_count" : result.length});
-            }else {
-              res.json({"status" : 0, "data" : "Something went wrong guide mail"});
-            }
+    sql = "SELECT mail.*, dept_heads.mail FROM mail, dept_heads WHERE mail.user_id = 14 AND mail.toaddr = dept_heads.mail;";
+    data = [user_id];
+    await new Promise(function(resolve, reject){
+      con.query(sql, data, function(err, result) {
+        if (err) {
+          res.json({"status" : 0, "data" : "Something went wrong"});
+        } else {
+          if (result.length > 0) {
+            result_dictionary.push(result);
+            resolve();
           }
         }
-        );
-      }else{
-        if(result[result.length-1]['role'] == 'cood'){
-        sql = "SELECT *, dept_heads.head_name as name FROM mail, dept_heads WHERE mail.user_id = ? AND dept_heads.user_id = ? AND mail.mail_visible= '1'";
-      }else if(result[result.length-1]['role'] == 'stud'){
-        sql = "SELECT *, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND student.user_id = ? AND mail.mail_visible= '1'";
-      }else{
-        sql = "SELECT *, internal_guides.guide_name as name FROM mail, internal_guides WHERE mail.user_id = ? AND internal_guides.user_id = ? AND mail.mail_visible= '1'";
-      }
-        data = [user_id, result[result.length-1]['id']];
-        con.query(sql, data, function(err, result) {
-          if (err) {
-            res.json({"status" : 0, "data" : "ERROR 937:Something went wrong"});
-          } else {
-            if (result.length > 0) {
-              res.json({"status" : 1, "data": result, "mail_count" : result.length});
-            }else {
-              res.json({"status" : 0, "data" : "Something went wrong heads table"});
-            }
-          }
-          // console.log(result);
+      });
+    }).catch(function(err){});
+
+
+    sql = "SELECT mail.*, student.mail FROM mail, student WHERE mail.user_id = 14 AND mail.toaddr = student.mail;";
+    data = [user_id];
+    await new Promise(function(resolve, reject){
+      con.query(sql, data, function(err, result) {
+        if (err) {
+          res.json({"status" : 0, "data" : "Something went wrong"});
+        } else {
+          result_dictionary.push(result);
+          resolve();
         }
-        );
-      }
-    }
+      });
+    }).catch(function(err){});
+
+    // const r = Object.assign({}, result_dictionary[0], result_dictionary[1]);
+    res.json({"status" : 0, "data" : result_dictionary});
+    // console.log(result_dictionary);
   }
-  );
+
+  fetch_sent_mail();
 
 
 });

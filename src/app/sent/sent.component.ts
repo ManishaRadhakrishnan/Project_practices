@@ -27,7 +27,8 @@ export class SentComponent implements OnInit {
       .sent_mail(this.user_id,this.role)
       .subscribe(
         data => {
-          this.information = data.data as string[];
+          this.information = data.data[0] as string[];
+          console.log(this.information);
           this.mail_count = data.mail_count as number;
           this.status = data.status as number;
         },
