@@ -24,8 +24,15 @@ export class SignUpComponent implements OnInit {
     }
   }
 
-  do_request(full_name: string, email: string, password: string, confirm_password: string, role: string) {  
+  do_request(full_name: string, email: string, password: string, confirm_password: string, user_role: string) {
+    let role = "";
    if (password == confirm_password) {
+    if (user_role == 'admin') {
+      role = $("#user_role").find(":selected").attr("value");
+    }
+    else {
+      role = "stud";
+    }
     this.api_service
      .do_register(full_name, email, password, role)
      .subscribe(

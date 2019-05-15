@@ -759,7 +759,7 @@ app.get("/insert_user/:fullname/:email/:password/:role",function (req, res, next
           {
             if (err)
             {
-              res.json({"status" : 0, "data" : "Something went wrong"});
+              res.json({"status" : 0, "data" : "Error : 762 - Something went wrong"});
             }
             else
             {
@@ -770,7 +770,7 @@ app.get("/insert_user/:fullname/:email/:password/:role",function (req, res, next
         else if(role == 'cood')
         {
           sql = "INSERT INTO dept_heads(user_id, head_name, mail) VALUES (?, ?, ?)";
-          data = [result.insertId.toString(), full_name, username];
+          data = [result.insertId.toString(), full_name, email];
           con.query(sql, data, function(err, result)
           {
             if (err)
@@ -786,11 +786,12 @@ app.get("/insert_user/:fullname/:email/:password/:role",function (req, res, next
         else
         {
           sql = "INSERT INTO internal_guides(user_id, guide_name, mail) VALUES (?, ?, ?)";
-          data = [result.insertId.toString(), full_name, username];
+          data = [result.insertId.toString(), full_name, email];
           con.query(sql, data, function(err, result)
           {
             if (err)
             {
+              console.log(err);
               res.json({"status" : 0, "data" : "Something went wrong"});
             }
             else

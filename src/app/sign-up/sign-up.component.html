@@ -32,15 +32,15 @@
                 </div>
                 <div>
                   <ng-template [ngIf]="role == 'admin'">
-                  <select name="role" class="form-control"  #role>
-                    <option >--Role-- </option>
+                  <select name="user_role" class="form-control" id="user_role" #user_role>
+                    <option value="">--Role-- </option>
                     <option value="cood">Coordinator</option>
                     <option value="guide">Guide</option>
                   </select>
                   </ng-template>
                   <ng-template [ngIf]="role == null">
                     <div class="form-group">
-                      <small id="role" class="form-text text-muted">Registering as Student</small>
+                      <small class="form-text text-muted">Registering as Student</small>
                     </div>
                   </ng-template>
                 </div>
@@ -49,7 +49,7 @@
                   <button (click)="do_request(full_name.value, email.value, password.value, confirm_password.value, 'stud')" class="btn bg-olive btn-block">Sign me up</button>
                   </ng-template>
                   <ng-template [ngIf]="role == 'admin'">
-                    <button (click)="do_request(full_name.value, email.value, username.value, password.value, confirm_password.value, role.value)" class="btn bg-olive btn-block">Register</button>
+                    <button (click)="do_request(full_name.value, email.value, password.value, confirm_password.value, 'admin')" class="btn bg-olive btn-block">Register</button>
                   </ng-template>
                 </div>
               </div>

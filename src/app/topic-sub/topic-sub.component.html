@@ -38,37 +38,40 @@
                         <div class="form-group">
                           <div class="input-group">
                             <span class="input-group-addon">TITLE:</span>
-                            <input name="project_title" type="text" class="form-control" aria-describedby="project_title_help" value="{{information[0]['proj_title']}}"  #project_title>
+                            <input name="project_title" type="text" class="form-control" aria-describedby="project_title_help" value="{{information ? information[0]['proj_title'] : ''}}"  #project_title>
                             </div>
                             <small id="project_title_help" class="form-text text-muted">A concise title for your project</small>
                           </div>
                           <div class="form-group">
                             <div class="input-group">
                               <span class="input-group-addon">DOMAIN:</span>
-                              <input name="domain_help" type="text" class="form-control" aria-describedby="domain_help" value="{{information[0]['proj_domain']}}" #project_domains>
+                              <input name="domain_help" type="text" class="form-control" aria-describedby="domain_help" value="{{information ? information[0]['proj_domain'] : ''}}" #project_domains>
                               </div>
                               <small id="domain_help" class="form-text text-muted">Domain of your project. Please separate multiple domain names with a comma</small>
                             </div>
                             <div class="form-group">
                               <div class="input-group">
                                 <span class="input-group-addon">TECHNOLOGY:</span>
-                                <input name="technology" type="text" class="form-control" aria-describedby="technology_help" value="{{information[0]['proj_technology']}}" #project_technologies>
+                                <input name="technology" type="text" class="form-control" aria-describedby="technology_help" value="{{information ? information[0]['proj_technology'] : ''}}" #project_technologies>
                                 </div>
                                 <small id="technology_help" class="form-text text-muted">Technologies that would be used in your project. Please separate multiple technologies names with a comma</small>
                               </div>
                               <div class="form-group">
-                                <textarea name="topic_description" id="topic_description" class="form-control" placeholder="Description of the idea" rows="10" value="{{information[0]['proj_desc']}}"#project_description></textarea>
+                                <textarea name="topic_description" id="topic_description" class="form-control" placeholder="Description of the idea" rows="10" value="{{information ? information[0]['proj_desc'] : ''}}" #project_description></textarea>
                               </div>
                       </div>
                       <!--</div>-->
                             <div class="modal-footer clearfix">
-                              <ng-template [ngIf]="information[0]['proj_id'] == ''">
-                              <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, false)" class="btn btn-info">Submit</button>
+                              <ng-template [ngIf]="information == null">
+                                <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, false)" class="btn btn-info">Submit</button>
                               </ng-template>
-                              <!--<button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button>-->
-                              <ng-template [ngIf]="information[0]['proj_id'] != ''">
-                              <button (click)="do_topic_save(project_title.value, project_domains.value, project_technologies.value, project_description.value)" type="submit" class="btn btn-primary pull-left">Save</button>
+
+                              <ng-template [ngIf]="information">
+                                <button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button>
+                                <button (click)="do_topic_save(project_title.value, project_domains.value, project_technologies.value, project_description.value)" type="submit" class="btn btn-primary pull-left">Save</button>
                               </ng-template>
+
+
                             </div>
                           </div>
                         </div>
