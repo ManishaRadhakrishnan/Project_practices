@@ -36,26 +36,27 @@ export class MailComponent implements OnInit {
       this.route.queryParamMap.subscribe(queryParams => {
         this.mail_role = queryParams.get("mail_role");
       });
-      console.log(this.mail_role);
-    // if(this.role != null) {
-      this.user_id = window.sessionStorage.getItem("user_id");
-      this.api_service
-      .inbox_mail(this.user_id,this.mail_role,this.mail)
-      .subscribe(
-        data => {
-          this.information = data.data as string[];
-          this.mail_count = data.mail_count as number;
-          this.status = data.status as number;
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    // }
-    // else {
-    //   this.router.navigate(["/login"]);
-    // }
+
+      this.load_email(this.mail_role);
   }
+}
+
+  load_email(mail_role : string) {
+  this.user_id = window.sessionStorage.getItem("user_id");
+  this.api_service
+  .inbox_mail(this.user_id, mail_role, this.mail)
+  .subscribe(
+    data => {
+      this.status = data.status as number;
+      if(this.status == 1) {
+        this.information = data.data as string[];
+      }
+      this.mail_count = data.mail_count as number;
+    },
+    err => {
+      console.log(err);
+    }
+  );
 }
 
   // get_sent_mail() {

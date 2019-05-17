@@ -38,10 +38,12 @@ export class SentComponent implements OnInit {
       .sent_mail(this.user_id,this.role,this.mail_role)
       .subscribe(
         data => {
-          this.information = data.data[0] as string[];
+          this.status = data.status as number;
+          if(this.status == 1) {
+            this.information = data.data as string[];
+          }
           console.log(this.information);
           this.mail_count = data.mail_count as number;
-          this.status = data.status as number;
         },
         err => {
           console.log(err);

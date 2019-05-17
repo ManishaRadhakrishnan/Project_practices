@@ -28,9 +28,15 @@
                   <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                  <li (click)="needed_role('cood')"><a>Coordinator</a></li>
-                  <li (click)="needed_role('guide')"><a>Guide</a></li>
-                  <li (click)="needed_role('stud')"><a>Student</a></li>
+                  <li>
+                    <a href="/mail?mail_role=cood">Coordinator</a>
+                  </li>
+                  <li>
+                    <a href="/mail?mail_role=guide">Guide</a>
+                  </li>
+                  <li>
+                    <a href="/mail?mail_role=stud">Student</a>
+                  </li>
                 </ul>
               </li>
               <ng-template [ngIf]="role == 'stud'">
