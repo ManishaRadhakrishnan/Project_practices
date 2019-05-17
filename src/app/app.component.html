@@ -22,10 +22,16 @@
                   <i class="fa fa-eye"></i> <span>View Profile</span>
                 </a>
               </li>
-              <li>
-                <a href="/mail">
+              <li class="treeview">
+                <a href="#">
                   <i class="fa fa-envelope"></i> <span>Mailbox</span>
+                  <i class="fa fa-angle-left pull-right"></i>
                 </a>
+                <ul class="treeview-menu">
+                  <li><button type="button" (click)="needed_role('cood')">Coordinator</button></li>
+                  <li><button type="button" (click)="needed_role('guide')">Guide</button></li>
+                  <li><button type="button" (click)="needed_role('stud')">Student</button></li>
+                </ul>
               </li>
               <ng-template [ngIf]="role == 'stud'">
                 <li>

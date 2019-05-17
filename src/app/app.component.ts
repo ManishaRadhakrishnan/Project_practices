@@ -8,7 +8,7 @@ import { RouterModule, Routes, Router } from '@angular/router';
 export class AppComponent  implements OnInit {
   title = 'pms-app';
 constructor(private router: Router) { }
-
+  mail_role : string;
   role : string;
   user_name : string;
   ngOnInit() {
@@ -21,4 +21,15 @@ constructor(private router: Router) { }
       this.router.navigate(["/login"]);
     }
   }
+
+  needed_role(mail_role : string){
+this.role = window.sessionStorage.getItem("role");
+  // console.log(mail_role);
+  if(this.role != '') {
+     this.router.navigate(["/mail"], { queryParams: { mail_role: mail_role} });
+   }
+   else {
+     this.router.navigate(["/login"]);
+   }
+}
 }

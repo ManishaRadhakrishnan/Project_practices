@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Api, ApiService } from '../api.service';
 import { RouterModule, Routes, Router } from '@angular/router';
 import * as $AB from 'jquery';
+import { Observable }         from 'rxjs';
+import { ActivatedRoute }     from '@angular/router';
+import { map }                from 'rxjs/operators';
+
 @Component({
   selector: 'app-sent',
   templateUrl: './sent.component.html',
@@ -9,7 +13,7 @@ import * as $AB from 'jquery';
 })
 export class SentComponent implements OnInit {
 
-  constructor(private router: Router,private api_service: ApiService) { }
+  constructor(private router: Router,private api_service: ApiService,private route: ActivatedRoute) { }
   information : string[];
   mail_count : number;
   status : number;
@@ -18,13 +22,20 @@ export class SentComponent implements OnInit {
   inbox_content : string;
   sent_mail_content : string[];
   mail : string;
+  mail_role : string;
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
     this.mail = window.sessionStorage.getItem("mail");
-    if(this.role != null) {
+    if(this.role == '') {
+      this.router.navigate(["/login"]);
+    }else{
+      this.mail_role = this.route.snapshot.paramMap.get("mail_role");
+      this.route.queryParamMap.subscribe(queryParams => {
+        this.mail_role = queryParams.get("mail_role");
+      });
       this.user_id = window.sessionStorage.getItem("user_id");
       this.api_service
-      .sent_mail(this.user_id,this.role)
+      .sent_mail(this.user_id,this.role,this.mail_role)
       .subscribe(
         data => {
           this.information = data.data[0] as string[];
@@ -37,9 +48,7 @@ export class SentComponent implements OnInit {
         }
       );
     }
-    else {
-      this.router.navigate(["/login"]);
-    }
+
       // window.location.reload();
 
     }

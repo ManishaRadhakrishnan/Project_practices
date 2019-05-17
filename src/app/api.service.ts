@@ -246,8 +246,8 @@ export class ApiService {
       );
     }
 
-    inbox_mail(mail : string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/inbox_mail/" + mail);
+    inbox_mail(user_id : string, mail_role : string, mail : string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/inbox_mail/" + user_id + "/" + mail_role + "/" + mail);
       console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
@@ -255,8 +255,8 @@ export class ApiService {
       );
     }
 
-    sent_mail(user_id: string, role: string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/sent_mail/" + user_id +"/"+role);
+    sent_mail(user_id: string, role: string, mail_role: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/sent_mail/" + user_id +"/"+role+"/"+mail_role);
       console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
@@ -273,8 +273,8 @@ export class ApiService {
       );
     }
     // insert_mail(user_id: string,mail_to: string,subject: string,cc: string,bcc: string,content: string,attachment: string){
-    trash_mail(mail: string, user_id: string, role : string): Observable<any> {
-      let api_url = encodeURI(this.endpoint_url + "/trash_mail/" + mail + "/" + user_id + "/" + role);
+    trash_mail(mail: string, user_id: string, role : string, mail_role: string): Observable<any> {
+      let api_url = encodeURI(this.endpoint_url + "/trash_mail/" + mail + "/" + user_id + "/" + role + "/" + mail_role);
       console.log(api_url);
       return this.http.get(api_url, httpOptions).pipe(
         map(this.extract_data),
