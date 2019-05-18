@@ -24,8 +24,8 @@
                               <div style="margin-top: 15px;">
                                 <ul class="nav nav-pills nav-stacked">
                                   <li class="header">Folders</li>
-                                  <li><a href="/mail"><i class="fa fa-inbox"></i> Inbox <ng-template>mail_count</ng-template></a></li>
-                                  <li id="sent-mail"><a href="/sent"><i class="fa fa-mail-forward"></i> Sent</a></li>
+                                  <li (click)="needed_role_inbox()"><a><i class="fa fa-inbox"></i> Inbox <ng-template>mail_count</ng-template></a></li>
+                                  <li id="sent-mail" (click)="needed_role()"><a href="/sent"><i class="fa fa-mail-forward"></i> Sent</a></li>
                                   <li class="active"><a href="/trash"><i class="fa fa-trash-o"></i> Trash</a></li>
                                 </ul>
                               </div>

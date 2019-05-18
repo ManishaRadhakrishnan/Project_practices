@@ -28,9 +28,9 @@
                   <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                  <li><button type="button" (click)="needed_role('cood')">Coordinator</button></li>
-                  <li><button type="button" (click)="needed_role('guide')">Guide</button></li>
-                  <li><button type="button" (click)="needed_role('stud')">Student</button></li>
+                  <li (click)="needed_role('cood')"><a>Coordinator</a></li>
+                  <li (click)="needed_role('guide')"><a>Guide</a></li>
+                  <li (click)="needed_role('stud')"><a>Student</a></li>
                 </ul>
               </li>
               <ng-template [ngIf]="role == 'stud'">

@@ -110,7 +110,17 @@ export class MailComponent implements OnInit {
   //   $("#sent-mail").removeClass("active");
   //   $("#inbox-mail").addClass("active");
   // }
+  needed_role(){
 
+    this.role = window.sessionStorage.getItem("role");
+      console.log(this.mail_role);
+      if(this.role != '') {
+         this.router.navigate(["/sent"], { queryParams: { mail_role: this.mail_role} });
+       }
+       else {
+         this.router.navigate(["/login"]);
+       }
+    }
   redirect()
   {
     this.router.navigate(["/sent"]);

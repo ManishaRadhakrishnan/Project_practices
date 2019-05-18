@@ -52,7 +52,29 @@ export class SentComponent implements OnInit {
       // window.location.reload();
 
     }
+    needed_role(){
 
+      this.role = window.sessionStorage.getItem("role");
+        console.log(this.mail_role);
+        if(this.role != '') {
+           this.router.navigate(["/mail"], { queryParams: { mail_role: this.mail_role} });
+         }
+         else {
+           this.router.navigate(["/login"]);
+         }
+      }
+
+      needed_role_trash(){
+
+        this.role = window.sessionStorage.getItem("role");
+          console.log(this.mail_role);
+          if(this.role != '') {
+             this.router.navigate(["/trash"], { queryParams: { mail_role: this.mail_role} });
+           }
+           else {
+             this.router.navigate(["/login"]);
+           }
+        }
     redirect()
     {
       this.router.navigate(["/mail"]);

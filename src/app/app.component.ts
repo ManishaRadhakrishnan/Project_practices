@@ -24,7 +24,7 @@ constructor(private router: Router) { }
 
   needed_role(mail_role : string){
 this.role = window.sessionStorage.getItem("role");
-  // console.log(mail_role);
+  console.log(mail_role);
   if(this.role != '') {
      this.router.navigate(["/mail"], { queryParams: { mail_role: mail_role} });
    }
