@@ -59,59 +59,7 @@ export class MailComponent implements OnInit {
   );
 }
 
-  // get_sent_mail() {
-  //   // window.location.reload();
-  //   this.user_id = window.sessionStorage.getItem("user_id");
-  //   this.api_service
-  //   .sent_mail(this.user_id)
-  //   .subscribe(
-  //     data => {
-  //       this.mail_count = data.mail_count as number;
-  //       this.status = data.status as number;
-  //       this.sent_mail_content = data.data as string[];
-  //     },
-  //     err => {
-  //       console.log(err);
-  //     }
-  //   );
-  //
-  //   this.inbox_content = $("#right-mail-content").html();
-  //   // $("#right-mail-content").html("test");
-  //   // $("#inbox-mail").removeClass("active");
-  //   // $("#sent-mail").addClass("active");
-  //   $("#right-mail-content").html(this.sent_mail_content);
-  //   $("#inbox-mail").removeClass("active");
-  //   $("#sent-mail").addClass("active");
-  // }
-
-  // get_inbox_mail() {
-  //
-  //   this.user_id = window.sessionStorage.getItem("user_id");
-  //   this.mail = window.sessionStorage.getItem("mail");
-  //   this.api_service
-  //   .inbox_mail(this.user_id,this.mail_role,this.mail)
-  //   .subscribe(
-  //     data => {
-  //       this.information = data.data as string[];
-  //       this.mail_count = data.mail_count as number;
-  //       this.status = data.status as number;
-  //       console.log(this.information);
-  //     },
-  //     err => {
-  //       console.log(err);
-  //     }
-  //   );
-  //
-  //   // for(number in this.information) {
-  //   //     inbox_content += "<tr  data-toggle=\"modal\" data-target=\"information[\"user_id\"]\"><td class=\"small-col\"><input type=\"checkbox\" /></td><td class=\"name\"><a href=\"#\">information[\"name\"]</a></td><td class=\"subject\"><a href=\"#\">information[\"content\"]</a></td><td class=\"time\">information[\"timestamp\"]</td></tr>";
-  //   //
-  //   // }
-  //
-  //   $("#right-mail-content").html(this.inbox_content);
-  //   $("#sent-mail").removeClass("active");
-  //   $("#inbox-mail").addClass("active");
-  // }
-  needed_role(){
+  needed_role() {
 
     this.role = window.sessionStorage.getItem("role");
       console.log(this.mail_role);
@@ -122,36 +70,48 @@ export class MailComponent implements OnInit {
          this.router.navigate(["/login"]);
        }
     }
-  redirect()
-  {
+
+  redirect() {
     this.router.navigate(["/sent"]);
   }
 
-  reload()
-  {
+  reload() {
     this.router.navigate(["/mail"]);
   }
 
-  load()
-  {
+  load() {
     this.router.navigate(["/trash"]);
   }
-  move_mail(mail_id: string){
+
+  move_mail(mail_id: string) {
     this.user_id = window.sessionStorage.getItem("user_id");
-    // this.mail = window.sessionStorage.getItem("mail");
     this.api_service
     .move_mail(mail_id)
     .subscribe(
       data => {
-        this.information = data.data as string[];
-        this.mail_count = data.mail_count as number;
         this.status = data.status as number;
-        // console.log(this.information);
+        if (this.status) {
+          window.location.reload();
+        }
+        else {
+          alert("Unable to delete message. Please try again later");
+        }
       },
       err => {
         console.log(err);
       }
     );
-    window.location.reload();
   }
+
+  needed_role_trash() {
+
+      this.role = window.sessionStorage.getItem("role");
+        console.log(this.mail_role);
+        if(this.role != '') {
+           this.router.navigate(["/trash"], { queryParams: { mail_role: this.mail_role} });
+         }
+         else {
+           this.router.navigate(["/login"]);
+         }
+      }
 }

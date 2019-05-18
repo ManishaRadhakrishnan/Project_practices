@@ -12,52 +12,51 @@ import { map }                from 'rxjs/operators';
   styleUrls: ['./sent.component.css']
 })
 export class SentComponent implements OnInit {
+    constructor(private router: Router,private api_service: ApiService,private route: ActivatedRoute) { }
+    information : string[];
+    mail_count : number;
+    status : number;
+    user_id: string;
+    role: string;
+    inbox_content : string;
+    sent_mail_content : string[];
+    mail : string;
+    mail_role : string;
 
-  constructor(private router: Router,private api_service: ApiService,private route: ActivatedRoute) { }
-  information : string[];
-  mail_count : number;
-  status : number;
-  user_id: string;
-  role: string;
-  inbox_content : string;
-  sent_mail_content : string[];
-  mail : string;
-  mail_role : string;
-  ngOnInit() {
-    this.role = window.sessionStorage.getItem("role");
-    this.mail = window.sessionStorage.getItem("mail");
-    if(this.role == '') {
-      this.router.navigate(["/login"]);
-    }else{
-      this.mail_role = this.route.snapshot.paramMap.get("mail_role");
-      this.route.queryParamMap.subscribe(queryParams => {
-        this.mail_role = queryParams.get("mail_role");
-      });
-      this.user_id = window.sessionStorage.getItem("user_id");
-      this.api_service
-      .sent_mail(this.user_id,this.role,this.mail_role)
-      .subscribe(
-        data => {
-          this.status = data.status as number;
-          if(this.status == 1) {
-            this.information = data.data as string[];
+    ngOnInit() {
+      this.role = window.sessionStorage.getItem("role");
+      this.mail = window.sessionStorage.getItem("mail");
+      if(this.role == '') {
+        this.router.navigate(["/login"]);
+      }else{
+        this.mail_role = this.route.snapshot.paramMap.get("mail_role");
+        this.route.queryParamMap.subscribe(queryParams => {
+          this.mail_role = queryParams.get("mail_role");
+        });
+        this.user_id = window.sessionStorage.getItem("user_id");
+        this.api_service
+        .sent_mail(this.user_id,this.role,this.mail_role)
+        .subscribe(
+          data => {
+            this.status = data.status as number;
+            if(this.status == 1) {
+              this.information = data.data as string[];
+            }
+            this.mail_count = data.mail_count as number;
+          },
+          err => {
+            console.log(err);
           }
-          console.log(this.information);
-          this.mail_count = data.mail_count as number;
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    }
+        );
+      }
 
-      // window.location.reload();
+        // window.location.reload();
 
-    }
-    needed_role(){
+      }
+
+    needed_role() {
 
       this.role = window.sessionStorage.getItem("role");
-        console.log(this.mail_role);
         if(this.role != '') {
            this.router.navigate(["/mail"], { queryParams: { mail_role: this.mail_role} });
          }
@@ -66,10 +65,9 @@ export class SentComponent implements OnInit {
          }
       }
 
-      needed_role_trash(){
+    needed_role_trash() {
 
         this.role = window.sessionStorage.getItem("role");
-          console.log(this.mail_role);
           if(this.role != '') {
              this.router.navigate(["/trash"], { queryParams: { mail_role: this.mail_role} });
            }
@@ -77,39 +75,36 @@ export class SentComponent implements OnInit {
              this.router.navigate(["/login"]);
            }
         }
-    redirect()
-    {
+
+    redirect() {
       this.router.navigate(["/mail"]);
     }
 
-    reload()
-    {
+    reload() {
       this.router.navigate(["/sent"]);
     }
 
-    load()
-    {
+    load() {
       this.router.navigate(["/trash"]);
     }
 
-    move_mail(mail_id: string){
+    move_mail(mail_id: string) {
       this.user_id = window.sessionStorage.getItem("user_id");
-      // this.mail = window.sessionStorage.getItem("mail");
       this.api_service
       .move_mail(mail_id)
       .subscribe(
         data => {
           this.status = data.status as number;
           if (this.status) {
-            // this.information = data.data as string[];
-            // this.mail_count = data.mail_count as number;
+            window.location.reload();
           }
-          // console.log(this.information);
+          else {
+            alert("Unable to delete message. Please try again later");
+          }
         },
         err => {
           console.log(err);
         }
       );
-      window.location.reload();
     }
 }

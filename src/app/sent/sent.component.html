@@ -25,7 +25,7 @@
                                 <ul class="nav nav-pills nav-stacked">
                                   <li class="header">Folders</li>
                                   <li (click)="needed_role()"><a><i class="fa fa-inbox"></i> Inbox <ng-template>mail_count</ng-template></a></li>
-                                  <li class="active" id="sent-mail"><a href="/sent"><i class="fa fa-mail-forward"></i> Sent</a></li>
+                                  <li class="active" id="sent-mail"><a><i class="fa fa-mail-forward"></i> Sent</a></li>
                                   <li (click)="needed_role_trash()"><a><i class="fa fa-trash-o"></i> Trash</a></li>
                                 </ul>
                               </div>
@@ -65,13 +65,6 @@
                               <div class="table-responsive table-hover table-stripped"  id="right-mail-content">
                                 <!-- THE MESSAGES -->
                                 <table class="table table-mailbox" *ngFor="let info of information">
-                                  <!-- <tr class="unread">
-                                    <td class="small-col"><input type="checkbox" /></td>
-                                    <td class="name"><a href="#">John Doe</a></td>
-                                    <td class="subject"><a href="#">Urgent! Please read</a></td>
-                                    <td class="time">12:30 PM</td>
-                                  </tr> -->
-
                                   <tr  data-toggle="modal" data-target="info.mail_id">
                                     <td class="small-col"><input type="checkbox" /></td>
                                     <td class="name"><a href="#">{{info.name}}</a></td>
