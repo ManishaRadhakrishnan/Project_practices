@@ -61,17 +61,10 @@
                                 </form>
                               </div>
                             </div>
-                            <ng-template [ngIf]="status == '1'">
-                              <div class="table-responsive table-hover table-stripped"  id="right-mail-content">
-                                <!-- THE MESSAGES -->
+                            <ng-template [ngIf]="status == 1">
+                              <ng-template [ngIf]="information.length > 0">
+                                <div class="table-responsive table-hover table-stripped"  id="right-mail-content">
                                 <table class="table table-mailbox" *ngFor="let info of information">
-                                  <!-- <tr class="unread">
-                                    <td class="small-col"><input type="checkbox" /></td>
-                                    <td class="name"><a href="#">John Doe</a></td>
-                                    <td class="subject"><a href="#">Urgent! Please read</a></td>
-                                    <td class="time">12:30 PM</td>
-                                  </tr> -->
-
                                   <tr  data-toggle="modal" data-target="info.mail_id">
                                     <td class="small-col"><input type="checkbox" /></td>
                                     <td class="name"><a href="#">{{info.name}}</a></td>
@@ -82,10 +75,23 @@
                                     </div>
                                   </tr>
                                 </table>
-                              </div>
+                                </div>
+                              </ng-template>
+                              <ng-template [ngIf]="information.length == 0">
+                                <div class="table-responsive table-hover table-stripped">
+                                  <table class="table table-mailbox">
+                                    <tr>
+                                      <td class="small-col"></td>
+                                      <td class="name">No mails to show</td>
+                                      <td class="subject"></td>
+                                      <td class="time"></td>
+                                    </tr>
+                                  </table>
+                                </div>
+                              </ng-template>
                             </ng-template>
 
-                            <ng-template [ngIf]="status == '0'">
+                            <ng-template [ngIf]="status == 0">
                               <div class="table-responsive table-hover table-stripped">
                                 <table class="table table-mailbox">
                                   <tr>

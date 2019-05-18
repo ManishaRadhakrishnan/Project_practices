@@ -939,7 +939,7 @@ app.get("/sent_mail/:user_id/:role/:mail_role",function (req, res, next) {
             }
         }
       });
-    }else if (mail_role='cood') {
+    }else if (mail_role =='cood') {
     sql = "SELECT mail.*, dept_heads.head_name as name FROM mail, dept_heads WHERE mail.user_id = ? AND mail.toaddr = dept_heads.mail AND mail.mail_visible='1';";
     data = [user_id];
 
@@ -947,11 +947,7 @@ app.get("/sent_mail/:user_id/:role/:mail_role",function (req, res, next) {
         if (err) {
           res.json({"status" : 0, "data" : "ERROR 970:Something went wrong"});
         } else {
-          if (result.length > 0) {
-            res.json({"status" : 1, "data" : result});
-          }  else {
-              res.json({"status" : 0, "data" : "ERROR 975:Something went wrong"});
-            }
+          res.json({"status" : 1, "data" : result});
         }
       });
     }else {
