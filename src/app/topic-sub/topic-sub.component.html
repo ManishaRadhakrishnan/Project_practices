@@ -8,12 +8,12 @@
     <!-- Main content -->
     <section class="content">
       <div class="mailbox row">
-          <ng-template [ngIf]="status  == '0'">
+          <ng-template [ngIf]="status  == 0">
             <div class="alert alert-danger">
                Topic Submission failed
             </div>
           </ng-template>
-          <ng-template [ngIf]="status == '1' && unique == false">
+          <ng-template [ngIf]="status == 1 && unique == false">
             <div class="alert alert-warning">
                There are {{number_of_similar_projects[0]["count"]}} similar project(s).
                <br/>

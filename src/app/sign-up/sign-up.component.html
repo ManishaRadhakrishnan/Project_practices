@@ -19,22 +19,22 @@
                   </div>
                 </ng-template>
                 <div class="form-group">
-                  <input type="text" name="full_name" #full_name class="form-control" placeholder="Full name"/>
+                  <input type="text" name="full_name" #full_name class="form-control" placeholder="Full name" required/>
                 </div>
                 <div class="form-group">
-                  <input type="email" name="email" #email class="form-control" placeholder="Email address"/>
+                  <input type="email" name="email" #email class="form-control" placeholder="Email address" required/>
                 </div>
                 <!-- <ng-template [ngIf]="role != 'admin'"> -->
                   <div class="form-group">
-                    <input type="password" name="password" #password class="form-control" placeholder="Password"/>
+                    <input type="password" name="password" #password class="form-control" placeholder="Password" required/>
                   </div>
                   <div class="form-group">
-                    <input type="password" name="confirm_password" #confirm_password class="form-control" placeholder="Confirm password"/>
+                    <input type="password" name="confirm_password" #confirm_password class="form-control" placeholder="Confirm password" required/>
                   </div>
                 <!-- </ng-template> -->
                 <div>
                   <ng-template [ngIf]="role == 'admin'">
-                    <select name="user_role" class="form-control" id="user_role" #user_role>
+                    <select name="user_role" class="form-control" id="user_role" #user_role required>
                       <option value="">--Role-- </option>
                       <option value="cood">Coordinator</option>
                       <option value="guide">Guide</option>

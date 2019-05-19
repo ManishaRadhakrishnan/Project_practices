@@ -60,8 +60,8 @@ export class StudProfComponent implements OnInit {
         }
       );
     }
-    else {
-    this.router.navigate(["/login"]);
-  }
+  //   else {
+  //   this.router.navigate(["/login"]);
+  // }
   }
 }

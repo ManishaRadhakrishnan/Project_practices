@@ -6,7 +6,12 @@
         </h1>
     </section>
     <section class="content">
-      <ng-template [ngIf]="status == '1'">
+      <ng-template [ngIf]="status == 0">
+        <div class="alert alert-info text-center">
+          You have not submitted any topics yet. <a href="/submit-topic">Submit now</a>
+        </div>
+      </ng-template>
+      <ng-template [ngIf]="status == 1">
         <div class="mailbox row">
           <!-- <div class="" *ngFor="let info of information">
             <div class="col-md-4"> -->
@@ -27,7 +32,7 @@
                           <th>Status</th>
                         </tr>
                       </thead>
-                      <ng-template [ngIf]="status  == '1'">
+                      <ng-template [ngIf]="status  == 1">
                         <tbody  *ngFor="let info of information">
                           <tr>
                             <td>{{get_upper_case_text(info.proj_title)}}</td>
@@ -88,13 +93,13 @@
                                           </select>
                                         </li>
                                         <li class="list-group-item">
-                                          <button type="button" class="btn btn-primary" name="button" (click)="allocate(info.proj_id, info.user_id, status.value, leader.value)">Update</button>
+                                          <button type="button" class="btn btn-primary" name="button" (click)="allocate(info.proj_id, info.user_id, leader.value, status.value)">Update</button>
                                         </li>
                                      </ul>
                                     <!--<div class="modal-body">
                                       <p>Description : {{info.proj_desc}}</p>
                                       <p>Submitted Date : {{info.proj_sub_date}}</p>
-                                      <p>Domain : {{info.proj_domain}}</p>
+                                      <p>Domain : {{info.domain_name}}</p>
                                       <p>Technology : {{info.proj_technology}}</p>
                                       <p>Status : {{info.proj_status}}</p>
                                     </div>-->
@@ -143,45 +148,47 @@
                               </p>
                               <a href="#" class="card-link" data-toggle="modal"  data-target="#{{info.proj_id}}" (click)="modal_pop(info.proj_id)">More ...</a>
                               <ng-template [ngIf]="info.proj_status != 'reject'">
-                              <div id="{{info.proj_id}}" class="modal fade" role="dialog">
-                                 <div class="modal-dialog">
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">{{get_upper_case_text(info.proj_title)}}</h4>
-                                      </div>
-                                       <ul class="list-group list-group-flush">
-                                         <li class="list-group-item">Serial number : {{serial_number + 1}}</li>
-                                         <ng-template [ngIf]="role != 'stud'">
-                                           <li class="list-group-item">Student : {{info.user_id}}</li>
-                                         </ng-template>
-                                          <li class="list-group-item">Description : {{get_upper_case_text(info.proj_desc)}}</li>
-                                          <li class="list-group-item">Submitted Date : {{info.proj_sub_date}}</li>
-                                          <li class="list-group-item">Domain : {{get_upper_case_text(info.proj_domain)}}</li>
-                                          <li class="list-group-item">Technology : {{get_upper_case_text(info.proj_technology)}}</li>
-                                          <li class="list-group-item">Status : {{get_upper_case_text(info.proj_status)}}</li>
-                                          <li class="list-group-item">Guide : {{get_upper_case_text(info.guide_name)}}</li>
-                                       </ul>
-                                      <!--<div class="modal-body">
-                                        <p>Description : {{info.proj_desc}}</p>
-                                        <p>Submitted Date : {{info.proj_sub_date}}</p>
-                                        <p>Domain : {{info.proj_domain}}</p>
-                                        <p>Technology : {{info.proj_technology}}</p>
-                                        <p>Status : {{info.proj_status}}</p>
-                                      </div>-->
-                                      <div class="modal-footer">
-                                        <ng-template [ngIf]="role  == 'guide'">
-                                        <button (click)="make_suggestion(info.proj_id,info.user_id)" type="submit" class="btn btn-info pull-left">Suggestion</button>
-                                        </ng-template>
-                                        <ng-template [ngIf]="role  == 'stud'">
-                                          <button (click)="edit_topic(info.proj_id)" type="submit" class="btn btn-info pull-left">Edit</button>
-                                        </ng-template>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <div id="{{info.proj_id}}" class="modal fade" role="dialog">
+                                   <div class="modal-dialog">
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                          <h4 class="modal-title">{{get_upper_case_text(info.proj_title)}}</h4>
+                                        </div>
+                                         <ul class="list-group list-group-flush">
+                                           <li class="list-group-item">Serial number : {{serial_number + 1}}</li>
+                                           <ng-template [ngIf]="role != 'stud'">
+                                             <li class="list-group-item">Student : {{info.user_id}}</li>
+                                           </ng-template>
+                                            <li class="list-group-item">Description : {{get_upper_case_text(info.proj_desc)}}</li>
+                                            <li class="list-group-item">Submitted Date : {{info.proj_sub_date}}</li>
+                                            <li class="list-group-item">Domain : {{get_upper_case_text(info.domain_name)}}</li>
+                                            <li class="list-group-item">Technology : {{get_upper_case_text(info.proj_technology)}}</li>
+                                            <li class="list-group-item">Status : {{get_upper_case_text(info.proj_status)}}</li>
+                                            <ng-template [ngIf]="info.guide_name">
+                                              <li class="list-group-item">Guide : {{get_upper_case_text(info.guide_name ? info.guide_name : '' )}}</li>
+                                            </ng-template>
+                                         </ul>
+                                        <!--<div class="modal-body">
+                                          <p>Description : {{info.proj_desc}}</p>
+                                          <p>Submitted Date : {{info.proj_sub_date}}</p>
+                                          <p>Domain : {{info.domain_name}}</p>
+                                          <p>Technology : {{info.proj_technology}}</p>
+                                          <p>Status : {{info.proj_status}}</p>
+                                        </div>-->
+                                        <div class="modal-footer">
+                                          <ng-template [ngIf]="role  == 'guide'">
+                                          <button (click)="make_suggestion(info.proj_id,info.user_id)" type="submit" class="btn btn-info pull-left">Suggestion</button>
+                                          </ng-template>
+                                          <ng-template [ngIf]="role  == 'stud'">
+                                            <button (click)="edit_topic(info.proj_id)" type="submit" class="btn btn-info pull-left">Edit</button>
+                                          </ng-template>
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                              </div>
+                                </div>
                               </ng-template>
                               <div class="card-footer text-muted">
 

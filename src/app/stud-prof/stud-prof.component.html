@@ -5,6 +5,12 @@
         Login attempt failed
       </div>
     </ng-template>
+     <ng-template [ngIf]="status  == 2">
+      <div class="alert text-center alert-success">
+        Your profile is incomplete
+        <strong>Complete it <a href="/edit-profile">here</a></strong>
+      </div>
+    </ng-template>
     <ng-template [ngIf]="status  == 1">
      <section class="content-header no-margin">
        <h1 class="text-center">
@@ -94,7 +100,7 @@
                          </div>
                        </div>
                        <div class="text-center">
-                         <a href="/student-edit-profile" type="submit" class="btn btn-info btn-block btn-wd">Edit Profile</a>
+                         <a href="/edit-profile" type="submit" class="btn btn-info btn-block btn-wd">Edit Profile</a>
                        </div>
                      </form>
                    </div>

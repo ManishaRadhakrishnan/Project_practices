@@ -136,8 +136,11 @@ this.role = window.sessionStorage.getItem("role");
   }
 
   allocate(project_id:string, user_id :string, guide : string, status: string){
+    if (status == 'reject') {
+      guide = '0';
+    }
     this.api_service
-    .allocate(project_id,user_id,guide, status)
+    .allocate(project_id,user_id, guide, status)
      .subscribe(
        data => {
          // this.information = data.data as string[];

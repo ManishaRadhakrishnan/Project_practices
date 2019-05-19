@@ -224,8 +224,11 @@ export class ApiService {
     );
   }
 
-  allocate(project_id: string,user_id: string, guide: string, status: string): Observable<any> {
-    let api_url = encodeURI(this.endpoint_url + "/allocate/" +project_id+"/"+user_id+"/"+guide +"/"+status);
+  allocate(project_id: string, user_id: string, guide: string, status: string): Observable<any> {
+    if (status == "reject") {
+      guide = '0';
+    }
+    let api_url = encodeURI(this.endpoint_url + "/allocate/" + project_id + "/" + user_id + "/"+ guide + "/" + status);
     console.log(api_url);
     return this.http.get(api_url, httpOptions).pipe(
       map(this.extract_data),

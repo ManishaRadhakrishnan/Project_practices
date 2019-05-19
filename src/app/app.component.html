@@ -18,7 +18,7 @@
                 </a>
               </li> -->
               <li>
-                <a href = "/student-profile">
+                <a href = "/view-profile">
                   <i class="fa fa-eye"></i> <span>View Profile</span>
                 </a>
               </li>
@@ -42,7 +42,7 @@
               <ng-template [ngIf]="role == 'stud'">
                 <li>
                   <a href = "/submit-topic">
-                    <i class="fa fa-info"></i> <span>Submit Topic</span>
+                    <i class="fa fa-book"></i> <span>Submit Topic</span>
                   </a>
                 </li>
               </ng-template>
@@ -55,14 +55,14 @@
                 <ng-template [ngIf]="role == 'stud'">
                 <li>
                   <a href = "/suggestion-view">
-                    <i class="fa fa-eye"></i> <span>Suggestion</span>
+                    <i class="fa fa-comments-o"></i> <span>Suggestion</span>
                   </a>
                 </li>
                 </ng-template>
                 <ng-template [ngIf]="role == 'guide'">
                 <li>
                   <a href = "/suggestion">
-                    <i class="fa fa-eye"></i> <span>Suggestion</span>
+                    <i class="fa fa-comments-o"></i> <span>Suggestion</span>
                   </a>
                 </li>
                 </ng-template>
@@ -89,7 +89,7 @@
                 <ng-template [ngIf]="role  != null">
                   <li>
                     <a href = "/logout">
-                      <i class="fa fa-info"></i> <span>Logout</span>
+                      <i class="fa fa-sign-out"></i> <span>Logout</span>
                     </a>
                   </li>
                 </ng-template>

@@ -16,6 +16,7 @@ export class StudEditComponent implements OnInit {
   update_status : number;
   role : string;
   user_id: string;
+  info : string;
 
   constructor(private router: Router,private api_service: ApiService) { }
 
@@ -71,40 +72,47 @@ export class StudEditComponent implements OnInit {
      );
     }
 
-    else {
-      this.router.navigate(["/student_profile"])
-    }
+    // else {
+    //   this.router.navigate(["/view-profile"])
+    // }
  }
 
 
   do_update_student_profile(full_name, email, contact, address, course, department) {
-    if(this.role== "stud"){
-      // console.log(this.role);
-    this.user_id = window.sessionStorage.getItem("user_id");
-    this.api_service
-     .update_student_profile(this.user_id, full_name, email, contact, address, course, department)
-     .subscribe(
-       data => {
-         this.update_status = data.status as number;
-       },
-       err => {
-         console.log(err);
-       }
-     );
-  }else  if(this.role== "cood"){
-    this.user_id = window.sessionStorage.getItem("user_id");
-    this.api_service
-     .update_cood_profile(this.user_id, full_name, email, contact, address, course, department)
-     .subscribe(
-       data => {
-         this.update_status = data.status as number;
-       },
-       err => {
-         console.log(err);
-       }
-     );
-  }else
-  {
+
+    if(full_name.length < 4 || email.length < 4 || contact.length < 15 || address.length == 0 || course.length == 0 || department.length == 0) {
+      this.update_status = 2;
+      this.info = "All fields are mandatory";
+    }
+
+    if(this.role== "stud") {
+          // console.log(this.role);
+        this.user_id = window.sessionStorage.getItem("user_id");
+        this.api_service
+         .update_student_profile(this.user_id, full_name, email, contact, address, course, department)
+         .subscribe(
+           data => {
+             this.update_status = data.status as number;
+           },
+           err => {
+             console.log(err);
+           }
+         );
+      }
+    else  if(this.role== "cood") {
+        this.user_id = window.sessionStorage.getItem("user_id");
+        this.api_service
+         .update_cood_profile(this.user_id, full_name, email, contact, address, course, department)
+         .subscribe(
+           data => {
+             this.update_status = data.status as number;
+           },
+           err => {
+             console.log(err);
+           }
+         );
+      }
+    else {
     this.user_id = window.sessionStorage.getItem("user_id");
     this.api_service
      .update_guide_profile(this.user_id, full_name, email, contact, address, course, department)
@@ -117,6 +125,5 @@ export class StudEditComponent implements OnInit {
        }
      );
   }
-
   }
 }

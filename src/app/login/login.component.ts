@@ -24,7 +24,7 @@ export class LoginComponent{
           this.router.navigate(["/register"]);
         }
         else {
-          this.router.navigate(["/student-profile"]);
+          this.router.navigate(["/view-profile"]);
 
         }
       }
@@ -45,7 +45,7 @@ export class LoginComponent{
            this.user_name = data.user_name as string;
            if(this.status == 1)
            {
-             this.router.navigate(['/student-profile']);
+             this.router.navigate(['/view-profile']);
              window.sessionStorage.setItem("role", this.role);
              window.sessionStorage.setItem("user_id", this.user_id);
              window.sessionStorage.setItem("mail", username);
