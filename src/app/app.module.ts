@@ -23,6 +23,7 @@ import { SuggestionViewComponent } from './suggestion-view/suggestion-view.compo
 import { AdminComponent } from './admin/admin.component';
 import { SentComponent } from './sent/sent.component';
 import { TrashComponent } from './trash/trash.component';
+import { UpdatePasswordComponent } from './update-password/update-password.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { TrashComponent } from './trash/trash.component';
     SuggestionViewComponent,
     AdminComponent,
     SentComponent,
-    TrashComponent
+    TrashComponent,
+    UpdatePasswordComponent
   ],
   imports: [
     BrowserModule,

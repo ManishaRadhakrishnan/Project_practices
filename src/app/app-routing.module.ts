@@ -16,6 +16,7 @@ import {LogoutComponent} from './logout/logout.component';
 import {SuggestionViewComponent} from './suggestion-view/suggestion-view.component';
 import {SentComponent} from './sent/sent.component';
 import {TrashComponent} from './trash/trash.component';
+import {UpdatePasswordComponent} from './update-password/update-password.component';
 const routes: Routes = [
   {path : 'login' , component: LoginComponent},
   {path : 'register' , component: SignUpComponent},
@@ -34,7 +35,8 @@ const routes: Routes = [
   {path : 'logout', component : LogoutComponent},
   {path : 'suggestion-view', component : SuggestionViewComponent},
   {path : 'sent', component : SentComponent },
-  {path : 'trash', component : TrashComponent }
+  {path : 'trash', component : TrashComponent },
+  {path : 'update-password', component : UpdatePasswordComponent }
 ];
 
 @NgModule({
