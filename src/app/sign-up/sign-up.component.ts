@@ -34,9 +34,11 @@ export class SignUpComponent implements OnInit {
      else {
        if (user_role == 'admin') {
          role = $("#user_role").find(":selected").attr("value");
+         alert(role);
        }
        else {
          role = "stud";
+       }
          this.api_service
          .do_register(full_name, email, password, role)
          .subscribe(
@@ -50,7 +52,7 @@ export class SignUpComponent implements OnInit {
              console.log(err);
            }
          );
-       }
+       
      }
    }
    else {

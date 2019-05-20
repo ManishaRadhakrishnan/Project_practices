@@ -1008,10 +1008,10 @@ app.get("/trash_mail/:mail/:user_id/:role/:mail_role",function (req, res, next) 
   //   } else {
   if(mail_role == 'guide')
   {
-    let sql = "SELECT mail.*, internal_guides.guide_name as name FROM mail, internal_guides WHERE (mail.mail_visible = '0' AND mail.user_id = internal_guides.user_id) OR (mail.toaddr=internal_guides.mail AND mail.mail_visible = '0');";
+    let sql = "SELECT mail.*, internal_guides.guide_name as name FROM mail, internal_guides WHERE (mail.mail_visible = '0' AND mail.user_id = internal_guides.user_id AND mail.toaddr =?) OR (mail.toaddr=internal_guides.mail AND mail.mail_visible = '0' AND mail.user_id=?);";
 
-    // let data = [mail,user_id];
-      con.query(sql, function(err, result) {
+    let data = [mail,user_id];
+      con.query(sql, data, function(err, result) {
         if (err) {
           res.json({"status" : 0, "data" : "ERROR 887:Something went wrong"});
         } else {
@@ -1019,10 +1019,10 @@ app.get("/trash_mail/:mail/:user_id/:role/:mail_role",function (req, res, next) 
         }
       });
     }else if (mail_role == 'cood') {
-    sql = "SELECT mail.*, dept_heads.head_name as name FROM mail, dept_heads WHERE (mail.mail_visible = '0' AND mail.user_id = dept_heads.user_id) OR (mail.toaddr=dept_heads.mail AND mail.mail_visible = '0');";
-    // data = [mail,user_id];
+    sql = "SELECT mail.*, dept_heads.head_name as name FROM mail, dept_heads WHERE (mail.mail_visible = '0' AND mail.user_id = dept_heads.user_id AND mail.toaddr =?) OR (mail.toaddr=dept_heads.mail AND mail.mail_visible = '0' AND mail.user_id=?);";
+    data = [mail,user_id];
 
-      con.query(sql, function(err, result) {
+      con.query(sql, data, function(err, result) {
         if (err) {
           res.json({"status" : 0, "data" : "ERROR 903: Something went wrong"});
         } else {
@@ -1030,9 +1030,9 @@ app.get("/trash_mail/:mail/:user_id/:role/:mail_role",function (req, res, next) 
         }
       });
     }else {
-    sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE (mail.mail_visible = '0' AND mail.user_id = student.user_id) OR (mail.toaddr=student.mail AND mail.mail_visible = '0');";
-    // data = [mail,user_id];
-      con.query(sql, function(err, result) {
+    sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE (mail.mail_visible = '0' AND mail.user_id = student.user_id AND mail.toaddr =?) OR (mail.toaddr=student.mail AND mail.mail_visible = '0'  AND mail.user_id=?);";
+    data = [mail,user_id];
+      con.query(sql, data, function(err, result) {
         if (err) {
           res.json({"status" : 0, "data" : "ERROR 918:Something went wrong"});
         } else {

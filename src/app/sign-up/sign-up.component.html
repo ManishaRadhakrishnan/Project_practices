@@ -24,14 +24,14 @@
                 <div class="form-group">
                   <input type="email" name="email" #email class="form-control" placeholder="Email address"/>
                 </div>
-                <ng-template [ngIf]="role != 'admin'">
+                <!-- <ng-template [ngIf]="role != 'admin'"> -->
                   <div class="form-group">
                     <input type="password" name="password" #password class="form-control" placeholder="Password"/>
                   </div>
                   <div class="form-group">
                     <input type="password" name="confirm_password" #confirm_password class="form-control" placeholder="Confirm password"/>
                   </div>
-                </ng-template>
+                <!-- </ng-template> -->
                 <div>
                   <ng-template [ngIf]="role == 'admin'">
                     <select name="user_role" class="form-control" id="user_role" #user_role>
@@ -51,7 +51,7 @@
                   <button (click)="do_request(full_name.value, email.value, password.value, confirm_password.value, 'stud')" class="btn bg-olive btn-block">Sign me up</button>
                   </ng-template>
                   <ng-template [ngIf]="role == 'admin'">
-                    <button (click)="do_request(full_name.value, email.value, 'P@ssw0rd', 'P@ssw0rd', 'admin')" class="btn bg-olive btn-block">Register</button>
+                    <button (click)="do_request(full_name.value, email.value, password.value, confirm_password.value, 'admin')" class="btn bg-olive btn-block">Register</button>
                   </ng-template>
                 </div>
               </div>
