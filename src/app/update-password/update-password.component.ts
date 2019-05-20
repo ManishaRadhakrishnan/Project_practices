@@ -35,6 +35,10 @@ export class UpdatePasswordComponent implements OnInit {
          data => {
            this.status = data.status as number;
            this.information = data.message as string;
+           if(this.status == 1)
+             {
+                this.router.navigate(['/student-profile']);
+             }
          },
          err => {
            console.log(err);

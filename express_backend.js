@@ -220,6 +220,7 @@ app.get('/project_details/:user_id', function (req, res, next) {
           if (err){
             res.json({"status" : 0, "data" : "Something went wrong"});
           } else {
+            // console.log(result);
             if(result.length > 0){
               res.json({"status" : 1, "data" : result});
             }
@@ -269,6 +270,19 @@ app.get('/all_guide_details', function (req, res, next) {
   });
 })
 
+app.get('/update_password/:user_id/:password', function (req, res, next){
+  let user_id = req.params.user_id;
+  let password = req.params.password;
+  let sql = "UPDATE user SET password = ? WHERE user_id =?;";
+  data=[password,user_id];
+  con.query(sql, data, function(err, result, fields) {
+    if (err){
+      res.json({"status" : 0, "data" : "Something went wrong"});
+    } else{
+        res.json({"status" : 1, "data" : result});
+      }
+  });
+})
 app.get('/project_details_update/:user_id/:project_title/:project_domains/:project_technologies/:project_description', function (req, res, next) {
   let user_id = req.params.user_id;
   let project_title = req.params.project_title;
@@ -418,6 +432,7 @@ app.get('/login/:username/:password', function (req, res, next) {
     let data = [username, password];
 
     con.query(sql, data, function(err, result, fields) {
+      console.log(sql);
     if (err){
       res.json({"status" : 0, "message" : "Something went wrong"});
     } else {
@@ -435,21 +450,6 @@ app.get('/login/:username/:password', function (req, res, next) {
       } else {
         res.json({"status" : 0, "data" : "No data retrieved"});
       }
-    }
-  });
-});
-
-app.get('/update_password/:user_id/:password', function (req, res, next) {
-  let user_id = req.params.user_id;
-  let password = req.params.password;
-    var sql = "UPDATE user SET password = ? WHERE user_id = ?";
-    let data = [password, user_id];
-
-    con.query(sql, data, function(err, result, fields) {
-    if (err){
-      res.json({"status" : 0, "message" : "Password not updated. Please try again later"});
-    } else {
-      res.json({"status" : 1, "message" : "Password updated succesfully"});
     }
   });
 });
@@ -580,7 +580,7 @@ app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_te
               domain_id_for_project_table.push(result["insertId"]);
 
             sql = "SELECT count(*) as count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND '%" + project_technologies + "%'";
-
+            console.log(sql);
             con.query(sql, function(err, result, fields) {
               if (err){
                 console.log(err);
@@ -650,7 +650,7 @@ app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_te
         // console.log(count + " : " + project_domains_list.length);
         if(count == project_domains_list.length) {
           sql = "SELECT count(*) as count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND proj_technology LIKE '%" + project_technologies + "%'";
-
+          console.log(sql);
           con.query(sql, function(err, result, fields) {
             if (err){
               console.log(err);
@@ -686,7 +686,6 @@ app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_te
     }
   });
   }
-
 });
 
 app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",function (req, res, next) {
@@ -749,55 +748,77 @@ app.get("/insert_user/:fullname/:email/:password/:role",function (req, res, next
   let date_time = current_date.getFullYear() + "-" + next_year;
   let month = current_date.getMonth()+1;
   // console.log(month);
-  if(month >= 5 && month <=12) {
+  if(month >= 5 && month <=12){
+    // var passwordHash = require('password-hash');
+    // var hashedPassword = passwordHash.generate(password);
+    // const bcrypt = require('bcrypt');
+    // let hash = bcrypt.hashSync(password,10);
+    // console.log(hash);
     let sql = "INSERT INTO user(user_name, password, role) VALUES(?, ?, ?)";
     let data = [email, password, role];
-    con.query(sql, data, function(err, result) {
-      if (err) {
+    con.query(sql, data, function(err, result)
+    {
+      if (err)
+      {
+      console.log(err);
         res.json({"status" : 0, "data" : "Something went wrong"});
-      }
-      else {
-        if(role == 'stud') {
+      } else
+      {
+        if(role == 'stud')
+        {
           sql = "INSERT INTO student(user_id, stud_name, mail, curr_acad_yr) VALUES (?, ?, ?, ?)";
           data = [result.insertId.toString(), full_name, email, date_time];
-          con.query(sql, data, function(err, result) {
-            if (err) {
-              res.json({"status" : 0, "data" : "Unable to register. Please try again later"});
+          con.query(sql, data, function(err, result)
+          {
+            if (err)
+            {
+              res.json({"status" : 0, "data" : "Error : 762 - Something went wrong"});
             }
-            else {
-              res.json({"status" : 1, "data" : "User registration successful"});
+            else
+            {
+              res.json({"status" : 1, "data" : "User inserted sccessfully"});
             }
           });
         }
-        else if (role == 'cood') {
+        else if(role == 'cood')
+        {
           sql = "INSERT INTO dept_heads(user_id, head_name, mail) VALUES (?, ?, ?)";
           data = [result.insertId.toString(), full_name, email];
-          con.query(sql, data, function(err, result) {
-            if (err) {
-              res.json({"status" : 0, "data" : "Unable to register. Please try again later"});
+          con.query(sql, data, function(err, result)
+          {
+            if (err)
+            {
+              res.json({"status" : 0, "data" : "Something went wrong"});
             }
-            else {
-              res.json({"status" : 1, "data" : "User registration successful"});
+            else
+            {
+              res.json({"status" : 1, "data" : "User inserted sccessfully"});
             }
           });
         }
-        else {
+        else
+        {
           sql = "INSERT INTO internal_guides(user_id, guide_name, mail) VALUES (?, ?, ?)";
           data = [result.insertId.toString(), full_name, email];
-          con.query(sql, data, function(err, result) {
-            if (err) {
-              res.json({"status" : 0, "data" : "Unable to register. Please try again later"});
+          con.query(sql, data, function(err, result)
+          {
+            if (err)
+            {
+              console.log(err);
+              res.json({"status" : 0, "data" : "Something went wrong"});
             }
-            else {
-              res.json({"status" : 1, "data" : "User registration successful"});
+            else
+            {
+              res.json({"status" : 1, "data" : "User inserted sccessfully"});
             }
           });
         }
       }
-    });
+    }
+  );
   }
-  else {
-      res.json({"status" : 0, "message" : "Can't register as given time expired"});
+  else{
+      res.json({"status" : 0, "data" : "Can't register as given time expired"});
   }
 });
 
@@ -851,7 +872,6 @@ app.get("/select_suggestion/:user_id",function (req, res, next) {
   // let proj_id = req.params.proj_id;
   // let stud_id = req.params.stud_id;
   var sql = "SELECT suggestions.proj_id,suggestions.suggestion, suggestions.date, project.proj_title from suggestions, student, project WHERE suggestions.proj_id = project.proj_id and project.proj_status = 'approved' AND suggestions.stud_user_id = student.user_id and student.user_id = ? ORDER BY date DESC";
-
   let data = [user_id];
   con.query(sql, data, function(err, result) {
     if (err) {
@@ -869,7 +889,10 @@ app.get("/inbox_mail/:user_id/:mail_role/:mail",function (req, res, next) {
     let mail_role = req.params.mail_role;
     let mail = req.params.mail;
 
-    if(mail_role == 'guide') {
+    // let to_user_email_id = req.params.mail;
+    // let result_dictionary = [];
+    if(mail_role == 'guide')
+    {
       let sql = "SELECT mail.*, internal_guides.guide_name as name FROM mail, internal_guides WHERE mail.toaddr = ? AND mail.user_id=internal_guides.user_id AND mail.mail_visible = '1';";
       let data = [mail];
         con.query(sql, data, function(err, result) {
@@ -880,33 +903,31 @@ app.get("/inbox_mail/:user_id/:mail_role/:mail",function (req, res, next) {
             res.json({"status" : 1, "data" : result});
           }
         });
+      }else if (mail_role == 'cood') {
+      sql = "SELECT mail.*, dept_heads.head_name as name FROM mail, dept_heads WHERE mail.toaddr = ? AND mail.user_id=dept_heads.user_id AND  mail.mail_visible='1';";
+      data = [mail];
+
+        con.query(sql, data, function(err, result) {
+          if (err) {
+            console.log(err);
+            // res.json({"status" : 0, "data" : "ERROR 903: Something went wrong"});
+          } else {
+            res.json({"status" : 1, "data" : result});
+
+          }
+        });
+      }else {
+      sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.toaddr = ? AND mail.user_id=student.user_id AND  mail.mail_visible='1';";
+      data = [mail];
+
+        con.query(sql, data, function(err, result) {
+          if (err) {
+            res.json({"status" : 0, "data" : "ERROR 918:Something went wrong"});
+          } else {
+            res.json({"status" : 1, "data" : result});
+          }
+        });
       }
-    else if (mail_role == 'cood') {
-    sql = "SELECT mail.*, dept_heads.head_name as name FROM mail, dept_heads WHERE mail.toaddr = ? AND mail.user_id=dept_heads.user_id AND  mail.mail_visible='1';";
-    data = [mail];
-
-      con.query(sql, data, function(err, result) {
-        if (err) {
-          console.log(err);
-          // res.json({"status" : 0, "data" : "ERROR 903: Something went wrong"});
-        } else {
-          res.json({"status" : 1, "data" : result});
-
-        }
-      });
-      }
-    else {
-    sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.toaddr = ? AND mail.user_id=student.user_id AND  mail.mail_visible='1';";
-    data = [mail];
-
-      con.query(sql, data, function(err, result) {
-        if (err) {
-          res.json({"status" : 0, "data" : "ERROR 918:Something went wrong"});
-        } else {
-          res.json({"status" : 1, "data" : result});
-        }
-      });
-    }
     });
 
 app.get("/sent_mail/:user_id/:role/:mail_role",function (req, res, next) {
@@ -914,7 +935,7 @@ app.get("/sent_mail/:user_id/:role/:mail_role",function (req, res, next) {
   let role = req.params.role;
   let mail_role = req.params.mail_role;
 
-  if(mail_role == 'guide') {
+  if(mail_role == 'guide'){
 
     let sql = "SELECT mail.*, internal_guides.guide_name as name FROM mail, internal_guides WHERE mail.user_id = ? AND mail.toaddr = internal_guides.mail AND mail.mail_visible='1';";
     let data = [user_id];
@@ -926,8 +947,7 @@ app.get("/sent_mail/:user_id/:role/:mail_role",function (req, res, next) {
           res.json({"status" : 1, "data" : result});
         }
       });
-    }
-  else if (mail_role =='cood') {
+    }else if (mail_role =='cood') {
     sql = "SELECT mail.*, dept_heads.head_name as name FROM mail, dept_heads WHERE mail.user_id = ? AND mail.toaddr = dept_heads.mail AND mail.mail_visible='1';";
     data = [user_id];
 
@@ -938,22 +958,21 @@ app.get("/sent_mail/:user_id/:role/:mail_role",function (req, res, next) {
           res.json({"status" : 1, "data" : result});
         }
       });
+    }else {
+    sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND mail.toaddr = student.mail AND mail.mail_visible='1';";
+    data = [user_id];
+      con.query(sql, data, function(err, result) {
+        if (err) {
+          res.json({"status" : 0, "data" : "ERROR 985:Something went wrong"});
+        } else {
+          if (result.length > 0) {
+            res.json({"status" : 1, "data" : result});
+          }  else {
+              res.json({"status" : 0, "data" : "ERROR 990:Something went wrong"});
+            }
+        }
+      });
     }
-  else {
-  sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.user_id = ? AND mail.toaddr = student.mail AND mail.mail_visible='1';";
-  data = [user_id];
-    con.query(sql, data, function(err, result) {
-      if (err) {
-        res.json({"status" : 0, "data" : "ERROR 985:Something went wrong"});
-      } else {
-        if (result.length > 0) {
-          res.json({"status" : 1, "data" : result});
-        }  else {
-            res.json({"status" : 0, "data" : "ERROR 990:Something went wrong"});
-          }
-      }
-    });
-  }
 });
 
 app.get("/move_mail/:mail_id",function (req, res, next) {
@@ -980,43 +999,54 @@ app.get("/trash_mail/:mail/:user_id/:role/:mail_role",function (req, res, next) 
   let user_id = req.params.user_id;
   let role = req.params.role;
   let mail_role = req.params.mail_role;
-  let data = [];
-  if(mail_role == 'guide') {
-    let sql = "SELECT mail.*, internal_guides.guide_name as name FROM mail, internal_guides WHERE mail.toaddr = internal_guides.mail AND mail.mail_visible ='0' AND (mail.user_id = ? OR mail.toaddr = ?);";
-    data = [user_id, mail];
-    con.query(sql, function(err, result) {
-      if (err) {
-        res.json({"status" : 0, "data" : "ERROR 887:Something went wrong"});
-      } else {
-        res.json({"status" : 1, "data" : result});
-      }
-    });
-  }
-  else if (mail_role == 'cood') {
-    sql = "SELECT mail.*, dept_heads.head_name as name FROM mail, dept_heads WHERE mail.toaddr = dept_heads.mail AND mail.mail_visible ='0' AND (mail.user_id = ? OR mail.toaddr = ?);";
-    data = [user_id, mail];
+  // let sql = "SELECT role,id FROM mail WHERE user_id = ?";
+  // let data = [user_id];
+  // con.query(sql, data, function(err, result) {
+  //   if (err) {
+  //     console.log(err);
+  //     res.json({"status" : 0, "data" : "ERROR 899: Something went wrong"});
+  //   } else {
+  if(mail_role == 'guide')
+  {
+    let sql = "SELECT mail.*, internal_guides.guide_name as name FROM mail, internal_guides WHERE (mail.mail_visible = '0' AND mail.user_id = internal_guides.user_id) OR (mail.toaddr=internal_guides.mail AND mail.mail_visible = '0');";
 
-    con.query(sql, function(err, result) {
+    // let data = [mail,user_id];
+      con.query(sql, function(err, result) {
+        if (err) {
+          res.json({"status" : 0, "data" : "ERROR 887:Something went wrong"});
+        } else {
+          res.json({"status" : 1, "data" : result});
+        }
+      });
+    }else if (mail_role == 'cood') {
+    sql = "SELECT mail.*, dept_heads.head_name as name FROM mail, dept_heads WHERE (mail.mail_visible = '0' AND mail.user_id = dept_heads.user_id) OR (mail.toaddr=dept_heads.mail AND mail.mail_visible = '0');";
+    // data = [mail,user_id];
+
+      con.query(sql, function(err, result) {
         if (err) {
           res.json({"status" : 0, "data" : "ERROR 903: Something went wrong"});
         } else {
           res.json({"status" : 1, "data" : result});
         }
       });
+    }else {
+    sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE (mail.mail_visible = '0' AND mail.user_id = student.user_id) OR (mail.toaddr=student.mail AND mail.mail_visible = '0');";
+    // data = [mail,user_id];
+      con.query(sql, function(err, result) {
+        if (err) {
+          res.json({"status" : 0, "data" : "ERROR 918:Something went wrong"});
+        } else {
+          res.json({"status" : 1, "data" : result});
+        }
+      });
     }
-  else {
-  sql = "SELECT mail.*, student.stud_name as name FROM mail, student WHERE mail.toaddr = student.mail AND mail.mail_visible ='0' AND (mail.user_id = ? OR mail.toaddr = ?);";
-  data = [user_id, mail];
-  con.query(sql, data, function(err, result) {
-      if (err) {
-        res.json({"status" : 0, "data" : "ERROR 918:Something went wrong"});
-      } else {
-        res.json({"status" : 1, "data" : result});
-      }
-    });
-  }
-});
 
+
+    // const r = Object.assign({}, result_dictionary[0], result_dictionary[1]);
+    // res.json({"status" : 0, "data" : result_dictionary});
+    // console.log(result_dictionary);
+
+});
 app.get("/single_project_details/:user_id",function (req, res, next) {
   let mail = req.params.mail;
   let user_id = req.params.user_id;
