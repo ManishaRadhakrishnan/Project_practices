@@ -1,0 +1,102 @@
+1.....Student Project Performance Management System for Effective Final Year and Dissertation Projects Supervision
+
+this paper proposes features of a new integrated and collaborative online supervision system for final year and dissertation projects. The system is currently under development and it aims to ease the supervision process, federate the tasks of all involved actors and enhance the student learning experience. Collected feedback from students and academic staff shows that such a system can help to maintain an effective and efficient supervision relationship between all parties.
+system includes the following elements.....
+
+1.1 Project database
+	This database contains all dissertation projects proposed by all teaching staff and students for a given department of discipline. Project proposals are uploaded to the system using an online form. The specification of each project includes an abstract, a list of keywords, a list of required resources (hardware and software), and preferable skills.
+
+1.2 Supervisory Team Database
+	This database contains the lists of tutors or supervisors. Supervisors are linked to the list of projects that they have suggested and they are classified according to their fields of expertise. These fields of expertise match the keywords used in the project database. Within our system, supervisors can be grouped into small groups with respect to the different categories used to classify projects.
+
+1.3 Performance Management Plan
+	Once a dissertation project is identified and the supervisory team is agreed and allocated, the student starts tackling their project. For this purpose, they
+will need to agree a schedule and a work plan with their supervisor. Therefore, our system contains a performance management plan that allows defining milestones, tasks and goals and their corresponding timeline and expected deliverables.
+
+1.4 Trainings and workshop database
+	During a dissertation project, a student needs to consolidate and learn new skills. To address this issue, we added to our system a database for academic and professional workshops and trainings. As part of the performance management plan the student needs to agree with their supervisor which type of trainings or skills they require to attend to better achieve their project. This will be documented as a specific task within the performance management plan.Automatic notification will be sent to the workshop or training organiser. For example, a student may be advised to seek help from the student academic support adviser to enhance time management, academic writing and oral presentations skills. Other technical skills may be provided by external academic institutions or department.
+
+1.5 Assessment Forms
+	Depending on the assessment scheme and the nature of the dissertation project, our supervision system allows the supervisor and the examiners to complete and print electronic assessment forms. These forms can be accessed by the student at the end of the supervision process so that he will have a detailed feedback about his performance.
+
+1.6 Communication interfaces
+	The supervision system provides support for communication and group work. Example of features that are still under development include videoconferencing  apability, integrated chat and whiteboard; online discussion, file management system and mail system.
+
+1.7 pros & cons
+	The system needs to be fully implemented and then widely tested to confirm whether it helps to improve the quality of supervision and enhance student learning, feedback and assessment experiences. Future work will focus on these points and collect measurable evidences and metrics to evaluate the performance of this system.
+
+
+
+
+
+
+
+2. Proposal Submission System - A Content Management System Approach for Proposal Submission 
+
+		
+
+		Figure 3 “Development Timeline”
+
+2.1 TOOLS AND TECHNOLOGY FOR DEVELOPMENT
+
+	Microsoft's .NET framework and Java's J2EE [4]. Among the choices, AMP package stands out as
+a popular option of free open-source system available for development.
+
+AMP package consist of Apache server, MySQL database with PHP, Perl or Python as server side
+scripting language. Developer had chosen AMP for development of Proposal Submission System
+due to his experience with development with AMP package with the ease of installation with
+XAMPP. XAMPP is a full featured AMPP ( Apache, MySQL, PHP, Perl) package that is one of
+the few non-commercial AMPP middleware stacks available cross platforms. It's packages
+includes not only AMPP, but also database tools (phpMyAdmin, SQLite), PHP packages (PEAR)
+and other development tools. With its features, it is possible for XAMPP to be use for personal
+home page to production site for developments [5].
+
+JavaScript mentioned to be the most popular scripting language on the internet in w3schools's
+JavaScript section, which works with all major browsers includes Internet Explorer, Firefox,
+Chrome, Opera and Safari [6]. AJAX (Asynchronous JavaScript and XML) introduced the ability
+to compose asynchronous background requests to the web, from the client machine. This allow
+applications to provide rich client-side interfaces, and allows browsers to communicate with the
+web without forcing page refreshes; both fundamental features of Rich Internet Application.
+
+2.2 PROS & CONS 
+
+
+3.Web-based Project Management System
+
+the goal of work is to
+create a groupware system available entirely through web
+browser as a set of dynamic web pages. Web browser
+applications have advantage in this kind of systems, because
+client's operating system, hardware configuration, physical
+location etc. is usually not an issue in such case.
+
+
+
+
+4.PROGRESS MONITORING SYSTEM FOR
+STUDENT FINAL YEAR PROJECTThe Progress Monitoring System for Student Final Year Project (PSM) is computer
+software which helps student contacts of University Malaysia Pahang (UMP) under
+Faculty System Computer and Software Engineering (FSKKP) gain better control of
+their project planning and implementation through keeping student connected with
+supervisor, regardless of where student are located. Supervisor in FSKKP can monitor
+every detail, simply, and easily. However the system is about managing projects from
+remote destinations. So that, this system helps student to complete projects, keep within
+budget, stay on track, and collaborate with supervisor.
+
+Therefore, the Progress Monitoring system for Student FYP allows its student to easily
+update project problems as they arise. Those update project problem, actually they are
+will get the feedback from supervisor. So, Supervisor will evaluate the progress and
+assign marks to student based on rubric. This system also can helps student streamline
+the project management process, helping to keep student on track and providing user
+with reports and real-time data so that their project success is assured.
+The software will be used to develop this system is Macromedia Dreamweaver. The
+language used is PHP. For the database we will use MySQL, Apache and web server
+XAMPP. 
+
+In  this system,students can update their logbook at any time via a paperless,
+environmentally-friendly method as well as submit their logbook and final report
+through online. Supervisors can access the student's logbook at any time, therefore they
+can evaluate and grade the student at their own page. Student can submit their report
+and get feedback from their supervisor. Supervisor will assign marks to students on
+their progress and performance during presentation. After that, student able to check
+their result. The result will generate automatically.

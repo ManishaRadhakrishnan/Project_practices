@@ -10,17 +10,24 @@
       <div class="mailbox row">
           <ng-template [ngIf]="status  == 0">
             <div class="alert alert-danger">
-               Topic Submission failed
+               {{message}}
             </div>
           </ng-template>
-          <ng-template [ngIf]="status == 1 && unique == false">
+
+          <ng-template [ngIf]="status  == 1">
+            <div class="alert alert-success">
+               {{message}}
+            </div>
+          </ng-template>
+
+          <!-- <ng-template [ngIf]="status == 1 && unique == false">
             <div class="alert alert-warning">
                There are {{number_of_similar_projects[0]["count"]}} similar project(s).
                <br/>
                <li id="submit-anyway" (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, true)">Submit anyway</li>&nbsp;
                <a href="/submit-topic">Reset form content</a>?
             </div>
-          </ng-template>
+          </ng-template> -->
           <ng-template [ngIf]="status == '1' && unique == true">
             <div class="alert alert-success">
                Successful submission
@@ -57,13 +64,23 @@
                                 <small id="technology_help" class="form-text text-muted">Technologies that would be used in your project. Please separate multiple technologies names with a comma</small>
                               </div>
                               <div class="form-group">
-                                <textarea name="topic_description" id="topic_description" class="form-control" placeholder="Description of the idea" rows="10" value="{{information ? information[0]['proj_desc'] : ''}}" #project_description></textarea>
+                                <!-- <textarea name="topic_description" id="topic_description" class="form-control" placeholder="Description of the idea" rows="10" value="{{information ? information[0]['proj_desc'] : ''}}" #project_description></textarea> -->
+                                <input type="file" (change)="onChange($event, project_description)" />
+                                <small id="technology_help" class="form-text text-muted">Select a text (.txt) file of your project abstract</small>
+
+                                <!-- <div class="card-body"></div> -->
+                                <table>
+                                  <tr id="desc_row" border="1">
+                                    <td #project_description id="project_description" (click)="editable_desc()"></td>
+                                  </tr>
+                                </table>
+                                <!-- <markdown class="variable-binding" [data]="markdown" #project_description></markdown> -->
                               </div>
                       </div>
                       <!--</div>-->
                             <div class="modal-footer clearfix">
                               <ng-template [ngIf]="information == null">
-                                <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.value, false)" class="btn btn-info">Submit</button>
+                                <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.textContent, false)" class="btn btn-info">Submit</button>
                               </ng-template>
 
                               <ng-template [ngIf]="information">

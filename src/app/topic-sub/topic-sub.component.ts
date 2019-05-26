@@ -4,6 +4,10 @@ import { RouterModule, Routes, Router } from '@angular/router';
 import { Observable }         from 'rxjs';
 import { ActivatedRoute }     from '@angular/router';
 import { map }                from 'rxjs/operators';
+import * as $AB from 'jquery';
+// import {  FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
+const UploadURL = 'http://localhost:3000/api/upload';
+var reader = new FileReader();
 
 @Component({
   selector: 'app-topic-sub',
@@ -13,7 +17,6 @@ import { map }                from 'rxjs/operators';
 export class TopicSubComponent implements OnInit {
   count : number;
   error: string;
-  // api: Api;
   user_id : string;
   role: string;
   status : number;
@@ -22,6 +25,9 @@ export class TopicSubComponent implements OnInit {
   unique:boolean;
   project_id : string;
   number_of_similar_projects : string[];
+  message : string;
+
+  // uploader: FileUploader = new FileUploader({url: UploadURL, itemAlias: 'sdyuihfkjn'});
 
   constructor(private router: Router, private route: ActivatedRoute, private api_service: ApiService) { }
 
@@ -59,6 +65,14 @@ export class TopicSubComponent implements OnInit {
            }
       }
     }
+
+    // this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+    // this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+    //      console.log('FileUpload:uploaded:', item, status, response);
+    //      if(status == true){
+    //       alert('File uploaded successfully');
+    //      }
+    //  };
   }
 
   do_submit_topic(project_title: string, project_domains: string, project_technologies: string, project_description: string, _continue: string) {
@@ -69,6 +83,7 @@ export class TopicSubComponent implements OnInit {
        data => {
          console.log(data);
          this.status = data.status as number;
+         this.message = data.message as string;
          this.number_of_similar_projects = data.number_of_similar_projects as string[];
          this.unique = data.unique;
 
@@ -112,4 +127,20 @@ export class TopicSubComponent implements OnInit {
      }
 }
 
+  public onChange(event, output) {
+    let file = event.target.files[0];
+    // let x = new ArrayBuffer(2048);
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+    // markdownfileReader.result
+    // x = fileReader.result
+    output.innerHTML = fileReader.result
+    }
+    fileReader.readAsText(file);
+  }
+
+  editable_desc() {
+    $("#desc_row").attr("contenteditable", "true");
+    $("#desc_row").attr("border", "1");
+  }
 }

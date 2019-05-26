@@ -2,6 +2,7 @@ var express = require('express')
 var cors = require('cors')
 var url = require('url');
 var mysql = require('mysql');
+const util = require('util');
 
 var app = express();
 app.use(cors());
@@ -136,13 +137,14 @@ app.get('/view_student_profile/:user_id', function (req, res, next) {
 
   con.query(sql, data, function(err, result, fields) {
     if (err){
-      res.json({"status" : 0, "data" : "Something went wrong"});
-    } else {
+      res.json({"status" : 0, "message" : "Something went wrong", "error_message" : err});
+    }
+    else {
       if(result.length == 1) {
         res.json({"status" : 1, "data" : result});
       }
       else {
-        res.json({"status" : 2, "data" : "No data retrieved"});
+        res.json({"status" : 2, "error_message" : "No data retrieved", "message" : "No data retrieved"});
       }
     }
   });
@@ -433,22 +435,24 @@ app.get('/login/:username/:password', function (req, res, next) {
 
     con.query(sql, data, function(err, result, fields) {
 
-    if (err){
-      res.json({"status" : 0, "message" : "Something went wrong"});
-    } else {
-      if(result.length == 1){
+    if (err) {
+      res.json({"status" : 0, "error_message" : err, "message" : "Unable to login. Something went wrong"});
+    }
+    else {
+      if(result.length == 1) {
         let active = result[0].active;
         if(active == "1") {
           let user_id = result[0].user_id;
           let role = result[0].role;
           let username = result[0].user_name;
-          res.json({"status" : 1, "user_id" : user_id, "role" : role, "user_name" : username});
+          res.json({"status" : 1, "user_id" : user_id, "role" : role, "user_name" : username, "message" : "Redirecting ..."});
         }
         else {
-          res.json({"status" : 0, "message" : "User is not currenty active"});
+          res.json({"status" : 0, "message" : "Email account is not active"});
         }
-      } else {
-        res.json({"status" : 0, "data" : "No data retrieved"});
+      }
+      else {
+        res.json({"status" : 0, "message" : "Invalid username/password", "error_message" : "No records retrieved"});
       }
     }
   });
@@ -543,6 +547,151 @@ app.get("/update_guide_profile/:user_id/:full_name/:email/:contact/:address/:cou
   });
 });
 
+// app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_technologies/:project_description/:_continue",function (req, res, next) {
+//
+//   let user_id = req.params.user_id;
+//   let project_title = req.params.project_title;
+//   let project_domains = req.params.project_domains;
+//   let project_technologies = req.params.project_technologies;
+//   let project_description = req.params.project_description;
+//   let _continue = req.params._continue;
+//   let project_domains_list = project_domains.split(",");
+//
+//   let sql = "";
+//   let data = [];
+//   let domain_id_for_project_table = [];
+//   let count = 0;
+//   let count_again = 0;
+//   for(number=0;number < project_domains_list.length;number ++) {
+//     sql = "SELECT * FROM domain WHERE domain_name = ?";
+//     let domain = project_domains_list[number].trim();
+//     data = [domain];
+//     con.query(sql, data, function(err, result) {
+//     if (err)
+//     {
+//       res.json({"status" : 0, "data" : "Error 505 : Something went wrong"});
+//     } else
+//     {
+//       if(result.length == 0) {
+//         sql = "INSERT INTO domain(domain_name) VALUES (?)";
+//         data = [domain];
+//
+//         con.query(sql, data, function(err, result, fields) {
+//           if (err){
+//             res.json({"status" : 0, "data" : "Error 514 : Something went wrong"});
+//           } else {
+//             if(_continue == "false") {
+//               domain_id_for_project_table.push(result["insertId"]);
+//
+//             sql = "SELECT count(*) as count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND '%" + project_technologies + "%'";
+//
+//             con.query(sql, function(err, result, fields) {
+//               if (err){
+//
+//                 res.json({"status" : 0, "data" : "Something went wrong"});
+//               } else {
+//                   if(result[0]["count"] == 0) {
+//                     count_again += 1
+//                     if(count_again == project_domains_list.length) {
+//                       sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
+//
+//                       let current_date = new Date();
+//                       let date_time = current_date.getDate() + "/"
+//                       + (current_date.getMonth() + 1)  + "/"
+//                       + current_date.getFullYear() + " @ "
+//                       + current_date.getHours() + ":"
+//                       + current_date.getMinutes();
+//
+//                       let data = [user_id, project_title, project_description.trim(), date_time, domain_id_for_project_table.join(","), project_technologies];
+//
+//                       con.query(sql, data, function(err, result, fields) {
+//                         if (err){
+//                           res.json({"status" : 0, "data" : "Something went wrong"});
+//                         } else {
+//                           res.json({"status" : 1, "data" : "Domain inserted. Project added", "unique" : true});
+//                         }
+//                       });
+//
+//                     }
+//                   }
+//                   else {
+//                     res.json({"status" : 1, "data" : "Domain inserted. Project not added", "unique" : false, "number_of_similar_projects" : result});
+//                   }
+//               }
+//             });
+//           }
+//           else {
+//             if(_continue == "false") {
+//               count_again += 1
+//               if(count_again == project_domains_list.length) {
+//                 sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
+//
+//                 let current_date = new Date();
+//                 let date_time = current_date.getDate() + "/"
+//                 + (current_date.getMonth() + 1)  + "/"
+//                 + current_date.getFullYear() + " @ "
+//                 + current_date.getHours() + ":"
+//                 + current_date.getMinutes();
+//
+//                 let data = [user_id, project_title, project_description.trim(), date_time, domain_id_for_project_table.join(","), project_technologies];
+//
+//                 con.query(sql, data, function(err, result, fields) {
+//                   if (err){
+//                     res.json({"status" : 0, "data" : "Something went wrong"});
+//                   } else {
+//                     res.json({"status" : 1, "data" : "Domain inserted. Project added", "unique" : true});
+//                   }
+//                 });
+//               }
+//             }
+//           }
+//         }
+//       });
+//     }
+//       else {
+//         domain_id_for_project_table.push(result[0]["domain_id"]);
+//         count += 1;
+//         // console.log(count + " : " + project_domains_list.length);
+//         if(count == project_domains_list.length) {
+//           sql = "SELECT count(*) as count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND proj_technology LIKE '%" + project_technologies + "%'";
+//
+//           con.query(sql, function(err, result, fields) {
+//             if (err){
+//
+//               res.json({"status" : 0, "data" : "Error 558 : Something went wrong"});
+//             } else {
+//                 if(result[0]["count"] == 0) {
+//                   sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
+//
+//                   let current_date = new Date();
+//                   let date_time = current_date.getDate() + "/"
+//                                 + (current_date.getMonth() + 1)  + "/"
+//                                 + current_date.getFullYear() + " @ "
+//                                 + current_date.getHours() + ":"
+//                                 + current_date.getMinutes();
+//
+//                   let data = [user_id, project_title, project_description.trim(), date_time, domain_id_for_project_table.join(","), project_technologies];
+//
+//                   con.query(sql, data, function(err, result, fields) {
+//                     if (err){
+//                       res.json({"status" : 0, "data" : "Error 574 : Something went wrong"});
+//                     } else {
+//                       res.json({"status" : 1, "data" : "Domain inserted. Project added", "unique" : true});
+//                     }
+//                   });
+//                 }
+//                 else {
+//                   res.json({"status" : 1, "data" : "Domain inserted. Project not added", "unique" : false,  "number_of_similar_projects" : result});
+//                 }
+//             }
+//           });
+//         }
+//       }
+//     }
+//   });
+//   }
+// });
+
 app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_technologies/:project_description/:_continue",function (req, res, next) {
 
   let user_id = req.params.user_id;
@@ -552,149 +701,123 @@ app.get("/add_project_topic/:user_id/:project_title/:project_domains/:project_te
   let project_description = req.params.project_description;
   let _continue = req.params._continue;
   let project_domains_list = project_domains.split(",");
+  let project_domain_ids_list = [];
+  let similarity_percentage = 0;
+  // node native promisify
+  const query = util.promisify(con.query).bind(con);
 
-  let sql = "";
-  let data = [];
-  let domain_id_for_project_table = [];
-  let count = 0;
-  let count_again = 0;
-  for(number=0;number < project_domains_list.length;number ++) {
-    sql = "SELECT * FROM domain WHERE domain_name = ?";
-    let domain = project_domains_list[number].trim();
-    data = [domain];
-    con.query(sql, data, function(err, result) {
-    if (err)
-    {
-      res.json({"status" : 0, "data" : "Error 505 : Something went wrong"});
-    } else
-    {
-      if(result.length == 0) {
-        sql = "INSERT INTO domain(domain_name) VALUES (?)";
-        data = [domain];
+  (async () => {
 
-        con.query(sql, data, function(err, result, fields) {
-          if (err){
-            res.json({"status" : 0, "data" : "Error 514 : Something went wrong"});
-          } else {
-            if(_continue == "false") {
-              domain_id_for_project_table.push(result["insertId"]);
+    let successful_student = "SELECT * FROM project WHERE user_id = '" + user_id +  "' AND proj_status = 'verified'";
+    let successful_student_execute = await query(successful_student);
 
-            sql = "SELECT count(*) as count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND '%" + project_technologies + "%'";
+    if(successful_student_execute.length == 0) {
+      for(number=0;number<project_domains_list.length;number++) {
+        let rows = await query("SELECT * from domain WHERE domain_name = '" + project_domains_list[number] + "'");
 
-            con.query(sql, function(err, result, fields) {
-              if (err){
-
-                res.json({"status" : 0, "data" : "Something went wrong"});
-              } else {
-                  if(result[0]["count"] == 0) {
-                    count_again += 1
-                    if(count_again == project_domains_list.length) {
-                      sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
-
-                      let current_date = new Date();
-                      let date_time = current_date.getDate() + "/"
-                      + (current_date.getMonth() + 1)  + "/"
-                      + current_date.getFullYear() + " @ "
-                      + current_date.getHours() + ":"
-                      + current_date.getMinutes();
-
-                      let data = [user_id, project_title, project_description.trim(), date_time, domain_id_for_project_table.join(","), project_technologies];
-
-                      con.query(sql, data, function(err, result, fields) {
-                        if (err){
-                          res.json({"status" : 0, "data" : "Something went wrong"});
-                        } else {
-                          res.json({"status" : 1, "data" : "Domain inserted. Project added", "unique" : true});
-                        }
-                      });
-
-                    }
-                  }
-                  else {
-                    res.json({"status" : 1, "data" : "Domain inserted. Project not added", "unique" : false, "number_of_similar_projects" : result});
-                  }
-              }
-            });
-          }
-          else {
-            if(_continue == "false") {
-              count_again += 1
-              if(count_again == project_domains_list.length) {
-                sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
-
-                let current_date = new Date();
-                let date_time = current_date.getDate() + "/"
-                + (current_date.getMonth() + 1)  + "/"
-                + current_date.getFullYear() + " @ "
-                + current_date.getHours() + ":"
-                + current_date.getMinutes();
-
-                let data = [user_id, project_title, project_description.trim(), date_time, domain_id_for_project_table.join(","), project_technologies];
-
-                con.query(sql, data, function(err, result, fields) {
-                  if (err){
-                    res.json({"status" : 0, "data" : "Something went wrong"});
-                  } else {
-                    res.json({"status" : 1, "data" : "Domain inserted. Project added", "unique" : true});
-                  }
-                });
-              }
-            }
-          }
+        if(rows.length == 0) {
+          let insert_row = await query("INSERT INTO domain(domain_name) VALUES('" + project_domains_list[number] + "')");
+          project_domain_ids_list.push(insert_row["insertId"]);
         }
-      });
-    }
-      else {
-        domain_id_for_project_table.push(result[0]["domain_id"]);
-        count += 1;
-        // console.log(count + " : " + project_domains_list.length);
-        if(count == project_domains_list.length) {
-          sql = "SELECT count(*) as count FROM project WHERE proj_title LIKE '%" + project_title + "%' AND proj_technology LIKE '%" + project_technologies + "%'";
-
-          con.query(sql, function(err, result, fields) {
-            if (err){
-
-              res.json({"status" : 0, "data" : "Error 558 : Something went wrong"});
-            } else {
-                if(result[0]["count"] == 0) {
-                  sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES(?, ?, ?, ?, ?, ?)";
-
-                  let current_date = new Date();
-                  let date_time = current_date.getDate() + "/"
-                                + (current_date.getMonth() + 1)  + "/"
-                                + current_date.getFullYear() + " @ "
-                                + current_date.getHours() + ":"
-                                + current_date.getMinutes();
-
-                  let data = [user_id, project_title, project_description.trim(), date_time, domain_id_for_project_table.join(","), project_technologies];
-
-                  con.query(sql, data, function(err, result, fields) {
-                    if (err){
-                      res.json({"status" : 0, "data" : "Error 574 : Something went wrong"});
-                    } else {
-                      res.json({"status" : 1, "data" : "Domain inserted. Project added", "unique" : true});
-                    }
-                  });
-                }
-                else {
-                  res.json({"status" : 1, "data" : "Domain inserted. Project not added", "unique" : false,  "number_of_similar_projects" : result});
-                }
-            }
-          });
+        else {
+          project_domain_ids_list.push(rows[0]["domain_id"]);
         }
       }
+
+      let proposed_project_description = project_description.replace("\n", "<br/>")
+      proposed_project_description = proposed_project_description.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+      let proposed_desc_as_list = proposed_project_description.split(" ");
+      let similar_project_count = 0;
+      let last_similar_project_id = 0;
+      for(n=0;n<proposed_desc_as_list.length;n++) {
+        let desc_sql = "SELECT * FROM project WHERE proj_desc LIKE '%" + proposed_desc_as_list[n] +  "%'";
+        let desc_execute = await query(desc_sql);
+        // console.log(desc_execute);
+        if(desc_execute.length > 0) {
+          if(last_similar_project_id != desc_execute[0]["proj_id"]) {
+            last_similar_project_id = desc_execute[0]["proj_id"];
+            similar_project_count += 1
+          }
+        }
+      }
+      // console.log(similar_project_count);
+      // console.log(proposed_project_description);
+      if(similar_project_count > 0) {
+        let count_of_all_projects_sql = "SELECT count(*) as count FROM project";
+        let count_of_all_projects = await query(count_of_all_projects_sql);
+
+        similarity_percentage = Math.round((similar_project_count/count_of_all_projects[0]["count"]) * 100)
+      }
+      // if(desc_execute.length > 0) {
+      //   let existing_desc = desc_execute[0]["proj_desc"];
+      //   existing_desc = existing_desc.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+      //   let existing_desc_as_list = existing_desc.split(" ");
+      //
+      //   similarity_percentage = Math.round(100 - (arr_diff(existing_desc_as_list, proposed_desc_as_list).length/(existing_desc_as_list.length + proposed_desc_as_list.length)) * 100);
+      //   console.log(similarity_percentage);
+      // }
+      console.log(similarity_percentage);
+      if(similarity_percentage < 70) {
+        let project_genereic = await query("SELECT count(*) as count FROM project WHERE proj_title LIKE '%" + project_title + "%' OR proj_technology LIKE '%" + project_technologies +  "%'");
+
+        if(project_genereic[0]["count"] == 0) {
+          let current_date = new Date();
+          let date_time = current_date.getDate() + "/"
+          + (current_date.getMonth() + 1)  + "/"
+          + current_date.getFullYear() + " @ "
+          + current_date.getHours() + ":"
+          + current_date.getMinutes();
+          project_description = project_description.replace("\n", "<br/>")
+          sql = "INSERT INTO project(user_id, proj_title, proj_desc, proj_sub_date, proj_domain, proj_technology) VALUES('" + user_id + "', '" + project_title + "', '" + project_description + "', '" + date_time + "', '" + project_domain_ids_list.join(",") + "', '" + project_technologies + "')";
+          await query(sql);
+          res.json({"status" : 1, "message": "Project added successfully"});
+        }
+        else {
+          res.json({"status" : 0, "message": "Projects using similar title or technologies exist. Please try something new"});
+        }
+      }
+      else {
+        res.json({"status" : 0, "message" :  "We found " + similarity_percentage + "% having similar description to your. Please try something new."});
+      }
     }
-  });
-  }
+    else {
+      res.json({"status" : 0, "message" : "One project has already been verified. You can not submit a new project"});
+    }
+
+})()
 });
 
-app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",function (req, res, next) {
+
+function arr_diff(a1, a2) {
+
+    var a = [], diff = [];
+
+    for (var i = 0; i < a1.length; i++) {
+        a[a1[i]] = true;
+    }
+
+    for (var i = 0; i < a2.length; i++) {
+        if (a[a2[i]]) {
+            delete a[a2[i]];
+        } else {
+            a[a2[i]] = true;
+        }
+    }
+
+    for (var k in a) {
+        diff.push(k);
+    }
+
+    return diff;
+}
+
+app.get("/insert_mail/:user_id/:mail_to/:subject/:content/:attachment",function (req, res, next) {
 
   let user_id = req.params.user_id;
   let mail_to = req.params.mail_to;
   let subject = req.params.subject;
-  let cc = req.params.cc;
-  let bcc = req.params.bcc;
+  // let cc = req.params.cc;
+  // let bcc = req.params.bcc;
   let content = req.params.content;
   let attachment = req.params.attachment;
   let current_date = new Date();
@@ -715,8 +838,8 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:cc/:bcc/:content/:attachment",
       // res.json({"status" : 0, "data" : "ERROR 699: Something went wrong "});
     } else
     {
-      sql = "INSERT INTO mail(user_id, toaddr, sub, cc, bcc, content, timestamp, attachment,role,id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
-      data = [user_id, mail_to, subject, cc, bcc, content, date_time, attachment, result[0]['role'],result[0]['id']];
+      sql = "INSERT INTO mail(user_id, toaddr, sub, content, timestamp, attachment,role,id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+      data = [user_id, mail_to, subject, content, date_time, attachment, result[0]['role'],result[0]['id']];
       con.query(sql, data, function(err, result) {
 
         if (err)

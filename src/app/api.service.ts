@@ -63,24 +63,15 @@ export class ApiService {
     );
   }
 
-  insert_mail(user_id: string, email_to: string, subject: string, email_cc: string, email_bcc: string, email_content: string,attachment :string) {
+  insert_mail(user_id: string, email_to: string, subject: string, email_content: string,attachment :string) {
     if(subject == null || subject == "") {
       subject = "%20";
     }
-
-    if(email_cc == null || email_cc == "") {
-      email_cc = "%20";
-    }
-
-    if(email_bcc == null || email_bcc == "") {
-      email_bcc = "%20";
-    }
-
     if(attachment == null || attachment == "") {
       attachment = "%20";
     }
 
-    let api_url = encodeURI(this.endpoint_url + "/insert_mail/"+ user_id  + "/" + email_to + "/" + subject + "/" + email_cc + "/" + email_bcc + "/" + email_content + "/" + attachment);
+    let api_url = encodeURI(this.endpoint_url + "/insert_mail/"+ user_id  + "/" + email_to + "/" + subject + "/" + email_content + "/" + attachment);
     // console.log(api_url);
     return this.http.get<Api>(api_url)
       .pipe(

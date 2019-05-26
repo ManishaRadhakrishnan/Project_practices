@@ -1,18 +1,19 @@
 <div class="form-box" id="login-box">
   <div class="header">Sign In</div>
   <div class="body bg-gray">
-    <ng-template [ngIf]="status  == '0'">
+    <ng-template [ngIf]="status  == 0">
       <div class="alert alert-danger">
-        Login attempt failed
+        {{message}}
       </div>
     </ng-template>
 
-    <ng-template [ngIf]="status == '1'">
+    <ng-template [ngIf]="status == 1">
       <div class="alert alert-success">
-        Please wait while we redirect you to dashboard
+        {{message}}
       </div>
     </ng-template>
 
+    
     <div class="form-group">
       <input type="text" name="user_email" #user_email class="form-control" placeholder="Email"/>
     </div>

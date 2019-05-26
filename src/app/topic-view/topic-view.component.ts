@@ -24,6 +24,7 @@ export class TopicViewComponent implements OnInit {
        .subscribe(
          data => {
            this.information = data.data as string[];
+           console.log(this.information);
            this.status = data.status as number;
          },
          err => {

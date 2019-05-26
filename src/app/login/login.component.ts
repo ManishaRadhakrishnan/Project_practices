@@ -13,6 +13,7 @@ export class LoginComponent{
   role : string;
   status : number;
   user_name : string;
+  message : string;
 
   constructor(private router: Router, private api_service: ApiService) { }
 
@@ -43,6 +44,7 @@ export class LoginComponent{
            this.user_id = data.user_id as string;
            this.status = data.status as number;
            this.user_name = data.user_name as string;
+           this.message = data.message as string;
            if(this.status == 1)
            {
              this.router.navigate(['/view-profile']);
