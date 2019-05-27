@@ -136,6 +136,14 @@ export class ApiService {
     );
   }
 
+  upload_file(file_upload : string): Observable<any> {
+    let api_url = encodeURI(this.endpoint_url + "/fileupload/" + file_upload);
+    return this.http.post(api_url, httpOptions).pipe(
+      map(this.extract_data),
+      catchError(this.handle_error)
+    );
+  }
+
   view_guide_profile(user_id : string): Observable<any> {
     let api_url = encodeURI(this.endpoint_url + "/view_guide_profile/" + user_id);
     console.log(api_url);

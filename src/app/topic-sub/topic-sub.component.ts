@@ -4,6 +4,8 @@ import { RouterModule, Routes, Router } from '@angular/router';
 import { Observable }         from 'rxjs';
 import { ActivatedRoute }     from '@angular/router';
 import { map }                from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import * as $AB from 'jquery';
 // import {  FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
 const UploadURL = 'http://localhost:3000/api/upload';
@@ -27,9 +29,10 @@ export class TopicSubComponent implements OnInit {
   number_of_similar_projects : string[];
   message : string;
 
+  endpoint_url = "http://127.0.0.1:8080";
   // uploader: FileUploader = new FileUploader({url: UploadURL, itemAlias: 'sdyuihfkjn'});
 
-  constructor(private router: Router, private route: ActivatedRoute, private api_service: ApiService) { }
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private api_service: ApiService) { }
 
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
@@ -76,27 +79,22 @@ export class TopicSubComponent implements OnInit {
   }
 
   do_submit_topic(project_title: string, project_domains: string, project_technologies: string, project_description: string, _continue: string) {
-    this.user_id = window.sessionStorage.getItem("user_id");
-    this.api_service
-     .do_add_project_topic(this.user_id, project_title, project_domains, project_technologies, project_description, _continue)
-     .subscribe(
-       data => {
-         console.log(data);
-         this.status = data.status as number;
-         this.message = data.message as string;
-         this.number_of_similar_projects = data.number_of_similar_projects as string[];
-         this.unique = data.unique;
+      let api_url = encodeURI("http://127.0.0.1:8080/add_project_topic");
+      this.http.post(api_url, {"user_id" : this.user_id, "project_title" : project_title, "project_domains" : project_domains, "project_technologies" : project_technologies, "project_description" : project_description, " _continue": _continue})
+      .subscribe(
+          data  => {
+          this.user_id = window.sessionStorage.getItem("user_id");
+          console.log("POST Request is successful ", data);
+          this.status = data.status as number;
+          this.message = data.message as string;
+          },
+          error  => {
 
-         console.log(this.number_of_similar_projects);
-         if(this.status == 1 && this.unique == true )
-           {
-              this.router.navigate(['/topic-view']);
-           }
-       },
-       err => {
-         console.log(err);
-       }
-     );
+          console.log("Error", error);
+
+          }
+
+          );
   }
 
   do_edit_topic() {
