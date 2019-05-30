@@ -807,7 +807,7 @@ app.post("/add_project_topic",function (req, res, next) {
   let project_technologies = req.body.project_technologies;
   let project_description = req.body.project_description;
   let _continue = req.body._continue;
-  // console.log(project_description);
+  // console.log(user_id);
   let project_domains_list = project_domains.split(",");
   let project_domain_ids_list = [];
   let similarity_percentage = 0;
@@ -844,14 +844,24 @@ app.post("/add_project_topic",function (req, res, next) {
     let similar_domain_select_sql = "SELECT * FROM domain WHERE domain_name LIKE '%" + project_domain_ids_list.join(",") + "%'"
     let similar_domain_select = await query(similar_domain_select_sql);
 
-    let all_desc_sql = "SELECT proj_desc FROM project WHERE proj_status = 'verified' AND proj_desc LIKE '%" + project_description + "%'";
+    let all_desc_sql = "SELECT proj_desc FROM project WHERE proj_status = 'verified'";
     let all_desc = await query(all_desc_sql);
     let all_desc_string = "";
-    for(n = 0; n < all_desc.length; n++) {
-      all_desc_string += all_desc[n]["proj_desc"];
+    // console.log(all_desc);
+    // for(n = 0; n < all_desc.length; n++) {
+    //   all_desc_string += all_desc[n]["proj_desc"];
+    // }
+    // console.log(all_desc_string[1]);
+       for (i = 0; i < all_desc.length; i++) {
+       all_desc_string += all_desc[i]["proj_desc"];
+    similarity_percentage = Math.round(stringSimilarity.compareTwoStrings(all_desc_string, project_description) * 100) ;
+    console.log(similarity_percentage);
+    if(similarity_percentage > 30){
+      break;
+    }else{
+      continue;
     }
-    console.log(all_desc_string);
-    similarity_percentage = stringSimilarity.compareTwoStrings(all_desc_string, project_description) * 100 ;
+  }
     console.log(similarity_percentage);
     if(select_similar_titles.length <= 0 && similarity_percentage < 30) {
       let current_date = new Date();
@@ -865,10 +875,13 @@ app.post("/add_project_topic",function (req, res, next) {
       res.json({"status" : 1, "message" : "Project added succesfully"})
     }
     else if(select_similar_titles.length > 0 && similar_domain_select.length > 0 && select_similar_tech.length > 0 && similarity_percentage > 30) {
-      res.json({"status" : 0, "message" : similarity_percentage + "% projects already exist."})
+      res.json({"status" : 0, "message" : similarity_percentage + "% similar project already exist."})
     }
     else if(select_similar_titles.length == 0 && similar_domain_select.length == 0 && select_similar_tech.length == 0 && similarity_percentage > 30) {
-      res.json({"status" : 0, "message" : similarity_percentage+ "% projects have similar description."})
+      res.json({"status" : 0, "message" : similarity_percentage+ "% similar description exist. You are not permitted to submit. Try something new."})
+    }
+    else if(select_similar_titles.length > 0 && similar_domain_select.length > 0 && select_similar_tech.length > 0 && similarity_percentage < 30) {
+      res.json({"status" : 0, "message" : similarity_percentage + "% similar project already exist with your title,domain and technology "})
     }
     // else if(select_similar_titles.length > 0 && similar_domain_select.length > 0 && select_similar_tech.length > 0 && similarity_percentage < 30) {
     //   res.json({"status" : 0, "message" : similarity_percentage + "% projects already exist."})
