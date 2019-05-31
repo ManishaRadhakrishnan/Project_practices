@@ -539,11 +539,11 @@ app.get('/student_project_details/:user_id', function(req, res, next) {
 
 app.get('/all_project_details', function(req, res, next) {
   // let user_id = req.params.user_id;
-  let sql =
-    "SELECT project.user_id,project.proj_id,project.proj_title, project.proj_desc, project.proj_sub_by, project.proj_sub_date, project.proj_domain, project.proj_technology,project.proj_status,student.stud_name as name, domain.domain_name as domain FROM project,student,domain WHERE project.project_visible='visible' AND project.user_id=student.user_id AND domain.domain_id=project.proj_domain"
+  let sql = "SELECT project.user_id, project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_by, project.proj_sub_date, project.proj_domain, project.proj_technology,project.proj_status,student.stud_name as name, domain.domain_name as domain FROM project,student,domain WHERE project.project_visible='visible' AND project.user_id=student.user_id AND domain.domain_id=project.proj_domain";
   con.query(sql, function(err, result, fields) {
 
     if (err) {
+      console.log(err);
       res.json({
         "status": 0,
         "data": "Something went wrong"

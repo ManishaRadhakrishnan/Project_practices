@@ -33,10 +33,10 @@
                         </tr>
                       </thead>
                       <ng-template [ngIf]="status  == 1">
-                        <tbody  *ngFor="let info of information">
+                        <tbody  *ngFor="let info of information; let serial_number = index">
                           <tr>
                             <td>{{get_upper_case_text(info.proj_title)}}</td>
-                            <td>{{set_desc_length(get_upper_case_text(info.proj_desc))}}<a href="#" class="card-link" data-toggle="modal"  data-target="#{{info.proj_id+info.user_id}}" (click)="modal_pop(info.proj_id)">More...</a></td>
+                            <td>{{set_desc_length(get_upper_case_text(info.proj_desc))}}<a href="#" class="card-link" data-toggle="modal"  data-target="#{{info.unique_val}}" (click)="modal_pop(info.unique_val)">More...</a></td>
                             <td>{{info.name}}</td>
                             <td>{{info.proj_sub_date}}</td>
                             <td>{{info.domain}}</td>
@@ -118,7 +118,7 @@
                           </tr>
                           <!--More Modal Content  -->
                           <tr>
-                            <div id="{{info.proj_id+info.user_id}}" class="modal fade" role="dialog">
+                            <div id="{{info.unique_val}}" class="modal fade" role="dialog">
                                <div class="modal-dialog">
                                   <!-- Modal content-->
                                   <div class="modal-content">
