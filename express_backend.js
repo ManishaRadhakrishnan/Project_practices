@@ -755,7 +755,7 @@ app.post("/add_project_topic", function(req, res, next) {
   let project_technologies = req.body.project_technologies;
   let project_description = req.body.project_description;
   let _continue = req.body._continue;
-  // console.log(user_id);
+  // console.log(project_description);
   let project_domains_list = project_domains.split(",");
   let project_domain_ids_list = [];
   let similarity_percentage = 0;
@@ -768,7 +768,7 @@ app.post("/add_project_topic", function(req, res, next) {
       user_id + "' AND proj_status = 'verified'";
     let successful_student_execute = await query(successful_student);
 
-
+// console.log(successful_student_execute);
 
     let select_similar_titles_sql =
       "SELECT * FROM project WHERE proj_title LIKE '%" + project_title +
@@ -804,15 +804,23 @@ app.post("/add_project_topic", function(req, res, next) {
       "SELECT proj_desc FROM project WHERE proj_status = 'verified'";
     let all_desc = await query(all_desc_sql);
     let all_desc_list = [];
-
-    for (number = 0; number < all_desc.length; all_desc++) {
-      all_desc_list.append(all_desc[number]["proj_desc"]);
+    // console.log(all_desc.length);
+    console.log(all_desc);
+    for (number = 0; number < all_desc.length; number++) {
+      // console.log(all_desc[number]["proj_desc"]);
+      all_desc_list.push(all_desc[number]["proj_desc"]);
+      // console.log(all_desc_list[number]);
+      // console.log("loop"+number);
     }
-
     let similarity_percent = get_string_match_percentage(
       project_description, all_desc_list);
-
+      // console.log(all_desc_list);
+      console.log(similarity_percent);
+      console.log(select_similar_titles.length);
+      console.log(similar_domain_select.length);
+      console.log(select_similar_tech.length);
     if (select_similar_titles.length <= 0 && similarity_percent < 30) {
+      console.log("inside insert");
       let current_date = new Date();
       let date_time = current_date.getDate() + "/" + (current_date.getMonth() +
           1) + "/" + current_date.getFullYear() + " @ " + current_date.getHours() +
@@ -828,26 +836,37 @@ app.post("/add_project_topic", function(req, res, next) {
         "message": "Project added succesfully"
       })
     } else if (select_similar_titles.length > 0 && similar_domain_select.length >
-      0 && select_similar_tech.length > 0 && similarity_percentage > 30) {
+      0 && select_similar_tech.length > 0 && similarity_percent > 30) {
+          console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage > 30");
       res.json({
         "status": 0,
-        "message": similarity_percentage +
+        "message": similarity_percent +
           "% similar project already exist."
       })
     } else if (select_similar_titles.length == 0 && similar_domain_select
       .length == 0 && select_similar_tech.length == 0 &&
-      similarity_percentage > 30) {
+      similarity_percent > 30) {
+        console.log("select_similar_titles.length == 0 && similar_domain_select.length == 0 && select_similar_tech.length == 0 &&similarity_percentage > 30");
       res.json({
         "status": 0,
-        "message": similarity_percentage +
+        "message": similarity_percent +
           "% similar description exist. You are not permitted to submit. Try something new."
       })
     } else if (select_similar_titles.length > 0 && similar_domain_select.length >
-      0 && select_similar_tech.length > 0 && similarity_percentage < 30) {
+      0 && select_similar_tech.length > 0 && similarity_percent < 30) {
+        console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
       res.json({
         "status": 0,
-        "message": similarity_percentage +
+        "message": similarity_percent +
           "% similar project already exist with your title,domain and technology "
+      })
+    }else if (select_similar_titles.length > 0 && similar_domain_select.length ==
+      0 && select_similar_tech.length == 0 && similarity_percent > 30) {
+        // console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
+      res.json({
+        "status": 0,
+        "message": similarity_percent +
+          "% similar project already exist with your title and description "
       })
     }
     // else if(select_similar_titles.length > 0 && similar_domain_select.length > 0 && select_similar_tech.length > 0 && similarity_percentage < 30) {
@@ -861,20 +880,22 @@ app.post("/add_project_topic", function(req, res, next) {
 
 function get_string_match_percentage(input_string, list_of_strings) {
   max_similarity = 0;
+  // console.log(list_of_strings[1]);
   for (i = 0; i < list_of_strings.length; i++) {
     var similarity = Math.round(stringSimilarity.compareTwoStrings(
       input_string,
       list_of_strings[i]) * 100);
-
+      // console.log(similarity);
     if (similarity > max_similarity) {
       max_similarity = similarity;
     }
-    console.log("`" + input_string + "`, " +
-      "`" + list_of_strings[i] + "`" + " have " + similarity +
-      "% similarity");
+    // console.log("`" + input_string + "`, " +
+    //   "`" + list_of_strings[i] + "`" + " have " + similarity +
+    //   "% similarity");
 
   }
-  console.log(max_similarity);
+  // console.log(max_similarity);
+  return(max_similarity);
 }
 
 function arr_diff(a1, a2) {

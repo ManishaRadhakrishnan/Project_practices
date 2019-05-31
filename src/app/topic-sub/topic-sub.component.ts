@@ -80,7 +80,7 @@ export class TopicSubComponent implements OnInit {
 
   do_submit_topic(project_title: string, project_domains: string, project_technologies: string, project_description: string, _continue: string) {
       let api_url = encodeURI("http://127.0.0.1:8080/add_project_topic");
-      
+
       this.user_id = window.sessionStorage.getItem("user_id");
       this.http.post(api_url, {"user_id" : this.user_id, "project_title" : project_title, "project_domains" : project_domains, "project_technologies" : project_technologies, "project_description" : project_description, " _continue": _continue})
       .subscribe(

@@ -36,7 +36,7 @@
                         <tbody  *ngFor="let info of information">
                           <tr>
                             <td>{{get_upper_case_text(info.proj_title)}}</td>
-                            <td>{{set_desc_length(get_upper_case_text(info.proj_desc))}}</td>
+                            <td>{{set_desc_length(get_upper_case_text(info.proj_desc))}}<a href="#" class="card-link" data-toggle="modal"  data-target="#{{info.proj_id+info.user_id}}" (click)="modal_pop(info.proj_id)">More...</a></td>
                             <td>{{info.name}}</td>
                             <td>{{info.proj_sub_date}}</td>
                             <td>{{info.domain}}</td>
@@ -110,6 +110,37 @@
                                       <ng-template [ngIf]="role  == 'stud'">
                                         <button (click)="edit_topic(info.proj_id)" type="submit" class="btn btn-info pull-left">Edit</button>
                                       </ng-template>
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                          </tr>
+                          <!--More Modal Content  -->
+                          <tr>
+                            <div id="{{info.proj_id+info.user_id}}" class="modal fade" role="dialog">
+                               <div class="modal-dialog">
+                                  <!-- Modal content-->
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      <h4 class="modal-title">{{get_upper_case_text(info.proj_title)}}</h4>
+                                    </div>
+                                     <ul class="list-group list-group-flush">
+                                       <li class="list-group-item">Serial number : {{serial_number + 1}}</li>
+                                       <ng-template [ngIf]="role != 'stud'">
+                                         <li class="list-group-item">Student : {{info.user_id}}</li>
+                                       </ng-template>
+                                        <li class="list-group-item">Description : {{get_upper_case_text(info.proj_desc)}}</li>
+                                     </ul>
+                                    <!--<div class="modal-body">
+                                      <p>Description : {{info.proj_desc}}</p>
+                                      <p>Submitted Date : {{info.proj_sub_date}}</p>
+                                      <p>Domain : {{info.domain_name}}</p>
+                                      <p>Technology : {{info.proj_technology}}</p>
+                                      <p>Status : {{info.proj_status}}</p>
+                                    </div>-->
+                                    <div class="modal-footer">
                                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                     </div>
                                   </div>
