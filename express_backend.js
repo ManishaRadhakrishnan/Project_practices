@@ -751,15 +751,18 @@ app.post("/project_details_update", function(req, res, next){
   let project_technologies = req.body.project_technologies;
   let project_description = req.body.project_description;
   let _continue = req.body._continue;
+  let proj_id = req.body.project_id;
   let project_domain_ids_list = [];
   let project_domains_list = project_domains.split(",");
   let index_count=0;
   const query = util.promisify(con.query).bind(con);
-
+  console.log(proj_id);
   (async() => {
     for (index = 0; index < project_domains_list.length; index++) {
     let select_domain_sql = "SELECT * FROM domain WHERE domain_name = '" + project_domains_list[index].trim()+"'";
     let select_domain = await query(select_domain_sql);
+    // console.log(select_domain);
+    // console.log(select_domain.length);
     if (select_domain.length > 0) {
       project_domain_ids_list.push(select_domain[0]["domain_id"]);
     } else {
@@ -768,13 +771,16 @@ app.post("/project_details_update", function(req, res, next){
       let new_domain = await query(new_domain_sql);
 
       project_domain_ids_list.push(new_domain["insertId"]);
-            index_count += 1;
     }
+    index_count += 1;
+    // console.log(project_domain_ids_list);
   }
-  //         console.log(project_domain_ids_list);
+          // console.log(index_count);
+          // console.log(project_domains_list.length);
           if (index_count == project_domains_list.length) {
             let update_project_sql =
-              "UPDATE project SET proj_title = '" + project_title + "',  proj_domain ='" + project_domain_ids_list.join(",") + "', proj_technology='" + project_technologies + "',proj_desc ='" + project_description +"' WHERE project.user_id =" + user_id + ";"
+              "UPDATE project SET proj_title = '" + project_title + "',  proj_domain ='" + project_domain_ids_list.join(",") + "', proj_technology='" + project_technologies + "',proj_desc ='" + project_description +"' WHERE project.user_id =" + user_id + " AND project.proj_id = " + proj_id + ";"
+              console.log(update_project_sql);
             let update_project = await query(update_project_sql);
             res.json({
               "status": 1,

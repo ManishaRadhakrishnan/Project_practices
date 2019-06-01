@@ -86,8 +86,8 @@ export class TopicSubComponent implements OnInit {
       .subscribe(
           data  => {
           console.log("POST Request is successful ", data);
-          this.status = data.status as number;
-          this.message = data.message as string;
+          // this.status = data.status as number;
+          // this.message = data.message as string;
           },
           error  => {
 
@@ -106,7 +106,7 @@ export class TopicSubComponent implements OnInit {
   let api_url = encodeURI("http://127.0.0.1:8080/project_details_update");
 
   this.user_id = window.sessionStorage.getItem("user_id");
-  this.http.post(api_url, {"user_id" : this.user_id, "project_title" : project_title, "project_domains" : project_domains, "project_technologies" : project_technologies, "project_description" : project_description, " _continue": _continue})
+  this.http.post(api_url, {"user_id" : this.user_id, "project_id" : this.project_id, "project_title" : project_title, "project_domains" : project_domains, "project_technologies" : project_technologies, "project_description" : project_description, " _continue": _continue})
   .subscribe(
       data  => {
       console.log("POST Request is successful ", data);
