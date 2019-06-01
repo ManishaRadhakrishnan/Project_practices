@@ -84,8 +84,8 @@
                               </ng-template>
 
                               <ng-template [ngIf]="information">
-                                <button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button>
-                                <button (click)="do_topic_save(project_title.value, project_domains.value, project_technologies.value, project_description.value)" type="submit" class="btn btn-primary pull-left">Save</button>
+                                <!-- <button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button> -->
+                                <button (click)="do_topic_save(project_title.value, project_domains.value, project_technologies.value, project_description.textContent, false)" type="submit" class="btn btn-primary pull-left">Save</button>
                               </ng-template>
 
 

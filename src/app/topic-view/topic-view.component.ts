@@ -116,7 +116,7 @@ this.role = window.sessionStorage.getItem("role");
   }
   else if(button_text.trim() == "Rejected") {
     $("select[name='status']").remove();
-    alert("Inji ippo nee guide allocate cheyyanda");
+    // alert("Inji ippo nee guide allocate cheyyanda");
   }
   else if(button_text.trim() == "Verified") {
     alert("Guide allocate cheyth mathiyayille");

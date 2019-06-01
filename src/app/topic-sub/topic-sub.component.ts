@@ -86,8 +86,8 @@ export class TopicSubComponent implements OnInit {
       .subscribe(
           data  => {
           console.log("POST Request is successful ", data);
-          // this.status = data.status as number;
-          // this.message = data.message as string;
+          this.status = data.status as number;
+          this.message = data.message as string;
           },
           error  => {
 
@@ -102,28 +102,24 @@ export class TopicSubComponent implements OnInit {
 
   }
 
-  do_topic_save(project_title : string, project_domains : string, project_technologies : string, project_description : string) {
-  this.role = window.sessionStorage.getItem("role");
-    if(this.role == "stud") {
-      this.user_id = window.sessionStorage.getItem("user_id");
-      this.api_service
-       .project_details_update(this.user_id,project_title, project_domains, project_technologies, project_description)
-       .subscribe(
-         data => {
-           this.information = data.data as string[];
-           this.status = data.status as number;
-           if(this.status == 1) {
-             this.router.navigate(["/topic-view"]);
-           }
-         },
-         err => {
-           console.log(err);
-         }
-       );
-     }
-     else {
-       this.router.navigate(["/login"]);
-     }
+  do_topic_save(project_title : string, project_domains : string, project_technologies : string, project_description : string, _continue: string) {
+  let api_url = encodeURI("http://127.0.0.1:8080/project_details_update");
+
+  this.user_id = window.sessionStorage.getItem("user_id");
+  this.http.post(api_url, {"user_id" : this.user_id, "project_title" : project_title, "project_domains" : project_domains, "project_technologies" : project_technologies, "project_description" : project_description, " _continue": _continue})
+  .subscribe(
+      data  => {
+      console.log("POST Request is successful ", data);
+      this.status = data.status as number;
+      this.message = data.message as string;
+      },
+      error  => {
+
+      console.log("Error", error);
+
+      }
+
+      );
 }
 
   public onChange(event, output) {

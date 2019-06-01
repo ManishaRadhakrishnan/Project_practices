@@ -421,8 +421,7 @@ app.get('/update_password/:user_id/:password', function(req, res, next) {
   });
 })
 
-app.get(
-  '/project_details_update/:user_id/:project_title/:project_domains/:project_technologies/:project_description',
+app.get('/project_details_update/:user_id/:project_title/:project_domains/:project_technologies/:project_description',
   function(req, res, next) {
     let user_id = req.params.user_id;
     let project_title = req.params.project_title;
@@ -511,12 +510,12 @@ app.get(
 
 app.get('/student_project_details/:user_id', function(req, res, next) {
   let user_id = req.params.user_id;
-  let sql =
-    "SELECT project.user_id,project.proj_id,project.proj_title, project.proj_desc, project.proj_sub_by, project.proj_sub_date, project.proj_domain, project.proj_technology,project.proj_status FROM project, student WHERE project.proj_status = 'approved' AND student.guide_id = ? AND project.project_visible='visible'"
+  let sql ="SELECT project.user_id,project.proj_id,project.proj_title, project.proj_desc, project.proj_sub_by, project.proj_sub_date, project.proj_domain, project.proj_technology,project.proj_status FROM project, student WHERE (project.proj_status = 'approved' OR project.proj_status = 'verified') AND student.guide_id = ? AND project.project_visible='visible'";
   let data = [user_id];
   con.query(sql, data, function(err, result, fields) {
 
     if (err) {
+      console.log(err);
       res.json({
         "status": 0,
         "data": "Something went wrong"
@@ -714,8 +713,7 @@ app.get(
     });
   });
 
-app.get(
-  "/update_guide_profile/:user_id/:full_name/:email/:contact/:address/:course/:department",
+app.get("/update_guide_profile/:user_id/:full_name/:email/:contact/:address/:course/:department",
   function(req, res, next) {
 
     let user_id = req.params.user_id;
@@ -746,7 +744,68 @@ app.get(
       }
     });
   });
+app.post("/project_details_update", function(req, res, next){
+  let user_id = req.body.user_id;
+  let project_title = req.body.project_title;
+  let project_domains = req.body.project_domains;
+  let project_technologies = req.body.project_technologies;
+  let project_description = req.body.project_description;
+  let _continue = req.body._continue;
+  let project_domain_ids_list = [];
+  let project_domains_list = project_domains.split(",");
+  let index_count=0;
+  const query = util.promisify(con.query).bind(con);
 
+  (async() => {
+    for (index = 0; index < project_domains_list.length; index++) {
+    let select_domain_sql = "SELECT * FROM domain WHERE domain_name = '" + project_domains_list[index].trim()+"'";
+    let select_domain = await query(select_domain_sql);
+    if (select_domain.length > 0) {
+      project_domain_ids_list.push(select_domain[0]["domain_id"]);
+    } else {
+      let new_domain_sql = "INSERT INTO domain(domain_name) VALUES('" +
+        project_domains_list[number] + "')";
+      let new_domain = await query(new_domain_sql);
+
+      project_domain_ids_list.push(new_domain["insertId"]);
+            index_count += 1;
+    }
+  }
+  //         console.log(project_domain_ids_list);
+          if (index_count == project_domains_list.length) {
+            let update_project_sql =
+              "UPDATE project SET proj_title = '" + project_title + "',  proj_domain ='" + project_domain_ids_list.join(",") + "', proj_technology='" + project_technologies + "',proj_desc ='" + project_description +"' WHERE project.user_id =" + user_id + ";"
+            let update_project = await query(update_project_sql);
+            res.json({
+              "status": 1,
+              "message": "Project updated succesfully"
+            })
+          }
+  //               sql = "SELECT * FROM project WHERE user_id = ?";
+  //               data = [user_id];
+  //               con.query(sql, data, function(err, result, fields) {
+  //                 if (err) {
+  //                   res.json({
+  //                     "status": 0,
+  //                     "data": "Something went wrong"
+  //                   });
+  //                 } else {
+  //                   res.json({
+  //                     "status": 1,
+  //                     "data": result
+  //                   });
+  //                 }
+  //               });
+  //             }
+  //           });
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
+})()
+
+})
 app.post("/add_project_topic", function(req, res, next) {
 
   let user_id = req.body.user_id;
@@ -846,7 +905,7 @@ app.post("/add_project_topic", function(req, res, next) {
     } else if (select_similar_titles.length == 0 && similar_domain_select
       .length == 0 && select_similar_tech.length == 0 &&
       similarity_percent > 30) {
-        console.log("select_similar_titles.length == 0 && similar_domain_select.length == 0 && select_similar_tech.length == 0 &&similarity_percentage > 30");
+        // console.log("select_similar_titles.length == 0 && similar_domain_select.length == 0 && select_similar_tech.length == 0 &&similarity_percentage > 30");
       res.json({
         "status": 0,
         "message": similarity_percent +
@@ -862,6 +921,13 @@ app.post("/add_project_topic", function(req, res, next) {
       })
     }else if (select_similar_titles.length > 0 && similar_domain_select.length ==
       0 && select_similar_tech.length == 0 && similarity_percent > 30) {
+        // console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
+      res.json({
+        "status": 0,
+        "message": similarity_percent +
+          "% similar project already exist with your title and description "
+      })
+    }else if (select_similar_titles.length == 0 && similar_domain_select.length >= 0 && select_similar_tech.length >= 0 && similarity_percent > 30) {
         // console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
       res.json({
         "status": 0,

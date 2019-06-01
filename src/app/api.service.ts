@@ -90,6 +90,7 @@ export class ApiService {
 
   student_project_details(user_id: string): Observable<any> {
     let api_url = encodeURI(this.endpoint_url + "/student_project_details/" + user_id);
+    console.log(api_url);
     return this.http.get(api_url, httpOptions).pipe(
     map(this.extract_data),
     catchError(this.handle_error)
