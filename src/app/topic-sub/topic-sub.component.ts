@@ -78,11 +78,12 @@ export class TopicSubComponent implements OnInit {
     //  };
   }
 
-  do_submit_topic(project_title: string, project_domains: string, project_technologies: string, project_description: string, _continue: string) {
+  do_submit_topic(project_title: string, project_domains: string, project_technologies: string,  _continue: string) {
       let api_url = encodeURI("http://127.0.0.1:8080/add_project_topic");
-
+      // let project_description = $("#file_upload_iframe").contentWindow;
+      // console.log(project_description);
       this.user_id = window.sessionStorage.getItem("user_id");
-      this.http.post(api_url, {"user_id" : this.user_id, "project_title" : project_title, "project_domains" : project_domains, "project_technologies" : project_technologies, "project_description" : project_description, " _continue": _continue})
+      this.http.post(api_url, {"user_id" : this.user_id, "project_title" : project_title, "project_domains" : project_domains, "project_technologies" : project_technologies, " _continue": _continue})
       .subscribe(
           data  => {
           console.log("POST Request is successful ", data);
@@ -110,8 +111,8 @@ export class TopicSubComponent implements OnInit {
   .subscribe(
       data  => {
       console.log("POST Request is successful ", data);
-      this.status = data.status as number;
-      this.message = data.message as string;
+      // this.status = data.status as number;
+      // this.message = data.message as string;
       },
       error  => {
 

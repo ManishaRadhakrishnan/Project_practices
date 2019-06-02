@@ -5,6 +5,10 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser')
 var formidable = require('formidable');
 var stringSimilarity = require('string-similarity');
+var fs = require('fs'),
+    path = require('path'),
+    _ = require('underscore');
+var textract = require('textract');
 const util = require('util');
 
 var app = express();
@@ -818,16 +822,20 @@ app.post("/add_project_topic", function(req, res, next) {
   let project_title = req.body.project_title;
   let project_domains = req.body.project_domains;
   let project_technologies = req.body.project_technologies;
-  let project_description = req.body.project_description;
+  // let project_description = req.body.project_description;
+  var project_description = "";
   let _continue = req.body._continue;
   // console.log(project_description);
   let project_domains_list = project_domains.split(",");
   let project_domain_ids_list = [];
   let similarity_percentage = 0;
   // node native promisify
-  const query = util.promisify(con.query).bind(con);
+  let recent_desc_file = "C:\\Users\\Jayashankar\\Documents\\Manisha\\endgame\\file_upload_node\\" + getMostRecentFileName();
 
-  (async() => {
+  const query = util.promisify(con.query).bind(con);
+  textract.fromFileWithPath(recent_desc_file, function( error, text ) {
+    project_description = text;
+      (async() => {
 
     let successful_student = "SELECT * FROM project WHERE user_id = '" +
       user_id + "' AND proj_status = 'verified'";
@@ -895,6 +903,7 @@ app.post("/add_project_topic", function(req, res, next) {
         user_id + "', '" + project_title + "', '" + project_description +
         "', '" + project_domain_ids_list.join(",") + "' , '" + date_time +
         "', '" + project_technologies + "')"
+        console.log(insert_project_sql);
       let insert_project = await query(insert_project_sql);
       res.json({
         "status": 1,
@@ -945,6 +954,8 @@ app.post("/add_project_topic", function(req, res, next) {
     //   res.json({"status" : 0, "message" : similarity_percentage + "% projects already exist."})
     // }
   })()
+  });
+
 
   // console.log(req.body);
 });
@@ -1539,8 +1550,24 @@ app.get('/allocate/:project_id/:user_id/:guide/:status', function(req, res,
   });
 });
 
+// Return only base file name without dir
+function getMostRecentFileName() {
+  let dir = "C:\\Users\\Jayashankar\\Documents\\Manisha\\endgame\\file_upload_node";
+    var files = fs.readdirSync(dir);
+
+    // use underscore for max()
+    return _.max(files, function (f) {
+        var fullpath = path.join(dir, f);
+
+        // ctime = creation time is used
+        // replace with mtime for modification time
+        return fs.statSync(fullpath).ctime;
+    });
+}
+
 app.listen(8080, function() {
   // var host = server.address().address;
   // var port = server.address().port;
+
   console.log('CORS-enabled web server listening on port 8080')
 })

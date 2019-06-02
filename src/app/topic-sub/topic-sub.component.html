@@ -65,8 +65,9 @@
                               </div>
                               <div class="form-group">
                                 <!-- <textarea name="topic_description" id="topic_description" class="form-control" placeholder="Description of the idea" rows="10" value="{{information ? information[0]['proj_desc'] : ''}}" #project_description></textarea> -->
-                                <input type="file" (change)="onChange($event, project_description)" />
-                                <small id="technology_help" class="form-text text-muted">Select a text (.txt) file of your project abstract</small>
+                                <!-- <input type="file" (change)="onChange($event, project_description)" />
+                                <small id="technology_help" class="form-text text-muted">Select a text (.txt) file of your project abstract</small> -->
+                                <iframe src="http://127.0.0.1:8090/" width="" id="file_upload_iframe" height=""></iframe>
 
                                 <!-- <div class="card-body"></div> -->
                                 <table>
@@ -80,7 +81,7 @@
                       <!--</div>-->
                             <div class="modal-footer clearfix">
                               <ng-template [ngIf]="information == null">
-                                <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value, project_description.textContent, false)" class="btn btn-info">Submit</button>
+                                <button (click)="do_submit_topic(project_title.value, project_domains.value, project_technologies.value,  false)" class="btn btn-info">Submit</button>
                               </ng-template>
 
                               <ng-template [ngIf]="information">
