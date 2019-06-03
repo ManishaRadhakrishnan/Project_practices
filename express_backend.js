@@ -10,6 +10,7 @@ var fs = require('fs'),
     _ = require('underscore');
 var textract = require('textract');
 const util = require('util');
+var path = require('path')
 
 var app = express();
 app.use(cors());
@@ -818,6 +819,11 @@ app.post("/project_details_update", function(req, res, next){
 })
 app.post("/add_project_topic", function(req, res, next) {
 
+  // res.json({"d" : _dirname});
+  let recent_desc_file = __dirname + "\\pdfuploads\\" + getMostRecentFileName();
+
+  let file_type = path.extname(getMostRecentFileName());
+
   let user_id = req.body.user_id;
   let project_title = req.body.project_title;
   let project_domains = req.body.project_domains;
@@ -825,139 +831,275 @@ app.post("/add_project_topic", function(req, res, next) {
   // let project_description = req.body.project_description;
   var project_description = "";
   let _continue = req.body._continue;
-  // console.log(project_description);
+    // console.log(project_description);
   let project_domains_list = project_domains.split(",");
   let project_domain_ids_list = [];
   let similarity_percentage = 0;
   // node native promisify
-  let recent_desc_file = "C:\\Users\\MANISHA\\pms-app\\pdfuploads\\" + getMostRecentFileName();
 
   const query = util.promisify(con.query).bind(con);
-  textract.fromFileWithPath(recent_desc_file, function( error, text ) {
-    project_description = text;
-    // let proposed_project_description = project_description.replace("\n", "<br/>")
-    let proposed_project_description = project_description.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
-    console.log(proposed_project_description);
+
+  if(file_type == ".pdf") {
+    textract.fromFileWithPath(recent_desc_file, function( error, text ) {
+      project_description = text;
+      // let proposed_project_description = project_description.replace("\n", "<br/>")
+      let proposed_project_description = project_description.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
       (async() => {
 
-    let successful_student = "SELECT * FROM project WHERE user_id = '" +
-      user_id + "' AND proj_status = 'verified'";
-    let successful_student_execute = await query(successful_student);
+        let successful_student = "SELECT * FROM project WHERE user_id = '" +
+        user_id + "' AND proj_status = 'verified'";
+        let successful_student_execute = await query(successful_student);
 
-// console.log(successful_student_execute);
+        // console.log(successful_student_execute);
 
-    let select_similar_titles_sql =
-      "SELECT * FROM project WHERE proj_title LIKE '%" + project_title +
-      "%'";
-    let select_similar_titles = await query(select_similar_titles_sql);
+        let select_similar_titles_sql =
+        "SELECT * FROM project WHERE proj_title LIKE '%" + project_title +
+        "%'";
+        let select_similar_titles = await query(select_similar_titles_sql);
 
-    let select_similar_tech_sql =
-      "SELECT * FROM project WHERE proj_technology LIKE '%" +
-      project_technologies + "%'";
-    let select_similar_tech = await query(select_similar_tech_sql);
+        let select_similar_tech_sql =
+        "SELECT * FROM project WHERE proj_technology LIKE '%" +
+        project_technologies + "%'";
+        let select_similar_tech = await query(select_similar_tech_sql);
 
-    for (number = 0; number < project_domains_list.length; number++) {
-      let domain_sql = "SELECT * FROM domain WHERE domain_name LIKE '%" +
-        project_domains_list[number] + "%'";
-      let domain = await query(domain_sql);
-      if (domain.length > 0) {
-        project_domain_ids_list.push(domain[0]["domain_id"]);
-      } else {
-        let new_domain_sql = "INSERT INTO domain(domain_name) VALUES('" +
-          project_domains_list[number] + "')";
-        let new_domain = await query(new_domain_sql);
+        for (number = 0; number < project_domains_list.length; number++) {
+          let domain_sql = "SELECT * FROM domain WHERE domain_name LIKE '%" +
+          project_domains_list[number] + "%'";
+          let domain = await query(domain_sql);
+          if (domain.length > 0) {
+            project_domain_ids_list.push(domain[0]["domain_id"]);
+          } else {
+            let new_domain_sql = "INSERT INTO domain(domain_name) VALUES('" +
+            project_domains_list[number] + "')";
+            let new_domain = await query(new_domain_sql);
 
-        project_domain_ids_list.push(new_domain["insertId"]);
+            project_domain_ids_list.push(new_domain["insertId"]);
+          }
+        }
+
+        let similar_domain_select_sql =
+        "SELECT * FROM domain WHERE domain_name LIKE '%" +
+        project_domain_ids_list.join(",") + "%'"
+        let similar_domain_select = await query(similar_domain_select_sql);
+
+        let all_desc_sql =
+        "SELECT proj_desc FROM project WHERE proj_status = 'verified'";
+        let all_desc = await query(all_desc_sql);
+        let all_desc_list = [];
+        // console.log(all_desc.length);
+        // console.log(all_desc);
+        for (number = 0; number < all_desc.length; number++) {
+          // console.log(all_desc[number]["proj_desc"]);
+          all_desc_list.push(all_desc[number]["proj_desc"]);
+          // console.log(all_desc_list[number]);
+          // console.log("loop"+number);
+        }
+        let similarity_percent = get_string_match_percentage(
+          proposed_project_description, all_desc_list);
+          // console.log(all_desc_list);
+          // console.log(similarity_percent);
+          // console.log(select_similar_titles.length);
+          // console.log(similar_domain_select.length);
+          // console.log(select_similar_tech.length);
+          if (select_similar_titles.length <= 0 && similarity_percent < 30) {
+            console.log("inside insert");
+            let current_date = new Date();
+            let date_time = current_date.getDate() + "/" + (current_date.getMonth() +
+            1) + "/" + current_date.getFullYear() + " @ " + current_date.getHours() +
+            ":" + current_date.getMinutes();
+            let insert_project_sql =
+            "INSERT INTO project(user_id, proj_title, proj_desc, proj_domain, proj_sub_date, proj_technology) VALUES('" +
+            user_id + "', '" + project_title + "', '" + proposed_project_description +
+            "', '" + project_domain_ids_list.join(",") + "' , '" + date_time +
+            "', '" + project_technologies + "')"
+            // console.log(insert_project_sql);
+            let insert_project = await query(insert_project_sql);
+            res.json({
+              "status": 1,
+              "message": "Project added succesfully"
+            })
+          } else if (select_similar_titles.length > 0 && similar_domain_select.length >
+            0 && select_similar_tech.length > 0 && similarity_percent > 30) {
+              console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage > 30");
+              res.json({
+                "status": 0,
+                "message": similarity_percent +
+                "% similar project already exist."
+              })
+            } else if (select_similar_titles.length == 0 && similar_domain_select
+              .length == 0 && select_similar_tech.length == 0 &&
+              similarity_percent > 30) {
+                // console.log("select_similar_titles.length == 0 && similar_domain_select.length == 0 && select_similar_tech.length == 0 &&similarity_percentage > 30");
+                res.json({
+                  "status": 0,
+                  "message": similarity_percent +
+                  "% similar description exist. You are not permitted to submit. Try something new."
+                })
+              } else if (select_similar_titles.length > 0 && similar_domain_select.length >
+                0 && select_similar_tech.length > 0 && similarity_percent < 30) {
+                  console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
+                  res.json({
+                    "status": 0,
+                    "message": similarity_percent +
+                    "% similar project already exist with your title,domain and technology "
+                  })
+                }else if (select_similar_titles.length > 0 && similar_domain_select.length ==
+                  0 && select_similar_tech.length == 0 && similarity_percent > 30) {
+                    // console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
+                    res.json({
+                      "status": 0,
+                      "message": similarity_percent +
+                      "% similar project already exist with your title and description "
+                    })
+                  }else if (select_similar_titles.length == 0 && similar_domain_select.length >= 0 && select_similar_tech.length >= 0 && similarity_percent > 30) {
+                    // console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
+                    res.json({
+                      "status": 0,
+                      "message": similarity_percent +
+                      "% similar project already exist with your title and description "
+                    })
+                  }
+                  // else if(select_similar_titles.length > 0 && similar_domain_select.length > 0 && select_similar_tech.length > 0 && similarity_percentage < 30) {
+                    //   res.json({"status" : 0, "message" : similarity_percentage + "% projects already exist."})
+                    // }
+                  })()
+    });
+  }
+  else if(file_type == ".txt") {
+    fs.readFile(filename, 'utf8', function(err, data) {
+      if (err){
+        res.json("status" : 0, "message" : "Unable to read project description")
       }
-    }
+      else {
+        project_description = data;
+        // let proposed_project_description = project_description.replace("\n", "<br/>")
+        let proposed_project_description = project_description.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+        (async() => {
 
-    let similar_domain_select_sql =
-      "SELECT * FROM domain WHERE domain_name LIKE '%" +
-      project_domain_ids_list.join(",") + "%'"
-    let similar_domain_select = await query(similar_domain_select_sql);
+          let successful_student = "SELECT * FROM project WHERE user_id = '" +
+          user_id + "' AND proj_status = 'verified'";
+          let successful_student_execute = await query(successful_student);
 
-    let all_desc_sql =
-      "SELECT proj_desc FROM project WHERE proj_status = 'verified'";
-    let all_desc = await query(all_desc_sql);
-    let all_desc_list = [];
-    // console.log(all_desc.length);
-    // console.log(all_desc);
-    for (number = 0; number < all_desc.length; number++) {
-      // console.log(all_desc[number]["proj_desc"]);
-      all_desc_list.push(all_desc[number]["proj_desc"]);
-      // console.log(all_desc_list[number]);
-      // console.log("loop"+number);
-    }
-    let similarity_percent = get_string_match_percentage(
-      proposed_project_description, all_desc_list);
-      // console.log(all_desc_list);
-      // console.log(similarity_percent);
-      // console.log(select_similar_titles.length);
-      // console.log(similar_domain_select.length);
-      // console.log(select_similar_tech.length);
-    if (select_similar_titles.length <= 0 && similarity_percent < 30) {
-      console.log("inside insert");
-      let current_date = new Date();
-      let date_time = current_date.getDate() + "/" + (current_date.getMonth() +
-          1) + "/" + current_date.getFullYear() + " @ " + current_date.getHours() +
-        ":" + current_date.getMinutes();
-      let insert_project_sql =
-        "INSERT INTO project(user_id, proj_title, proj_desc, proj_domain, proj_sub_date, proj_technology) VALUES('" +
-        user_id + "', '" + project_title + "', '" + proposed_project_description +
-        "', '" + project_domain_ids_list.join(",") + "' , '" + date_time +
-        "', '" + project_technologies + "')"
-        // console.log(insert_project_sql);
-      let insert_project = await query(insert_project_sql);
-      res.json({
-        "status": 1,
-        "message": "Project added succesfully"
-      })
-    } else if (select_similar_titles.length > 0 && similar_domain_select.length >
-      0 && select_similar_tech.length > 0 && similarity_percent > 30) {
-          console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage > 30");
-      res.json({
-        "status": 0,
-        "message": similarity_percent +
-          "% similar project already exist."
-      })
-    } else if (select_similar_titles.length == 0 && similar_domain_select
-      .length == 0 && select_similar_tech.length == 0 &&
-      similarity_percent > 30) {
-        // console.log("select_similar_titles.length == 0 && similar_domain_select.length == 0 && select_similar_tech.length == 0 &&similarity_percentage > 30");
-      res.json({
-        "status": 0,
-        "message": similarity_percent +
-          "% similar description exist. You are not permitted to submit. Try something new."
-      })
-    } else if (select_similar_titles.length > 0 && similar_domain_select.length >
-      0 && select_similar_tech.length > 0 && similarity_percent < 30) {
-        console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
-      res.json({
-        "status": 0,
-        "message": similarity_percent +
-          "% similar project already exist with your title,domain and technology "
-      })
-    }else if (select_similar_titles.length > 0 && similar_domain_select.length ==
-      0 && select_similar_tech.length == 0 && similarity_percent > 30) {
-        // console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
-      res.json({
-        "status": 0,
-        "message": similarity_percent +
-          "% similar project already exist with your title and description "
-      })
-    }else if (select_similar_titles.length == 0 && similar_domain_select.length >= 0 && select_similar_tech.length >= 0 && similarity_percent > 30) {
-        // console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
-      res.json({
-        "status": 0,
-        "message": similarity_percent +
-          "% similar project already exist with your title and description "
-      })
-    }
-    // else if(select_similar_titles.length > 0 && similar_domain_select.length > 0 && select_similar_tech.length > 0 && similarity_percentage < 30) {
-    //   res.json({"status" : 0, "message" : similarity_percentage + "% projects already exist."})
-    // }
-  })()
-  });
+          // console.log(successful_student_execute);
+
+          let select_similar_titles_sql =
+          "SELECT * FROM project WHERE proj_title LIKE '%" + project_title +
+          "%'";
+          let select_similar_titles = await query(select_similar_titles_sql);
+
+          let select_similar_tech_sql =
+          "SELECT * FROM project WHERE proj_technology LIKE '%" +
+          project_technologies + "%'";
+          let select_similar_tech = await query(select_similar_tech_sql);
+
+          for (number = 0; number < project_domains_list.length; number++) {
+            let domain_sql = "SELECT * FROM domain WHERE domain_name LIKE '%" +
+            project_domains_list[number] + "%'";
+            let domain = await query(domain_sql);
+            if (domain.length > 0) {
+              project_domain_ids_list.push(domain[0]["domain_id"]);
+            } else {
+              let new_domain_sql = "INSERT INTO domain(domain_name) VALUES('" +
+              project_domains_list[number] + "')";
+              let new_domain = await query(new_domain_sql);
+
+              project_domain_ids_list.push(new_domain["insertId"]);
+            }
+          }
+
+          let similar_domain_select_sql =
+          "SELECT * FROM domain WHERE domain_name LIKE '%" +
+          project_domain_ids_list.join(",") + "%'"
+          let similar_domain_select = await query(similar_domain_select_sql);
+
+          let all_desc_sql =
+          "SELECT proj_desc FROM project WHERE proj_status = 'verified'";
+          let all_desc = await query(all_desc_sql);
+          let all_desc_list = [];
+          // console.log(all_desc.length);
+          // console.log(all_desc);
+          for (number = 0; number < all_desc.length; number++) {
+            // console.log(all_desc[number]["proj_desc"]);
+            all_desc_list.push(all_desc[number]["proj_desc"]);
+            // console.log(all_desc_list[number]);
+            // console.log("loop"+number);
+          }
+          let similarity_percent = get_string_match_percentage(
+            proposed_project_description, all_desc_list);
+            // console.log(all_desc_list);
+            // console.log(similarity_percent);
+            // console.log(select_similar_titles.length);
+            // console.log(similar_domain_select.length);
+            // console.log(select_similar_tech.length);
+            if (select_similar_titles.length <= 0 && similarity_percent < 30) {
+              console.log("inside insert");
+              let current_date = new Date();
+              let date_time = current_date.getDate() + "/" + (current_date.getMonth() +
+              1) + "/" + current_date.getFullYear() + " @ " + current_date.getHours() +
+              ":" + current_date.getMinutes();
+              let insert_project_sql =
+              "INSERT INTO project(user_id, proj_title, proj_desc, proj_domain, proj_sub_date, proj_technology) VALUES('" +
+              user_id + "', '" + project_title + "', '" + proposed_project_description +
+              "', '" + project_domain_ids_list.join(",") + "' , '" + date_time +
+              "', '" + project_technologies + "')"
+              // console.log(insert_project_sql);
+              let insert_project = await query(insert_project_sql);
+              res.json({
+                "status": 1,
+                "message": "Project added succesfully"
+              })
+            } else if (select_similar_titles.length > 0 && similar_domain_select.length >
+              0 && select_similar_tech.length > 0 && similarity_percent > 30) {
+                console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage > 30");
+                res.json({
+                  "status": 0,
+                  "message": similarity_percent +
+                  "% similar project already exist."
+                })
+              } else if (select_similar_titles.length == 0 && similar_domain_select
+                .length == 0 && select_similar_tech.length == 0 &&
+                similarity_percent > 30) {
+                  // console.log("select_similar_titles.length == 0 && similar_domain_select.length == 0 && select_similar_tech.length == 0 &&similarity_percentage > 30");
+                  res.json({
+                    "status": 0,
+                    "message": similarity_percent +
+                    "% similar description exist. You are not permitted to submit. Try something new."
+                  })
+                } else if (select_similar_titles.length > 0 && similar_domain_select.length >
+                  0 && select_similar_tech.length > 0 && similarity_percent < 30) {
+                    console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
+                    res.json({
+                      "status": 0,
+                      "message": similarity_percent +
+                      "% similar project already exist with your title,domain and technology "
+                    })
+                  }else if (select_similar_titles.length > 0 && similar_domain_select.length ==
+                    0 && select_similar_tech.length == 0 && similarity_percent > 30) {
+                      // console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
+                      res.json({
+                        "status": 0,
+                        "message": similarity_percent +
+                        "% similar project already exist with your title and description "
+                      })
+                    }else if (select_similar_titles.length == 0 && similar_domain_select.length >= 0 && select_similar_tech.length >= 0 && similarity_percent > 30) {
+                      // console.log("select_similar_titles.length > 0 && similar_domain_select.length >0 && select_similar_tech.length > 0 && similarity_percentage < 30");
+                      res.json({
+                        "status": 0,
+                        "message": similarity_percent +
+                        "% similar project already exist with your title and description "
+                      })
+                    }
+                    // else if(select_similar_titles.length > 0 && similar_domain_select.length > 0 && select_similar_tech.length > 0 && similarity_percentage < 30) {
+                      //   res.json({"status" : 0, "message" : similarity_percentage + "% projects already exist."})
+                      // }
+                    })()
+      }
+
+    });
+  }
+  else {
+    res.json("status" : 0, "message" : "Please select a PDF (.pdf) or Text (.txt) file for description")  
+  }
 
 
   // console.log(req.body);
@@ -1555,7 +1697,7 @@ app.get('/allocate/:project_id/:user_id/:guide/:status', function(req, res,
 
 // Return only base file name without dir
 function getMostRecentFileName() {
-  let dir = "C:\\Users\\MANISHA\\pms-app\\pdfuploads";
+  let dir = __dirname + "\\pdfuploads\\";
     var files = fs.readdirSync(dir);
 
     // use underscore for max()
