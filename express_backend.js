@@ -830,11 +830,14 @@ app.post("/add_project_topic", function(req, res, next) {
   let project_domain_ids_list = [];
   let similarity_percentage = 0;
   // node native promisify
-  let recent_desc_file = "C:\\Users\\Jayashankar\\Documents\\Manisha\\endgame\\file_upload_node\\" + getMostRecentFileName();
+  let recent_desc_file = "C:\\Users\\MANISHA\\pms-app\\pdfuploads\\" + getMostRecentFileName();
 
   const query = util.promisify(con.query).bind(con);
   textract.fromFileWithPath(recent_desc_file, function( error, text ) {
     project_description = text;
+    // let proposed_project_description = project_description.replace("\n", "<br/>")
+    let proposed_project_description = project_description.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+    console.log(proposed_project_description);
       (async() => {
 
     let successful_student = "SELECT * FROM project WHERE user_id = '" +
@@ -878,7 +881,7 @@ app.post("/add_project_topic", function(req, res, next) {
     let all_desc = await query(all_desc_sql);
     let all_desc_list = [];
     // console.log(all_desc.length);
-    console.log(all_desc);
+    // console.log(all_desc);
     for (number = 0; number < all_desc.length; number++) {
       // console.log(all_desc[number]["proj_desc"]);
       all_desc_list.push(all_desc[number]["proj_desc"]);
@@ -886,12 +889,12 @@ app.post("/add_project_topic", function(req, res, next) {
       // console.log("loop"+number);
     }
     let similarity_percent = get_string_match_percentage(
-      project_description, all_desc_list);
+      proposed_project_description, all_desc_list);
       // console.log(all_desc_list);
-      console.log(similarity_percent);
-      console.log(select_similar_titles.length);
-      console.log(similar_domain_select.length);
-      console.log(select_similar_tech.length);
+      // console.log(similarity_percent);
+      // console.log(select_similar_titles.length);
+      // console.log(similar_domain_select.length);
+      // console.log(select_similar_tech.length);
     if (select_similar_titles.length <= 0 && similarity_percent < 30) {
       console.log("inside insert");
       let current_date = new Date();
@@ -900,10 +903,10 @@ app.post("/add_project_topic", function(req, res, next) {
         ":" + current_date.getMinutes();
       let insert_project_sql =
         "INSERT INTO project(user_id, proj_title, proj_desc, proj_domain, proj_sub_date, proj_technology) VALUES('" +
-        user_id + "', '" + project_title + "', '" + project_description +
+        user_id + "', '" + project_title + "', '" + proposed_project_description +
         "', '" + project_domain_ids_list.join(",") + "' , '" + date_time +
         "', '" + project_technologies + "')"
-        console.log(insert_project_sql);
+        // console.log(insert_project_sql);
       let insert_project = await query(insert_project_sql);
       res.json({
         "status": 1,
@@ -1552,7 +1555,7 @@ app.get('/allocate/:project_id/:user_id/:guide/:status', function(req, res,
 
 // Return only base file name without dir
 function getMostRecentFileName() {
-  let dir = "C:\\Users\\Jayashankar\\Documents\\Manisha\\endgame\\file_upload_node";
+  let dir = "C:\\Users\\MANISHA\\pms-app\\pdfuploads";
     var files = fs.readdirSync(dir);
 
     // use underscore for max()

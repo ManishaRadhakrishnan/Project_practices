@@ -87,8 +87,8 @@ export class TopicSubComponent implements OnInit {
       .subscribe(
           data  => {
           console.log("POST Request is successful ", data);
-          // this.status = data.status as number;
-          // this.message = data.message as string;
+          this.status = data.status as number;
+          this.message = data.message as string;
           },
           error  => {
 
@@ -111,8 +111,8 @@ export class TopicSubComponent implements OnInit {
   .subscribe(
       data  => {
       console.log("POST Request is successful ", data);
-      // this.status = data.status as number;
-      // this.message = data.message as string;
+      this.status = data.status as number;
+      this.message = data.message as string;
       },
       error  => {
 

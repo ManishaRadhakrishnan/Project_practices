@@ -8,7 +8,7 @@ http.createServer(function (req, res) {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
       var oldpath = files.filetoupload.path;
-      var newpath = 'C:\\Users\\Jayashankar\\Documents\\Manisha\\endgame\\file_upload_node\\' + files.filetoupload.name;
+      var newpath = 'C:\\Users\\MANISHA\\pms-app\\pdfuploads\\' + files.filetoupload.name;
       fs.rename(oldpath, newpath, function (err) {
         if (err) throw err;
         textract.fromFileWithPath(newpath, function( error, text ) {
