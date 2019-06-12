@@ -515,7 +515,7 @@ app.get('/project_details_update/:user_id/:project_title/:project_domains/:proje
 
 app.get('/student_project_details/:user_id', function(req, res, next) {
   let user_id = req.params.user_id;
-  let sql ="SELECT project.user_id,project.proj_id,project.proj_title, project.proj_desc, project.proj_sub_by, project.proj_sub_date, project.proj_domain, project.proj_technology,project.proj_status FROM project, student WHERE (project.proj_status = 'approved' OR project.proj_status = 'verified') AND student.guide_id = ? AND project.project_visible='visible'";
+  let sql ="SELECT DISTINCT project.user_id,project.proj_id,project.proj_title, project.proj_desc, project.proj_sub_by, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status, domain.domain_name FROM project, student, domain WHERE (project.proj_status = 'approved' OR project.proj_status = 'verified') AND student.guide_id = ? AND project.project_visible='visible' AND domain.domain_id = project.proj_domain";
   let data = [user_id];
   con.query(sql, data, function(err, result, fields) {
 
@@ -966,9 +966,9 @@ app.post("/add_project_topic", function(req, res, next) {
     });
   }
   else if(file_type == ".txt") {
-    fs.readFile(filename, 'utf8', function(err, data) {
+    fs.readFile(recent_desc_file, 'utf8', function(err, data) {
       if (err){
-        res.json("status" : 0, "message" : "Unable to read project description")
+        res.json({"status" : 0, "message" : "Unable to read project description"})
       }
       else {
         project_description = data;
@@ -1098,7 +1098,7 @@ app.post("/add_project_topic", function(req, res, next) {
     });
   }
   else {
-    res.json("status" : 0, "message" : "Please select a PDF (.pdf) or Text (.txt) file for description")  
+    res.json({"status" : 0, "message" : "Please select a PDF (.pdf) or Text (.txt) file for description"})
   }
 
 
