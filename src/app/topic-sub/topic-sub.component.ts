@@ -28,7 +28,7 @@ export class TopicSubComponent implements OnInit {
   project_id : string;
   number_of_similar_projects : string[];
   message : string;
-
+  verify : number;
   endpoint_url = "http://127.0.0.1:8080";
   // uploader: FileUploader = new FileUploader({url: UploadURL, itemAlias: 'sdyuihfkjn'});
 
@@ -36,6 +36,9 @@ export class TopicSubComponent implements OnInit {
 
   ngOnInit() {
     this.role = window.sessionStorage.getItem("role");
+    // if(this.role == 'stud'){
+      this.user_id = window.sessionStorage.getItem("user_id");
+    // }
     if(this.role != 'stud') {
       this.router.navigate(["/login"]);
     }
@@ -44,7 +47,50 @@ export class TopicSubComponent implements OnInit {
       this.route.queryParamMap.subscribe(queryParams => {
         this.project_id = queryParams.get("project_id");
       });
-      if(this.project_id != null) {
+      this.api_service
+       .verified_project_details(this.user_id)
+       .subscribe(
+         data => {
+           // this.information = data.data as string[];
+           this.verify = data.verify as number;
+           console.log(this.verify);
+           if(this.verify==1){
+             alert("Your topic is once verified. You cannot submit or edit topic");
+           }else{
+             // alert(this.project_id);
+             if(this.project_id != null && this.verify == 0) {
+
+             this.button = true;
+             this.role = window.sessionStorage.getItem("role");
+             if(this.role == "stud") {
+               this.user_id = window.sessionStorage.getItem("user_id");
+               this.api_service
+                .single_project_details(this.project_id)
+                .subscribe(
+                  data => {
+                    this.information = data.data as string[];
+                    this.status = data.status as number;
+                    console.log(data);
+                  },
+                  err => {
+                    console.log(err);
+                  }
+                );
+              }
+             else {
+                  this.router.navigate(["/login"]);
+                }
+           }
+           }
+         },
+         err => {
+           console.log(err);
+         }
+       );
+      // if(this.status == 1){
+      // }else{
+
+        if(this.project_id != null) {
 
         this.button = true;
         this.role = window.sessionStorage.getItem("role");
@@ -67,6 +113,7 @@ export class TopicSubComponent implements OnInit {
              this.router.navigate(["/login"]);
            }
       }
+      // }
     }
 
     // this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
@@ -103,11 +150,11 @@ export class TopicSubComponent implements OnInit {
 
   }
 
-  do_topic_save(project_title : string, project_domains : string, project_technologies : string, project_description : string, _continue: string) {
+  do_topic_save(project_title : string, project_domains : string, project_technologies : string, _continue: string) {
   let api_url = encodeURI("http://127.0.0.1:8080/project_details_update");
 
   this.user_id = window.sessionStorage.getItem("user_id");
-  this.http.post(api_url, {"user_id" : this.user_id, "project_id" : this.project_id, "project_title" : project_title, "project_domains" : project_domains, "project_technologies" : project_technologies, "project_description" : project_description, " _continue": _continue})
+  this.http.post(api_url, {"user_id" : this.user_id, "project_id" : this.project_id, "project_title" : project_title, "project_domains" : project_domains, "project_technologies" : project_technologies, " _continue": _continue})
   .subscribe(
       data  => {
       console.log("POST Request is successful ", data);

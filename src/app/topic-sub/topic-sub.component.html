@@ -1,5 +1,6 @@
 <div class="wrapper row-offcanvas row-offcanvas-left">
   <aside class="right-side">
+    <ng-template [ngIf]="verify == 0">
     <section class="content-header no-margin">
       <h1 class="text-center">
         Proposal Submission
@@ -86,7 +87,7 @@
 
                               <ng-template [ngIf]="information">
                                 <!-- <button (click)="do_edit_topic()" type="submit" class="btn btn-primary pull-left">Edit</button> -->
-                                <button (click)="do_topic_save(project_title.value, project_domains.value, project_technologies.value, project_description.textContent, false)" type="submit" class="btn btn-primary pull-left">Save</button>
+                                <button (click)="do_topic_save(project_title.value, project_domains.value, project_technologies.value, false)" type="submit" class="btn btn-primary pull-left">Save</button>
                               </ng-template>
 
 
@@ -118,6 +119,8 @@
             </div>
           </section>
           <!-- /.content -->
+
+        </ng-template>
         </aside>
       </div>
       <!-- ./wrapper -->

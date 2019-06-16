@@ -513,6 +513,39 @@ app.get('/project_details_update/:user_id/:project_title/:project_domains/:proje
 
   });
 
+  app.get("/verified_project_details/:user_id", function(
+    req, res, next) {
+
+    let user_id = req.params.user_id;
+    let sql ="SELECT COUNT(*) as count FROM project WHERE proj_status = 'verified' AND user_id = ?"
+    let data = [user_id];
+    con.query(sql, data, function(err, result) {
+      console.log(result);
+      if (err) {
+        res.json({
+          "verify": 0,
+          "data": "Something went wrong",
+          "id": 0
+        });
+      } else {
+        if(result[0]['count'] == 1){
+          res.json({
+          "verify": 1,
+          "data": "Retrieved successfully",
+          "id": result
+        });
+      }else{
+        res.json({
+        "verify": 0,
+        "data": "Retrieved successfully",
+        "id": 0
+      });
+      }
+      }
+    });
+  });
+
+
 app.get('/student_project_details/:user_id', function(req, res, next) {
   let user_id = req.params.user_id;
   let sql ="SELECT DISTINCT project.user_id,project.proj_id,project.proj_title, project.proj_desc, project.proj_sub_by, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status, domain.domain_name FROM project, student, domain WHERE (project.proj_status = 'approved' OR project.proj_status = 'verified') AND student.guide_id = ? AND project.project_visible='visible' AND domain.domain_id = project.proj_domain";
@@ -750,19 +783,29 @@ app.get("/update_guide_profile/:user_id/:full_name/:email/:contact/:address/:cou
     });
   });
 app.post("/project_details_update", function(req, res, next){
+
+  let recent_desc_file = __dirname + "\\pdfuploads\\" + getMostRecentFileName();
+
+  let file_type = path.extname(getMostRecentFileName());
+
   let user_id = req.body.user_id;
   let project_title = req.body.project_title;
   let project_domains = req.body.project_domains;
   let project_technologies = req.body.project_technologies;
-  let project_description = req.body.project_description;
+  let project_description = "";
   let _continue = req.body._continue;
   let proj_id = req.body.project_id;
   let project_domain_ids_list = [];
   let project_domains_list = project_domains.split(",");
   let index_count=0;
   const query = util.promisify(con.query).bind(con);
-  console.log(proj_id);
-  (async() => {
+  // console.log(proj_desc);
+  if(file_type == ".txt") {
+    textract.fromFileWithPath(recent_desc_file, function( error, text ) {
+      project_description = text;
+      // let proposed_project_description = project_description.replace("\n", "<br/>")
+      let proposed_project_description = project_description.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+      (async() => {
     for (index = 0; index < project_domains_list.length; index++) {
     let select_domain_sql = "SELECT * FROM domain WHERE domain_name = '" + project_domains_list[index].trim()+"'";
     let select_domain = await query(select_domain_sql);
@@ -784,7 +827,7 @@ app.post("/project_details_update", function(req, res, next){
           // console.log(project_domains_list.length);
           if (index_count == project_domains_list.length) {
             let update_project_sql =
-              "UPDATE project SET proj_title = '" + project_title + "',  proj_domain ='" + project_domain_ids_list.join(",") + "', proj_technology='" + project_technologies + "',proj_desc ='" + project_description +"' WHERE project.user_id =" + user_id + " AND project.proj_id = " + proj_id + ";"
+              "UPDATE project SET proj_title = '" + project_title + "',  proj_domain ='" + project_domain_ids_list.join(",") + "', proj_technology='" + project_technologies + "',proj_desc ='" + proposed_project_description +"' WHERE project.user_id =" + user_id + " AND project.proj_id = " + proj_id + ";"
               console.log(update_project_sql);
             let update_project = await query(update_project_sql);
             res.json({
@@ -815,7 +858,8 @@ app.post("/project_details_update", function(req, res, next){
   //   });
   // }
 })()
-
+})
+}
 })
 app.post("/add_project_topic", function(req, res, next) {
 

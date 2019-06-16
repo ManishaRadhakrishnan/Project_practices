@@ -170,6 +170,15 @@ export class ApiService {
     );
   }
 
+  verified_project_details(user_id : string): Observable<any> {
+    let api_url = encodeURI(this.endpoint_url + "/verified_project_details/" + user_id);
+    console.log(api_url);
+    return this.http.get(api_url, httpOptions).pipe(
+      map(this.extract_data),
+      catchError(this.handle_error)
+    );
+  }
+
   project_details(user_id : string): Observable<any> {
     let api_url = encodeURI(this.endpoint_url + "/project_details/" + user_id);
     console.log(api_url);
@@ -188,8 +197,8 @@ export class ApiService {
     );
   }
 
-  project_details_update(user_id : string, project_title: string, project_domains: string, project_technologies: string, project_description: string): Observable<any> {
-    let api_url = encodeURI(this.endpoint_url + "/project_details_update/" + user_id + "/" + project_title + "/"+ project_domains + "/" + project_technologies + "/" + project_description );
+  project_details_update(user_id : string, project_title: string, project_domains: string, project_technologies: string): Observable<any> {
+    let api_url = encodeURI(this.endpoint_url + "/project_details_update/" + user_id + "/" + project_title + "/"+ project_domains + "/" + project_technologies );
     console.log(api_url);
     return this.http.get(api_url, httpOptions).pipe(
       map(this.extract_data),
