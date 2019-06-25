@@ -318,7 +318,7 @@ app.get('/project_details/:user_id', function(req, res, next) {
     "SELECT count(*) as count FROM student WHERE student.user_id = ? AND student.guide_id='0' OR student.guide_id='0';"
   let data = [user_id];
   con.query(sql, data, function(err, result, fields) {
-
+      // console.log(result);
     if (err) {
       res.json({
         "status": 0,
@@ -330,7 +330,7 @@ app.get('/project_details/:user_id', function(req, res, next) {
           "SELECT project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_date, internal_guides.guide_name, project.proj_domain, project.proj_technology, project.proj_status FROM student, user, internal_guides, project WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND student.guide_id = internal_guides.user_id AND project.project_visible = 'visible';"
         data = [user_id, user_id, user_id];
         con.query(sql, data, function(err, result, fields) {
-
+          // console.log(result);
           if (err) {
             res.json({
               "status": 0,
@@ -353,10 +353,10 @@ app.get('/project_details/:user_id', function(req, res, next) {
         });
       } else {
         sql =
-          "SELECT project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, internal_guides.guide_name, project.proj_technology, project.proj_status, domain.domain_name FROM student, user, project, domain, internal_guides WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND student.guide_id = internal_guides.user_id AND project.project_visible = 'visible' AND domain.domain_id = project.proj_domain;"
+          "SELECT project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status, domain.domain_name FROM student, user, project, domain WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible' AND domain.domain_id = project.proj_domain "
         data = [user_id, user_id, user_id];
         con.query(sql, data, function(err, result, fields) {
-
+          // console.log(result);
           if (err) {
             res.json({
               "status": 0,
@@ -1209,28 +1209,32 @@ app.get("/insert_mail/:user_id/:mail_to/:subject/:content/:attachment",
     let date_time = current_date.getDate() + "/" + (current_date.getMonth() +
         1) + "/" + current_date.getFullYear() + " @ " + current_date.getHours() +
       ":" + current_date.getMinutes();
+    //   console.log(user_id);
+    //   console.log(subject);
+    //   console.log(content);
+    //   console.log(attachment);
+    //   console.log(current_date);
+    //   console.log(date_time);
     // console.log(mail_to);
     let sql = "SELECT role,user_id as id FROM user WHERE user_name = ?"
     let data = [mail_to];
     con.query(sql, data, function(err, result) {
-
+      // console.log(result);
       if (err) {
         console.log(result);
         // alert("This user i not registered.! Please check the mail id");
         // res.json({"status" : 0, "data" : "ERROR 699: Something went wrong "});
       } else {
-        sql =
-          "INSERT INTO mail(user_id, toaddr, sub, content, timestamp, attachment,role,id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
-        data = [user_id, mail_to, subject, content, date_time, attachment,
-          result[0]['role'], result[0]['id']
-        ];
+        sql = "INSERT INTO mail(user_id, toaddr, sub, content, timestamp, attachment,role,id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        data = [user_id, mail_to, subject, content, date_time, attachment,result[0]['role'], result[0]['id']];
         con.query(sql, data, function(err, result) {
-
+          // console.log(data);
+          // console.log(result);
           if (err) {
 
             res.json({
               "status": 0,
-              "data": "ERROR 709: Something went wrong"
+              "data": "ERROR 1233: Something went wrong"
             });
           } else {
             res.json({
@@ -1377,6 +1381,8 @@ app.get("/do_suggestion/:user_id/:student_id/:project_id/:suggestion", function(
     "INSERT INTO suggestions(guide_user_id, stud_user_id, proj_id, suggestion, date) VALUES (?, ?, ?, ?, ?)"
   let data = [user_id, stud_id, proj_id, suggestion, date_time];
   con.query(sql, data, function(err, result) {
+    // console.log(result);
+    // console.log(data);
     if (err) {
       res.json({
         "status": 0,
@@ -1397,9 +1403,11 @@ app.get("/select_suggestion/:user_id", function(req, res, next) {
   // let proj_id = req.params.proj_id;
   // let stud_id = req.params.stud_id;
   var sql =
-    "SELECT suggestions.proj_id,suggestions.suggestion, suggestions.date, project.proj_title from suggestions, student, project WHERE suggestions.proj_id = project.proj_id and project.proj_status = 'approved' AND suggestions.stud_user_id = student.user_id and student.user_id = ? ORDER BY date DESC";
+    "SELECT suggestions.proj_id,suggestions.suggestion, suggestions.date, project.proj_title from suggestions, student, project WHERE suggestions.proj_id = project.proj_id and (project.proj_status = 'verified' OR project.proj_status = 'approved') AND suggestions.stud_user_id = student.user_id and student.user_id = ? ORDER BY date DESC";
   let data = [user_id];
   con.query(sql, data, function(err, result) {
+    console.log(result);
+    console.log(data);
     if (err) {
       res.json({
         "status": 0,

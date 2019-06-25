@@ -72,7 +72,7 @@ export class ApiService {
     }
 
     let api_url = encodeURI(this.endpoint_url + "/insert_mail/"+ user_id  + "/" + email_to + "/" + subject + "/" + email_content + "/" + attachment);
-    // console.log(api_url);
+    console.log(api_url);
     return this.http.get<Api>(api_url)
       .pipe(
       catchError(this.handle_error) // then handle the error
