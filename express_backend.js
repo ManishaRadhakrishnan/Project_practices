@@ -353,7 +353,7 @@ app.get('/project_details/:user_id', function(req, res, next) {
         });
       } else {
         sql =
-          "SELECT project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, project.proj_technology, project.proj_status, domain.domain_name FROM student, user, project, domain WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND project.project_visible = 'visible' AND domain.domain_id = project.proj_domain;"
+          "SELECT project.proj_id, project.proj_title, project.proj_desc, project.proj_sub_date, project.proj_domain, internal_guides.guide_name, project.proj_technology, project.proj_status, domain.domain_name FROM student, user, project, domain, internal_guides WHERE project.user_id = ? AND user.user_id = ? AND student.user_id = ? AND student.guide_id = internal_guides.user_id AND project.project_visible = 'visible' AND domain.domain_id = project.proj_domain;"
         data = [user_id, user_id, user_id];
         con.query(sql, data, function(err, result, fields) {
 
@@ -523,7 +523,7 @@ app.get('/project_details_update/:user_id/:project_title/:project_domains/:proje
       console.log(result);
       if (err) {
         res.json({
-          "verify": 0,
+          "status": 0,
           "data": "Something went wrong",
           "id": 0
         });

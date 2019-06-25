@@ -197,8 +197,10 @@
                                             <li class="list-group-item">Domain : {{get_upper_case_text(info.domain_name)}}</li>
                                             <li class="list-group-item">Technology : {{get_upper_case_text(info.proj_technology)}}</li>
                                             <li class="list-group-item">Status : {{get_upper_case_text(info.proj_status)}}</li>
+                                            <ng-template [ngIf]="info.proj_status == 'verified'">
                                             <ng-template [ngIf]="info.guide_name">
                                               <li class="list-group-item">Guide : {{get_upper_case_text(info.guide_name ? info.guide_name : '' )}}</li>
+                                            </ng-template>
                                             </ng-template>
                                          </ul>
                                         <!--<div class="modal-body">
