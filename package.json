@@ -31,7 +31,7 @@
     "express": "^4.16.4",
     "express-fileupload": "^1.1.4",
     "formidable": "^1.2.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "mysql": "^2.17.1",
     "ng-bootstrap": "^1.6.3",
     "ngx-markdown": "^7.1.5",
